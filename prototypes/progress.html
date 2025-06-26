@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>学习进度</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .progress-ring {
+            transform: rotate(-90deg);
+        }
+        
+        .chart-bar {
+            transition: height 1s ease-in-out;
+        }
+        
+        .achievement-card {
+            transition: all 0.3s ease;
+        }
+        
+        .achievement-card:hover {
+            transform: translateY(-4px);
+        }
+        
+        .streak-counter {
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+        
+        @keyframes glow {
+            from { box-shadow: 0 0 5px rgba(255, 193, 7, 0.3); }
+            to { box-shadow: 0 0 20px rgba(255, 193, 7, 0.7), 0 0 30px rgba(255, 193, 7, 0.4); }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-green-50 via-blue-50 to-purple-50 min-h-screen">
+    <!-- 顶部导航栏 -->
+    <nav class="bg-white shadow-sm px-6 py-4">
+        <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                    <i class="fas fa-chart-line text-green-600"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold text-gray-800">学习进度</h1>
+                    <p class="text-sm text-gray-500">看看你的学习成果</p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-3">
+                <button class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center">
+                    <i class="fas fa-share-alt text-gray-600"></i>
+                </button>
+                <button class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center">
+                    <i class="fas fa-download text-gray-600"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 总体概览 -->
+    <section class="px-6 py-8">
+        <div class="bg-white rounded-3xl p-6 shadow-xl">
+            <h2 class="text-xl font-bold text-gray-800 mb-6 text-center">今日学习概览</h2>
+            
+            <div class="grid grid-cols-2 gap-6">
+                <!-- 学习时间 -->
+                <div class="text-center">
+                    <div class="w-20 h-20 mx-auto mb-4 relative">
+                        <svg class="w-20 h-20 progress-ring">
+                            <circle cx="40" cy="40" r="35" stroke="#e5e7eb" stroke-width="6" fill="none"/>
+                            <circle cx="40" cy="40" r="35" stroke="#10b981" stroke-width="6" fill="none" 
+                                    stroke-dasharray="220" stroke-dashoffset="66" stroke-linecap="round"/>
+                        </svg>
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <span class="text-lg font-bold text-green-600">70%</span>
+                        </div>
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-800">21分钟</h3>
+                    <p class="text-sm text-gray-500">今日学习时间</p>
+                </div>
+                
+                <!-- 学习单词 -->
+                <div class="text-center">
+                    <div class="w-20 h-20 mx-auto mb-4 relative">
+                        <svg class="w-20 h-20 progress-ring">
+                            <circle cx="40" cy="40" r="35" stroke="#e5e7eb" stroke-width="6" fill="none"/>
+                            <circle cx="40" cy="40" r="35" stroke="#8b5cf6" stroke-width="6" fill="none" 
+                                    stroke-dasharray="220" stroke-dashoffset="110" stroke-linecap="round"/>
+                        </svg>
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <span class="text-lg font-bold text-purple-600">50%</span>
+                        </div>
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-800">15个</h3>
+                    <p class="text-sm text-gray-500">新学单词</p>
+                </div>
+            </div>
+            
+            <!-- 连续学习天数 -->
+            <div class="mt-6 p-4 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-2xl text-white text-center streak-counter">
+                <div class="flex items-center justify-center space-x-2 mb-2">
+                    <i class="fas fa-fire text-2xl"></i>
+                    <span class="text-2xl font-bold">7</span>
+                </div>
+                <p class="text-sm opacity-90">连续学习天数</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 分类进度 -->
+    <section class="px-6 pb-8">
+        <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center">
+            <i class="fas fa-tasks text-blue-500 mr-2"></i>
+            分类学习进度
+        </h3>
+        
+        <div class="space-y-4">
+            <!-- 动物分类 -->
+            <div class="bg-white rounded-2xl p-4 shadow-lg">
+                <div class="flex items-center justify-between mb-3">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-12 h-12 bg-gradient-to-br from-orange-400 to-red-500 rounded-xl flex items-center justify-center text-white text-lg">
+                            🐾
+                        </div>
+                        <div>
+                            <h4 class="text-base font-bold text-gray-800">动物朋友</h4>
+                            <p class="text-sm text-gray-500">25/98 个单词</p>
+                        </div>
+                    </div>
+                    <span class="text-sm font-medium text-orange-600">25%</span>
+                </div>
+                <div class="bg-gray-200 rounded-full h-2">
+                    <div class="bg-gradient-to-r from-orange-400 to-red-500 h-2 rounded-full transition-all duration-1000" 
+                         style="width: 25%"></div>
+                </div>
+            </div>
+
+            <!-- 食物分类 -->
+            <div class="bg-white rounded-2xl p-4 shadow-lg">
+                <div class="flex items-center justify-between mb-3">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-12 h-12 bg-gradient-to-br from-green-400 to-blue-500 rounded-xl flex items-center justify-center text-white text-lg">
+                            🍎
+                        </div>
+                        <div>
+                            <h4 class="text-base font-bold text-gray-800">美味食物</h4>
+                            <p class="text-sm text-gray-500">42/70 个单词</p>
+                        </div>
+                    </div>
+                    <span class="text-sm font-medium text-green-600">60%</span>
+                </div>
+                <div class="bg-gray-200 rounded-full h-2">
+                    <div class="bg-gradient-to-r from-green-400 to-blue-500 h-2 rounded-full transition-all duration-1000" 
+                         style="width: 60%"></div>
+                </div>
+            </div>
+
+            <!-- 颜色分类 -->
+            <div class="bg-white rounded-2xl p-4 shadow-lg">
+                <div class="flex items-center justify-between mb-3">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-12 h-12 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-xl flex items-center justify-center text-white text-lg">
+                            🎨
+                        </div>
+                        <div>
+                            <h4 class="text-base font-bold text-gray-800">彩色世界</h4>
+                            <p class="text-sm text-gray-500">50/50 个单词</p>
+                        </div>
+                    </div>
+                    <span class="text-sm font-medium text-yellow-600">100%</span>
+                </div>
+                <div class="bg-gray-200 rounded-full h-2">
+                    <div class="bg-gradient-to-r from-yellow-400 to-orange-500 h-2 rounded-full transition-all duration-1000" 
+                         style="width: 100%"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 周学习统计 -->
+    <section class="px-6 pb-8">
+        <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center">
+            <i class="fas fa-calendar-week text-purple-500 mr-2"></i>
+            本周学习统计
+        </h3>
+        
+        <div class="bg-white rounded-2xl p-6 shadow-lg">
+            <div class="flex items-end justify-between space-x-2 h-32 mb-4">
+                <div class="flex flex-col items-center space-y-2">
+                    <div class="bg-gradient-to-t from-blue-400 to-blue-600 chart-bar rounded-t w-8" style="height: 60%"></div>
+                    <span class="text-xs text-gray-500">周一</span>
+                </div>
+                <div class="flex flex-col items-center space-y-2">
+                    <div class="bg-gradient-to-t from-green-400 to-green-600 chart-bar rounded-t w-8" style="height: 80%"></div>
+                    <span class="text-xs text-gray-500">周二</span>
+                </div>
+                <div class="flex flex-col items-center space-y-2">
+                    <div class="bg-gradient-to-t from-purple-400 to-purple-600 chart-bar rounded-t w-8" style="height: 45%"></div>
+                    <span class="text-xs text-gray-500">周三</span>
+                </div>
+                <div class="flex flex-col items-center space-y-2">
+                    <div class="bg-gradient-to-t from-yellow-400 to-yellow-600 chart-bar rounded-t w-8" style="height: 90%"></div>
+                    <span class="text-xs text-gray-500">周四</span>
+                </div>
+                <div class="flex flex-col items-center space-y-2">
+                    <div class="bg-gradient-to-t from-pink-400 to-pink-600 chart-bar rounded-t w-8" style="height: 70%"></div>
+                    <span class="text-xs text-gray-500">周五</span>
+                </div>
+                <div class="flex flex-col items-center space-y-2">
+                    <div class="bg-gradient-to-t from-indigo-400 to-indigo-600 chart-bar rounded-t w-8" style="height: 55%"></div>
+                    <span class="text-xs text-gray-500">周六</span>
+                </div>
+                <div class="flex flex-col items-center space-y-2">
+                    <div class="bg-gradient-to-t from-red-400 to-red-600 chart-bar rounded-t w-8" style="height: 85%"></div>
+                    <span class="text-xs text-gray-500">周日</span>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-2 gap-4 text-center">
+                <div>
+                    <p class="text-2xl font-bold text-blue-600">156</p>
+                    <p class="text-sm text-gray-500">本周学习单词</p>
+                </div>
+                <div>
+                    <p class="text-2xl font-bold text-green-600">2.5小时</p>
+                    <p class="text-sm text-gray-500">本周学习时长</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 成就徽章 -->
+    <section class="px-6 pb-20">
+        <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center">
+            <i class="fas fa-trophy text-yellow-500 mr-2"></i>
+            我的成就
+        </h3>
+        
+        <div class="grid grid-cols-3 gap-4">
+            <!-- 第一天学习 -->
+            <div class="achievement-card bg-white rounded-2xl p-4 shadow-lg text-center">
+                <div class="w-12 h-12 mx-auto mb-2 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full flex items-center justify-center">
+                    <i class="fas fa-baby text-white"></i>
+                </div>
+                <h4 class="text-sm font-bold text-gray-800">初学者</h4>
+                <p class="text-xs text-gray-500">完成第一天学习</p>
+            </div>
+
+            <!-- 连续学习7天 -->
+            <div class="achievement-card bg-white rounded-2xl p-4 shadow-lg text-center">
+                <div class="w-12 h-12 mx-auto mb-2 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center">
+                    <i class="fas fa-fire text-white"></i>
+                </div>
+                <h4 class="text-sm font-bold text-gray-800">坚持者</h4>
+                <p class="text-xs text-gray-500">连续学习7天</p>
+            </div>
+
+            <!-- 学习100个单词 -->
+            <div class="achievement-card bg-white rounded-2xl p-4 shadow-lg text-center">
+                <div class="w-12 h-12 mx-auto mb-2 bg-gradient-to-br from-green-400 to-blue-500 rounded-full flex items-center justify-center">
+                    <i class="fas fa-book text-white"></i>
+                </div>
+                <h4 class="text-sm font-bold text-gray-800">学习家</h4>
+                <p class="text-xs text-gray-500">学习100个单词</p>
+            </div>
+
+            <!-- 完成一个分类 -->
+            <div class="achievement-card bg-white rounded-2xl p-4 shadow-lg text-center">
+                <div class="w-12 h-12 mx-auto mb-2 bg-gradient-to-br from-purple-400 to-pink-500 rounded-full flex items-center justify-center">
+                    <i class="fas fa-crown text-white"></i>
+                </div>
+                <h4 class="text-sm font-bold text-gray-800">专家</h4>
+                <p class="text-xs text-gray-500">完成颜色分类</p>
+            </div>
+
+            <!-- 即将解锁 -->
+            <div class="achievement-card bg-gray-100 rounded-2xl p-4 shadow-lg text-center opacity-50">
+                <div class="w-12 h-12 mx-auto mb-2 bg-gray-300 rounded-full flex items-center justify-center">
+                    <i class="fas fa-lock text-gray-500"></i>
+                </div>
+                <h4 class="text-sm font-bold text-gray-500">???</h4>
+                <p class="text-xs text-gray-400">即将解锁</p>
+            </div>
+
+            <!-- 即将解锁 -->
+            <div class="achievement-card bg-gray-100 rounded-2xl p-4 shadow-lg text-center opacity-50">
+                <div class="w-12 h-12 mx-auto mb-2 bg-gray-300 rounded-full flex items-center justify-center">
+                    <i class="fas fa-lock text-gray-500"></i>
+                </div>
+                <h4 class="text-sm font-bold text-gray-500">???</h4>
+                <p class="text-xs text-gray-400">即将解锁</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 底部Tab栏 -->
+    <nav class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-6 py-3">
+        <div class="flex justify-around">
+            <button class="flex flex-col items-center space-y-1 text-gray-400">
+                <i class="fas fa-home text-xl"></i>
+                <span class="text-xs font-medium">首页</span>
+            </button>
+            <button class="flex flex-col items-center space-y-1 text-gray-400">
+                <i class="fas fa-book text-xl"></i>
+                <span class="text-xs font-medium">学习</span>
+            </button>
+            <button class="flex flex-col items-center space-y-1 text-gray-400">
+                <i class="fas fa-gamepad text-xl"></i>
+                <span class="text-xs font-medium">练习</span>
+            </button>
+            <button class="flex flex-col items-center space-y-1 text-green-500">
+                <i class="fas fa-chart-line text-xl"></i>
+                <span class="text-xs font-medium">进度</span>
+            </button>
+            <button class="flex flex-col items-center space-y-1 text-gray-400">
+                <i class="fas fa-user text-xl"></i>
+                <span class="text-xs font-medium">我的</span>
+            </button>
+        </div>
+    </nav>
+</body>
+</html> 

@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>儿童英语学习 - iPad原型</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* iPad Pro 12.9寸尺寸 */
+        .ipad-container {
+            width: 1024px;
+            height: 1366px;
+            margin: 20px auto;
+            background: #000;
+            border-radius: 25px;
+            padding: 8px;
+            box-shadow: 0 0 50px rgba(0,0,0,0.3);
+        }
+        
+        .ipad-screen {
+            width: 100%;
+            height: 100%;
+            background: #f8f9fa;
+            border-radius: 18px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .status-bar {
+            height: 44px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .prototype-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr 1fr;
+            height: calc(100% - 44px);
+            gap: 1px;
+            background: #e5e7eb;
+        }
+        
+        .prototype-section {
+            background: white;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            transform: scale(0.5);
+            transform-origin: top left;
+            width: 200%;
+            height: 200%;
+        }
+        
+        .section-label {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(102, 126, 234, 0.9);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            z-index: 10;
+        }
+        
+        /* 响应式调整 */
+        @media (max-width: 1200px) {
+            .ipad-container {
+                width: 90vw;
+                height: 120vw;
+                max-width: 800px;
+                max-height: 1067px;
+            }
+            iframe {
+                transform: scale(0.4);
+                width: 250%;
+                height: 250%;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <!-- iPad容器 -->
+    <div class="ipad-container">
+        <div class="ipad-screen">
+            <!-- iOS状态栏 -->
+            <div class="status-bar">
+                <div class="flex items-center space-x-2">
+                    <span>9:41</span>
+                </div>
+                <div class="flex items-center space-x-1">
+                    <i class="fas fa-signal text-sm"></i>
+                    <i class="fas fa-wifi text-sm"></i>
+                    <i class="fas fa-battery-three-quarters text-sm"></i>
+                    <span class="text-sm">100%</span>
+                </div>
+            </div>
+            
+            <!-- 原型界面网格 -->
+            <div class="prototype-grid">
+                <!-- 首页 - 分类选择 -->
+                <div class="prototype-section">
+                    <div class="section-label">🏠 首页 - 分类选择</div>
+                    <iframe src="home.html"></iframe>
+                </div>
+                
+                <!-- 学习页面 -->
+                <div class="prototype-section">
+                    <div class="section-label">📚 学习 - 单词卡片</div>
+                    <iframe src="learning.html"></iframe>
+                </div>
+                
+                <!-- 练习模式 -->
+                <div class="prototype-section">
+                    <div class="section-label">🎮 练习 - 游戏化学习</div>
+                    <iframe src="practice.html"></iframe>
+                </div>
+                
+                <!-- 设置页面 -->
+                <div class="prototype-section">
+                    <div class="section-label">⚙️ 设置 - 个性化配置</div>
+                    <iframe src="settings.html"></iframe>
+                </div>
+                
+                <!-- 预留位置 - 进度页面 -->
+                <div class="prototype-section bg-gray-100">
+                    <div class="section-label bg-gray-500">📊 进度 (预留)</div>
+                    <div class="h-full flex items-center justify-center text-gray-500">
+                        <div class="text-center">
+                            <i class="fas fa-clock text-4xl mb-2"></i>
+                            <p class="text-sm">第二版本功能</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 预留位置 - 个人资料 -->
+                <div class="prototype-section bg-gray-100">
+                    <div class="section-label bg-gray-500">👤 个人 (预留)</div>
+                    <div class="h-full flex items-center justify-center text-gray-500">
+                        <div class="text-center">
+                            <i class="fas fa-clock text-4xl mb-2"></i>
+                            <p class="text-sm">第二版本功能</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 说明文字 -->
+    <div class="max-w-4xl mx-auto mt-8 p-6 bg-white rounded-xl shadow-lg">
+        <h2 class="text-2xl font-bold text-gray-800 mb-4">🎨 儿童英语学习iPad应用 - V1.0 简化版原型</h2>
+        <div class="grid md:grid-cols-3 gap-6">
+            <div>
+                <h3 class="text-lg font-semibold text-blue-600 mb-2">V1.0 核心功能</h3>
+                <ul class="space-y-2 text-gray-600">
+                    <li>• 🏠 <strong>首页</strong> - 直接分类选择</li>
+                    <li>• 📚 <strong>学习</strong> - 单词卡片学习</li>
+                    <li>• 🎮 <strong>练习</strong> - 游戏化练习</li>
+                    <li>• ⚙️ <strong>设置</strong> - 个性化配置</li>
+                </ul>
+            </div>
+            <div>
+                <h3 class="text-lg font-semibold text-orange-600 mb-2">设计亮点</h3>
+                <ul class="space-y-2 text-gray-600">
+                    <li>• 🎨 温馨卡通风格设计</li>
+                    <li>• 📱 iPad Pro真实尺寸</li>
+                    <li>• 🌈 鲜艳色彩，儿童友好</li>
+                    <li>• 🔘 大按钮，易于操作</li>
+                    <li>• 🖼️ 真实图片素材</li>
+                </ul>
+            </div>
+            <div>
+                <h3 class="text-lg font-semibold text-gray-600 mb-2">后续版本功能</h3>
+                <ul class="space-y-2 text-gray-500">
+                    <li>• 📊 学习进度统计</li>
+                    <li>• 🏆 成就系统</li>
+                    <li>• 👤 个人资料页面</li>
+                    <li>• 📅 学习日历</li>
+                    <li>• 🎯 目标设定</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 

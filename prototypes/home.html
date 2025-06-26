@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>首页</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+        
+        .category-card {
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            border: 2px solid transparent;
+            background-clip: padding-box;
+        }
+        
+        .floating-animation {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .sparkle {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: #ffd700;
+            border-radius: 50%;
+            animation: sparkle 2s infinite;
+        }
+        
+        @keyframes sparkle {
+            0%, 100% { opacity: 0; transform: scale(0); }
+            50% { opacity: 1; transform: scale(1); }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 min-h-screen">
+    <!-- 顶部导航栏 -->
+    <nav class="gradient-bg px-6 py-4 text-white">
+        <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
+                    <i class="fas fa-graduation-cap text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold">英语小天才</h1>
+                    <p class="text-sm opacity-90">和小动物一起学英语</p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-4">
+                <button class="w-10 h-10 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
+                    <i class="fas fa-search"></i>
+                </button>
+                <button class="w-10 h-10 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
+                    <i class="fas fa-cog"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 简化欢迎区域 -->
+    <section class="px-6 py-6">
+        <div class="text-center">
+            <h2 class="text-2xl font-bold text-gray-800 mb-2">选择学习分类</h2>
+            <p class="text-gray-600">选择一个你感兴趣的分类开始学习吧！</p>
+        </div>
+    </section>
+
+    <!-- 分类网格 -->
+    <section class="px-6 pb-8">
+        <div class="grid grid-cols-2 gap-6">
+            <!-- 动物分类 -->
+            <div class="category-card card-hover rounded-2xl p-6 shadow-lg">
+                <div class="text-center">
+                    <div class="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-orange-400 to-red-500 rounded-2xl flex items-center justify-center text-white text-2xl">
+                        🐾
+                    </div>
+                    <h4 class="text-lg font-bold text-gray-800 mb-2">动物朋友</h4>
+                    <p class="text-sm text-gray-600 mb-4">98个可爱的动物等你认识</p>
+                    <img src="https://images.unsplash.com/photo-1574870111867-089730e5a72c?w=300&h=200&fit=crop" 
+                         alt="可爱动物" class="w-full h-24 object-cover rounded-xl mb-3">
+                    <button class="w-full bg-gradient-to-r from-orange-400 to-red-500 text-white py-3 rounded-xl font-semibold">
+                        开始学习
+                    </button>
+                </div>
+            </div>
+
+            <!-- 食物分类 -->
+            <div class="category-card card-hover rounded-2xl p-6 shadow-lg">
+                <div class="text-center">
+                    <div class="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-green-400 to-blue-500 rounded-2xl flex items-center justify-center text-white text-2xl">
+                        🍎
+                    </div>
+                    <h4 class="text-lg font-bold text-gray-800 mb-2">美味食物</h4>
+                    <p class="text-sm text-gray-600 mb-4">70种好吃的食物名称</p>
+                    <img src="https://images.unsplash.com/photo-1568702846914-96b305d2aaeb?w=300&h=200&fit=crop" 
+                         alt="美味食物" class="w-full h-24 object-cover rounded-xl mb-3">
+                    <button class="w-full bg-gradient-to-r from-green-400 to-blue-500 text-white py-3 rounded-xl font-semibold">
+                        开始学习
+                    </button>
+                </div>
+            </div>
+
+            <!-- 学校分类 -->
+            <div class="category-card card-hover rounded-2xl p-6 shadow-lg">
+                <div class="text-center">
+                    <div class="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-purple-400 to-pink-500 rounded-2xl flex items-center justify-center text-white text-2xl">
+                        🏫
+                    </div>
+                    <h4 class="text-lg font-bold text-gray-800 mb-2">学校生活</h4>
+                    <p class="text-sm text-gray-600 mb-4">287个校园相关词汇</p>
+                    <img src="https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=300&h=200&fit=crop" 
+                         alt="学校" class="w-full h-24 object-cover rounded-xl mb-3">
+                    <button class="w-full bg-gradient-to-r from-purple-400 to-pink-500 text-white py-3 rounded-xl font-semibold">
+                        开始学习
+                    </button>
+                </div>
+            </div>
+
+            <!-- 颜色分类 -->
+            <div class="category-card card-hover rounded-2xl p-6 shadow-lg">
+                <div class="text-center">
+                    <div class="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-2xl flex items-center justify-center text-white text-2xl">
+                        🎨
+                    </div>
+                    <h4 class="text-lg font-bold text-gray-800 mb-2">彩色世界</h4>
+                    <p class="text-sm text-gray-600 mb-4">50种绚丽的颜色名称</p>
+                    <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=300&h=200&fit=crop" 
+                         alt="颜色" class="w-full h-24 object-cover rounded-xl mb-3">
+                    <button class="w-full bg-gradient-to-r from-yellow-400 to-orange-500 text-white py-3 rounded-xl font-semibold">
+                        开始学习
+                    </button>
+                </div>
+            </div>
+
+            <!-- 交通工具分类 -->
+            <div class="category-card card-hover rounded-2xl p-6 shadow-lg">
+                <div class="text-center">
+                    <div class="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-cyan-400 to-blue-500 rounded-2xl flex items-center justify-center text-white text-2xl">
+                        🚗
+                    </div>
+                    <h4 class="text-lg font-bold text-gray-800 mb-2">交通工具</h4>
+                    <p class="text-sm text-gray-600 mb-4">50种常见交通工具</p>
+                    <img src="https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=300&h=200&fit=crop" 
+                         alt="交通工具" class="w-full h-24 object-cover rounded-xl mb-3">
+                    <button class="w-full bg-gradient-to-r from-cyan-400 to-blue-500 text-white py-3 rounded-xl font-semibold">
+                        开始学习
+                    </button>
+                </div>
+            </div>
+
+            <!-- 家庭分类 -->
+            <div class="category-card card-hover rounded-2xl p-6 shadow-lg">
+                <div class="text-center">
+                    <div class="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-rose-400 to-pink-500 rounded-2xl flex items-center justify-center text-white text-2xl">
+                        🏠
+                    </div>
+                    <h4 class="text-lg font-bold text-gray-800 mb-2">温馨家庭</h4>
+                    <p class="text-sm text-gray-600 mb-4">50个家庭相关词汇</p>
+                    <img src="https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=300&h=200&fit=crop" 
+                         alt="家庭" class="w-full h-24 object-cover rounded-xl mb-3">
+                    <button class="w-full bg-gradient-to-r from-rose-400 to-pink-500 text-white py-3 rounded-xl font-semibold">
+                        开始学习
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 底部Tab栏 -->
+    <nav class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-6 py-4">
+        <div class="flex justify-around">
+            <button class="flex flex-col items-center space-y-1 text-purple-500">
+                <i class="fas fa-home text-2xl"></i>
+                <span class="text-sm font-medium">首页</span>
+            </button>
+            <button class="flex flex-col items-center space-y-1 text-gray-400">
+                <i class="fas fa-book text-2xl"></i>
+                <span class="text-sm font-medium">学习</span>
+            </button>
+            <button class="flex flex-col items-center space-y-1 text-gray-400">
+                <i class="fas fa-gamepad text-2xl"></i>
+                <span class="text-sm font-medium">练习</span>
+            </button>
+            <button class="flex flex-col items-center space-y-1 text-gray-400">
+                <i class="fas fa-cog text-2xl"></i>
+                <span class="text-sm font-medium">设置</span>
+            </button>
+        </div>
+    </nav>
+</body>
+</html> 
