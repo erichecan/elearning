@@ -4,8 +4,9 @@
   "description": "English Learning App for Kids",
   "main": "index.js",
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
+    "serve": "webpack serve --mode development",
+    "build": "webpack --mode production",
+    "dev": "webpack serve --mode development",
     "lint": "vue-cli-service lint"
   },
   "keywords": [
@@ -24,6 +25,7 @@
     "vue-router": "^4.0.0"
   },
   "devDependencies": {
+    "@playwright/test": "^1.53.1",
     "@vue/cli-service": "^5.0.0",
     "@vue/compiler-sfc": "^3.2.0",
     "css-loader": "^6.8.1",

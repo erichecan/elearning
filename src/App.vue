@@ -618,7 +618,12 @@ export default {
     async tryFixImageUrl(word) {
       if (!word || !word.id) return;
       
-      const newImageUrl = `https://source.unsplash.com/400x300/?${encodeURIComponent(word.text)}`;
+      // 使用稳定的Picsum Photos服务，为每个单词生成固定的图片ID
+      const wordHash = word.text.split('').reduce((hash, char) => {
+        return char.charCodeAt(0) + ((hash << 5) - hash);
+      }, 0);
+      const imageId = Math.abs(wordHash) % 1000; // 生成0-999的图片ID
+      const newImageUrl = `https://picsum.photos/400/300?random=${imageId}`;
       
       try {
         const { error } = await supabase
@@ -706,11 +711,13 @@ export default {
         
         // 尝试多个图片源
         if (event.target.retryCount === 1) {
-          // 第一次失败，尝试 Pixabay
-          const pixabayUrl = `https://pixabay.com/api/?key=your-key&q=${encodeURIComponent(text)}&image_type=photo&category=&min_width=400&min_height=300&per_page=3`;
-          // 暂时使用另一个 Unsplash 格式
-          const backupUrl = `https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=400&h=300&fit=crop&auto=format&q=80`;
-          console.log('尝试备用图片源:', backupUrl);
+          // 第一次失败，使用Picsum Photos（稳定可靠）
+          const wordHash = text.split('').reduce((hash, char) => {
+            return char.charCodeAt(0) + ((hash << 5) - hash);
+          }, 0);
+          const imageId = Math.abs(wordHash) % 1000; // 生成0-999的图片ID
+          const backupUrl = `https://picsum.photos/400/300?random=${imageId}`;
+          console.log('尝试Picsum图片源:', backupUrl);
           event.target.src = backupUrl;
         } else if (event.target.retryCount === 2) {
           // 第二次失败，使用精美的 SVG 图片
