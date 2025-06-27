@@ -1,10 +1,10 @@
 <template>
-  <div class="app-container">
+    <div class="app-container">
     <!-- iPad Pro 状态栏模拟 -->
     <div class="status-bar">
       <div class="status-left">
         <span class="time">9:41</span>
-      </div>
+        </div>
       <div class="status-center">
         <div class="dynamic-island"></div>
       </div>
@@ -15,7 +15,7 @@
       </div>
     </div>
 
-    <!-- 主内容区域 -->
+      <!-- 主内容区域 -->
     <div class="main-content">
       <!-- 首页：分类选择 -->
       <div v-if="currentView === 'home'" class="home-view">
@@ -25,12 +25,12 @@
             <div class="nav-left">
               <div class="nav-icon">
                 <i class="fas fa-graduation-cap"></i>
-              </div>
+        </div>
               <div class="nav-text">
                 <h1 class="nav-title">English Learning</h1>
                 <p class="nav-subtitle">Learn with fun activities</p>
-              </div>
-            </div>
+          </div>
+        </div>
             <div class="nav-right">
               <button class="nav-button">
                 <i class="fas fa-search"></i>
@@ -68,7 +68,7 @@
                   :class="`gradient-bg-${index % 6}`"
                 >
                   {{ getCategoryEmoji(category.name) }}
-                </div>
+            </div>
                 <h4 class="category-title-prototype">{{ category.name }}</h4>
                 <p class="category-description">{{ getWordCount(category.id) }} fun words to learn</p>
                 <img 
@@ -84,8 +84,8 @@
                 >
                   Start Learning
                 </button>
-              </div>
-            </div>
+          </div>
+        </div>
           </div>
         </section>
 
@@ -107,8 +107,8 @@
             <i class="fas fa-cog"></i>
             <span>Settings</span>
           </div>
-        </div>
-      </div>
+            </div>
+          </div>
 
       <!-- 学习页面 -->
       <div v-else-if="currentView === 'learning'" class="learning-view">
@@ -134,12 +134,12 @@
                 :src="currentItems[currentItemIndex]?.image_url || 'https://via.placeholder.com/400x300'" 
                 :alt="currentItems[currentItemIndex]?.text"
                 class="word-image"
-                @error="handleImageError"
-              />
+                  @error="handleImageError"
+                />
               <button class="audio-button" @click="playAudio">
                 <i class="fas fa-volume-up"></i>
               </button>
-            </div>
+              </div>
             
             <div class="word-content">
               <div v-if="showEnglishText || textRevealed" class="english-text">
@@ -313,6 +313,8 @@
 </template>
 
 <script>
+import config from './config.js';
+
 export default {
   name: 'App',
   data() {
@@ -341,6 +343,7 @@ export default {
   },
   mounted() {
     console.log('应用启动，开始获取分类数据...');
+    console.log('API地址:', config.apiBaseUrl);
     this.fetchCategories();
     this.loadSettings();
   },
@@ -440,7 +443,7 @@ export default {
 
     // 获取分类数据
     fetchCategories() {
-      fetch('http://localhost:5001/api/learning/categories')
+      fetch(`${config.apiBaseUrl}/api/learning/categories`)
         .then(res => res.json())
         .then(response => {
           // 后端返回格式: {data: [...], success: true}
@@ -459,7 +462,7 @@ export default {
 
     // 获取单词数量 - 修复Vue 3兼容性
     fetchWordCount(categoryId) {
-      fetch(`http://localhost:5001/api/learning/categories/${categoryId}/words`)
+      fetch(`${config.apiBaseUrl}/api/learning/categories/${categoryId}/words`)
         .then(res => res.json())
         .then(response => {
           // 处理可能的不同数据格式
@@ -483,8 +486,8 @@ export default {
     // 加载学习内容
     loadLearningItems() {
       const endpoint = this.learningMode === 'words' 
-        ? `http://localhost:5001/api/learning/categories/${this.selectedCategory.id}/words`
-        : `http://localhost:5001/api/learning/categories/${this.selectedCategory.id}/phrases`;
+        ? `${config.apiBaseUrl}/api/learning/categories/${this.selectedCategory.id}/words`
+        : `${config.apiBaseUrl}/api/learning/categories/${this.selectedCategory.id}/phrases`;
         
       console.log('加载学习内容:', endpoint);
       fetch(endpoint)
@@ -549,7 +552,7 @@ export default {
         speechSynthesis.speak(utterance);
       }
     },
-
+    
     // 处理图片错误
     handleImageError(event) {
       if (this.currentItems && this.currentItems.length > 0 && 
@@ -1000,7 +1003,7 @@ input:checked + .slider:before {
   }
   
   .navigation-buttons {
-    flex-direction: column;
+  flex-direction: column;
     gap: 15px;
   }
 }

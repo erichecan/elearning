@@ -10,17 +10,26 @@ from src.routes.user import user_bp
 from src.routes.learning import learning_bp
 
 app = Flask(__name__, static_folder=os.path.join(os.path.dirname(__file__), 'static'))
-app.config['SECRET_KEY'] = 'asdf#FGSgvasgf$5$WGT'
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'asdf#FGSgvasgf$5$WGT')
 
-# 启用 CORS 支持
-CORS(app, origins=['*'])
+# 启用 CORS 支持 - 生产环境配置
+if os.environ.get('FLASK_ENV') == 'production':
+    # 生产环境只允许特定域名
+    CORS(app, origins=[
+        'https://your-netlify-app.netlify.app',
+        'https://*.netlify.app'
+    ])
+else:
+    # 开发环境允许所有域名
+    CORS(app, origins=['*'])
 
 # 注册蓝图
 app.register_blueprint(user_bp, url_prefix='/api')
 app.register_blueprint(learning_bp, url_prefix='/api/learning')
 
-# 数据库配置
-app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{os.path.join(os.path.dirname(__file__), 'database', 'app.db')}"
+# 数据库配置 - 支持环境变量
+database_url = os.environ.get('DATABASE_URL', f"sqlite:///{os.path.join(os.path.dirname(__file__), 'database', 'app.db')}")
+app.config['SQLALCHEMY_DATABASE_URI'] = database_url
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # 初始化数据库
@@ -57,5 +66,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
     
     print(f"Starting Flask app on port {args.port}")
-    app.run(debug=True, host='0.0.0.0', port=args.port)
+    # 生产环境不启用debug模式
+    debug_mode = os.environ.get('FLASK_ENV') != 'production'
+    app.run(debug=debug_mode, host='0.0.0.0', port=args.port)
 
