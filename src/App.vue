@@ -127,19 +127,32 @@
         </div>
 
         <!-- 学习卡片 -->
-        <div v-if="currentItems.length > 0" class="learning-card-container">
+        <div v-if="currentItems.length > 0" class="learning-card-container"
+             @touchstart="handleTouchStart"
+             @touchmove="handleTouchMove"
+             @touchend="handleTouchEnd">
+          
+          <!-- 左侧导航按钮 -->
+          <button 
+            class="side-nav-btn left-nav-btn" 
+            @click="previousItem" 
+            :disabled="currentItemIndex === 0"
+          >
+            <i class="fas fa-chevron-left"></i>
+          </button>
+          
           <div class="learning-card">
             <div class="word-image-container">
               <img 
                 :src="currentItems[currentItemIndex]?.image_url || 'https://via.placeholder.com/400x300'" 
                 :alt="currentItems[currentItemIndex]?.text"
                 class="word-image"
-                  @error="handleImageError"
-                />
+                @error="handleImageError"
+              />
               <button class="audio-button" @click="playAudio">
                 <i class="fas fa-volume-up"></i>
               </button>
-              </div>
+            </div>
             
             <div class="word-content">
               <div v-if="showEnglishText || textRevealed" class="english-text">
@@ -153,29 +166,21 @@
               <div v-if="currentItems[currentItemIndex]?.definition && (showEnglishText || textRevealed)" class="word-definition">
                 {{ currentItems[currentItemIndex].definition }}
               </div>
+              
+              <div v-if="currentItems[currentItemIndex]?.pronunciation && (showEnglishText || textRevealed)" class="word-pronunciation">
+                [{{ currentItems[currentItemIndex].pronunciation }}]
+              </div>
             </div>
           </div>
-
-          <!-- 导航按钮 -->
-          <div class="navigation-buttons">
-            <button 
-              class="nav-btn prev-btn" 
-              @click="previousItem" 
-              :disabled="currentItemIndex === 0"
-            >
-              <i class="fas fa-chevron-left"></i>
-              Previous
-            </button>
-            
-            <button 
-              class="nav-btn next-btn" 
-              @click="nextItem" 
-              :disabled="currentItemIndex === currentItems.length - 1"
-            >
-              Next
-              <i class="fas fa-chevron-right"></i>
-            </button>
-          </div>
+          
+          <!-- 右侧导航按钮 -->
+          <button 
+            class="side-nav-btn right-nav-btn" 
+            @click="nextItem" 
+            :disabled="currentItemIndex === currentItems.length - 1"
+          >
+            <i class="fas fa-chevron-right"></i>
+          </button>
         </div>
 
         <!-- 底部导航 -->
@@ -329,7 +334,13 @@ export default {
       showEnglishText: false,
       autoPlay: false,
       textRevealed: false,
-      wordCounts: {}
+      wordCounts: {},
+      // 触摸滑动相关
+      touchStartX: 0,
+      touchStartY: 0,
+      touchEndX: 0,
+      touchEndY: 0,
+      minSwipeDistance: 50
     }
   },
   computed: {
@@ -568,6 +579,42 @@ export default {
     // 开始游戏
     startGame(gameType) {
       alert(`Starting ${gameType} game! This feature will be added soon.`);
+    },
+
+    // 触摸开始
+    handleTouchStart(event) {
+      this.touchStartX = event.touches[0].clientX;
+      this.touchStartY = event.touches[0].clientY;
+    },
+
+    // 触摸移动
+    handleTouchMove(event) {
+      // 阻止默认滚动行为
+      event.preventDefault();
+    },
+
+    // 触摸结束
+    handleTouchEnd(event) {
+      this.touchEndX = event.changedTouches[0].clientX;
+      this.touchEndY = event.changedTouches[0].clientY;
+      this.handleSwipe();
+    },
+
+    // 处理滑动手势
+    handleSwipe() {
+      const deltaX = this.touchEndX - this.touchStartX;
+      const deltaY = this.touchEndY - this.touchStartY;
+      
+      // 判断是否为有效的水平滑动
+      if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > this.minSwipeDistance) {
+        if (deltaX > 0) {
+          // 向右滑动 - 上一个单词
+          this.previousItem();
+        } else {
+          // 向左滑动 - 下一个单词
+          this.nextItem();
+        }
+      }
     },
 
     // 初始化 Supabase 测试数据（开发时使用）
@@ -1058,8 +1105,29 @@ input:checked + .slider:before {
   }
   
   .navigation-buttons {
-  flex-direction: column;
+    flex-direction: column;
     gap: 15px;
+  }
+  
+  /* 移动设备上的学习卡片布局 */
+  .learning-card-container {
+    flex-direction: column;
+    gap: 30px;
+  }
+  
+  .side-nav-btn {
+    position: relative;
+    width: 50px;
+    height: 50px;
+    font-size: 1.2rem;
+  }
+  
+  .left-nav-btn, .right-nav-btn {
+    order: 0;
+  }
+  
+  .learning-card {
+    max-width: 100%;
   }
 }
 
@@ -1116,6 +1184,10 @@ input:checked + .slider:before {
 .learning-card-container {
   max-width: 600px;
   margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  position: relative;
 }
 
 .learning-card {
@@ -1123,7 +1195,47 @@ input:checked + .slider:before {
   border-radius: 25px;
   box-shadow: 0 15px 35px rgba(0,0,0,0.1);
   overflow: hidden;
-  margin-bottom: 40px;
+  flex: 1;
+  max-width: 500px;
+}
+
+/* 侧边导航按钮 */
+.side-nav-btn {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: none;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+  z-index: 10;
+}
+
+.side-nav-btn:hover:not(:disabled) {
+  transform: scale(1.1);
+  background: linear-gradient(135deg, #764ba2, #667eea);
+}
+
+.side-nav-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  background: #e0e0e0;
+  color: #999;
+  box-shadow: none;
+}
+
+.left-nav-btn {
+  order: -1;
+}
+
+.right-nav-btn {
+  order: 1;
 }
 
 .word-image-container {
@@ -1194,6 +1306,14 @@ input:checked + .slider:before {
   font-size: 1.1rem;
   color: #666;
   line-height: 1.6;
+  margin-bottom: 10px;
+}
+
+.word-pronunciation {
+  font-size: 1rem;
+  color: #667eea;
+  font-style: italic;
+  font-weight: 500;
 }
 
 /* 导航按钮 */

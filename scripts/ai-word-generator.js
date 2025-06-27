@@ -33,15 +33,19 @@ async function generateWordsWithAI(category, count = 5) {
    - text: 英语单词
    - pronunciation: IPA音标
    - definition: 简单的中文定义（适合儿童理解）
+   - imageKeyword: 用于搜索图片的精确关键词（英文，确保能找到相关图片）
 
 示例格式：
 [
   {
     "text": "cat",
     "pronunciation": "kæt",
-    "definition": "猫，一种可爱的宠物动物"
+    "definition": "猫，一种可爱的宠物动物",
+    "imageKeyword": "cute domestic cat pet"
   }
 ]
+
+注意：imageKeyword应该是描述性的，包含多个相关词汇，确保图片搜索结果准确。
 
 请确保返回的是有效的JSON格式，不要包含任何额外的文字说明。
 `;
@@ -72,7 +76,8 @@ async function generateWordsWithAI(category, count = 5) {
       const validWords = words.filter(word => 
         word.text && 
         word.pronunciation && 
-        word.definition
+        word.definition &&
+        word.imageKeyword
       );
       
       console.log(`✅ 成功解析 ${validWords.length} 个单词`);
@@ -165,9 +170,12 @@ function generateFallbackWords(category, count = 5) {
 }
 
 // 获取 Unsplash 图片
-function generateImageUrl(word) {
+function generateImageUrl(wordText, imageKeyword = null) {
+  // 优先使用AI生成的精确关键词，否则使用单词本身
+  const searchTerm = imageKeyword || wordText;
+  
   // 使用 Unsplash Source API 根据关键词获取图片
-  return `https://source.unsplash.com/400x300/?${encodeURIComponent(word)}`;
+  return `https://source.unsplash.com/400x300/?${encodeURIComponent(searchTerm)}`;
 }
 
 // 主函数
@@ -196,7 +204,7 @@ async function runAIGenerator() {
       for (const word of newWords) {
         if (totalGenerated >= dailyTarget) break;
         
-        const imageUrl = generateImageUrl(word.text);
+        const imageUrl = generateImageUrl(word.text, word.imageKeyword);
         
         // 检查单词是否已存在
         const { data: existingWords } = await supabase
