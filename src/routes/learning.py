@@ -499,4 +499,84 @@ def get_phrase_contexts():
         return jsonify({
             'success': False,
             'error': str(e)
-        }), 500 
+        }), 500
+
+def init_database():
+    """初始化数据库，创建默认分类和单词"""
+    try:
+        # 检查是否已经有数据
+        if Category.query.count() > 0:
+            print("数据库已有数据，跳过初始化")
+            return
+        
+        # 创建默认分类
+        categories_data = [
+            {'name': 'Animals', 'icon': '🐾', 'description': 'Learn about different animals'},
+            {'name': 'Food', 'icon': '🍎', 'description': 'Food and drinks vocabulary'},
+            {'name': 'Colors', 'icon': '🎨', 'description': 'Learn colors in English'},
+            {'name': 'Body Parts', 'icon': '👋', 'description': 'Parts of the body'},
+            {'name': 'Numbers', 'icon': '🔢', 'description': 'Counting numbers'},
+            {'name': 'Family', 'icon': '🏠', 'description': 'Family members'},
+            {'name': 'Clothing', 'icon': '👕', 'description': 'Clothes and accessories'},
+            {'name': 'Transportation', 'icon': '🚗', 'description': 'Vehicles and transport'},
+            {'name': 'Home', 'icon': '🏡', 'description': 'House and furniture'},
+            {'name': 'School', 'icon': '🏫', 'description': 'School and education'},
+            {'name': 'Sports', 'icon': '⚽', 'description': 'Sports and activities'},
+            {'name': 'Weather', 'icon': '☀️', 'description': 'Weather and seasons'},
+            {'name': 'Fruits', 'icon': '🍓', 'description': 'Fruits and berries'},
+            {'name': 'Vegetables', 'icon': '🥕', 'description': 'Vegetables and greens'},
+            {'name': 'Toys', 'icon': '🧸', 'description': 'Toys and games'},
+            {'name': 'Shapes', 'icon': '⭐', 'description': 'Shapes and geometry'}
+        ]
+        
+        categories = []
+        for cat_data in categories_data:
+            category = Category(
+                name=cat_data['name'],
+                icon=cat_data['icon'],
+                description=cat_data['description']
+            )
+            categories.append(category)
+            db.session.add(category)
+        
+        db.session.commit()
+        print(f"创建了 {len(categories)} 个分类")
+        
+        # 为每个分类添加一些示例单词
+        sample_words = {
+            'Animals': [
+                {'text': 'cat', 'pronunciation': 'kæt', 'definition': 'A small domesticated carnivorous mammal'},
+                {'text': 'dog', 'pronunciation': 'dɔːɡ', 'definition': 'A domesticated carnivorous mammal'},
+                {'text': 'bird', 'pronunciation': 'bɜːrd', 'definition': 'A warm-blooded egg-laying vertebrate'},
+            ],
+            'Food': [
+                {'text': 'apple', 'pronunciation': 'ˈæpəl', 'definition': 'A round fruit with red or green skin'},
+                {'text': 'bread', 'pronunciation': 'bred', 'definition': 'A food made from flour and water'},
+                {'text': 'milk', 'pronunciation': 'mɪlk', 'definition': 'A white liquid produced by mammals'},
+            ],
+            'Colors': [
+                {'text': 'red', 'pronunciation': 'red', 'definition': 'The color of blood'},
+                {'text': 'blue', 'pronunciation': 'bluː', 'definition': 'The color of the sky'},
+                {'text': 'green', 'pronunciation': 'ɡriːn', 'definition': 'The color of grass'},
+            ]
+        }
+        
+        for category in categories:
+            if category.name in sample_words:
+                for word_data in sample_words[category.name]:
+                    word = Word(
+                        text=word_data['text'],
+                        pronunciation=word_data['pronunciation'],
+                        definition=word_data['definition'],
+                        category_id=category.id,
+                        difficulty_level=1
+                    )
+                    db.session.add(word)
+        
+        db.session.commit()
+        print("数据库初始化完成")
+        
+    except Exception as e:
+        print(f"数据库初始化失败: {e}")
+        db.session.rollback()
+        raise 

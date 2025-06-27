@@ -27,9 +27,18 @@ else:
 app.register_blueprint(user_bp, url_prefix='/api')
 app.register_blueprint(learning_bp, url_prefix='/api/learning')
 
-# 数据库配置 - 支持环境变量
-database_url = os.environ.get('DATABASE_URL', f"sqlite:///{os.path.join(os.path.dirname(__file__), 'database', 'app.db')}")
-app.config['SQLALCHEMY_DATABASE_URI'] = database_url
+# 数据库配置 - 支持环境变量和Render环境
+database_url = os.environ.get('DATABASE_URL')
+if database_url:
+    # 如果提供了DATABASE_URL环境变量，使用它
+    app.config['SQLALCHEMY_DATABASE_URI'] = database_url
+else:
+    # 否则使用本地SQLite文件
+    db_path = os.path.join(os.path.dirname(__file__), 'database', 'app.db')
+    # 确保数据库目录存在
+    os.makedirs(os.path.dirname(db_path), exist_ok=True)
+    app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{db_path}"
+
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # 初始化数据库
