@@ -59,31 +59,23 @@
             <div 
               v-for="(category, index) in displayCategories" 
               :key="category.id"
-              class="category-card-prototype"
+              class="category-card-modern"
               @click="selectCategory(category)"
             >
-              <div class="category-content">
-                <div 
-                  class="category-emoji-icon" 
-                  :class="`gradient-bg-${index % 6}`"
-                >
-                  {{ getCategoryEmoji(category.name) }}
-            </div>
-                <h4 class="category-title-prototype">{{ category.name }}</h4>
-                <p class="category-description">{{ getWordCount(category.id) }} fun words to learn</p>
-                <img 
-                  :src="getCategoryImageUrl(category.name)" 
-                  :alt="category.name" 
-                  class="category-image-prototype"
-                  @error="handleImageError"
-                />
-                <button 
-                  class="category-button-prototype"
-                  :class="`gradient-button-${index % 6}`"
-                  @click.stop="selectCategory(category)"
-                >
-                  Start Learning
-                </button>
+              <div class="category-content-modern">
+                <div class="category-image-container-modern">
+                  <img 
+                    :src="getCategoryImageUrl(category.name)" 
+                    :alt="category.name" 
+                    class="category-image-modern"
+                    @error="handleImageError"
+                  />
+                </div>
+                <div class="category-text-content">
+                  <h3 class="category-title-english">{{ category.name }}</h3>
+                  <h4 class="category-title-chinese">{{ getCategoryChineseName(category.name) }}</h4>
+                  <div class="word-count-modern">{{ getWordCount(category.id) }} 个单词</div>
+                </div>
           </div>
         </div>
           </div>
@@ -401,28 +393,73 @@ export default {
       return emojiMap[categoryName] || '📚';
     },
 
-    // 获取分类图片URL
+    // 获取分类图片URL - 使用卡通插画风格
     getCategoryImageUrl(categoryName) {
+      // 使用SVG插画风格的图片，更适合儿童应用
       const imageMap = {
-        'Animals': 'https://images.unsplash.com/photo-1574870111867-089730e5a72c?w=300&h=200&fit=crop',
-        'Food': 'https://images.unsplash.com/photo-1568702846914-96b305d2aaeb?w=300&h=200&fit=crop',
-        'Colors': 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=300&h=200&fit=crop',
-        'Body Parts': 'https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=300&h=200&fit=crop',
-        'Numbers': 'https://images.unsplash.com/photo-1587440871875-191322ee64b0?w=300&h=200&fit=crop',
-        'Family': 'https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=300&h=200&fit=crop',
-        'Clothing': 'https://images.unsplash.com/photo-1445205170230-053b83016050?w=300&h=200&fit=crop',
-        'Transportation': 'https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=300&h=200&fit=crop',
-        'Home': 'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=300&h=200&fit=crop',
-        'School': 'https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=300&h=200&fit=crop',
-        'Sports': 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=300&h=200&fit=crop',
-        'Weather': 'https://images.unsplash.com/photo-1504608524841-42fe6f032b4b?w=300&h=200&fit=crop',
-        'Fruits': 'https://images.unsplash.com/photo-1568702846914-96b305d2aaeb?w=300&h=200&fit=crop',
-        'Vegetables': 'https://images.unsplash.com/photo-1540420773420-3366772f4999?w=300&h=200&fit=crop',
-        'Toys': 'https://images.unsplash.com/photo-1558060370-d644479cb6f7?w=300&h=200&fit=crop',
-        'Shapes': 'https://images.unsplash.com/photo-1509909756405-be0199881695?w=300&h=200&fit=crop',
-        'Nature': 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=300&h=200&fit=crop'
+        'Animals': this.generateSVGImage('🐾', '#FFE0B2', '#FF9800'),
+        'Food': this.generateSVGImage('🍎', '#E8F5E8', '#4CAF50'),
+        'Colors': this.generateSVGImage('🎨', '#F3E5F5', '#9C27B0'),
+        'Body Parts': this.generateSVGImage('👋', '#E3F2FD', '#2196F3'),
+        'Numbers': this.generateSVGImage('🔢', '#FFF3E0', '#FF9800'),
+        'Family': this.generateSVGImage('🏠', '#FCE4EC', '#E91E63'),
+        'Clothing': this.generateSVGImage('👕', '#F1F8E9', '#8BC34A'),
+        'Transportation': this.generateSVGImage('🚗', '#E1F5FE', '#03A9F4'),
+        'Home': this.generateSVGImage('🏡', '#FFF8E1', '#FFC107'),
+        'School': this.generateSVGImage('🏫', '#F9FBE7', '#CDDC39'),
+        'Sports': this.generateSVGImage('⚽', '#E8F5E8', '#4CAF50'),
+        'Weather': this.generateSVGImage('☀️', '#FFF9C4', '#FFEB3B'),
+        'Fruits': this.generateSVGImage('🍓', '#FCE4EC', '#E91E63'),
+        'Vegetables': this.generateSVGImage('🥕', '#F1F8E9', '#8BC34A'),
+        'Toys': this.generateSVGImage('🧸', '#FFF3E0', '#FF9800'),
+        'Shapes': this.generateSVGImage('⭐', '#F3E5F5', '#9C27B0'),
+        'Nature': this.generateSVGImage('🌳', '#E8F5E8', '#4CAF50')
       };
-      return imageMap[categoryName] || 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=300&h=200&fit=crop';
+      return imageMap[categoryName] || this.generateSVGImage('📚', '#F5F5F5', '#9E9E9E');
+    },
+
+    // 生成SVG插画风格图片
+    generateSVGImage(emoji, bgColor, accentColor) {
+      const uniqueId = `bg-${Math.random().toString(36).substr(2, 9)}`;
+      const svg = `
+        <svg xmlns="http://www.w3.org/2000/svg" width="300" height="200" viewBox="0 0 300 200">
+          <defs>
+            <linearGradient id="${uniqueId}" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style="stop-color:${bgColor};stop-opacity:1" />
+              <stop offset="100%" style="stop-color:${accentColor};stop-opacity:0.3" />
+            </linearGradient>
+          </defs>
+          <rect width="300" height="200" fill="url(#${uniqueId})" rx="20"/>
+          <circle cx="250" cy="50" r="30" fill="${accentColor}" opacity="0.1"/>
+          <circle cx="50" cy="150" r="20" fill="${accentColor}" opacity="0.15"/>
+          <text x="150" y="120" text-anchor="middle" font-size="60" font-family="system-ui">${emoji}</text>
+        </svg>
+      `;
+      return `data:image/svg+xml;base64,${btoa(unescape(encodeURIComponent(svg)))}`;
+    },
+
+    // 获取分类中文名称
+    getCategoryChineseName(categoryName) {
+      const chineseNames = {
+        'Animals': '动物',
+        'Food': '食物',
+        'Colors': '颜色',
+        'Body Parts': '身体',
+        'Numbers': '数字',
+        'Family': '家庭',
+        'Clothing': '服装',
+        'Transportation': '交通',
+        'Home': '家居',
+        'School': '学校',
+        'Sports': '运动',
+        'Weather': '天气',
+        'Fruits': '水果',
+        'Vegetables': '蔬菜',
+        'Toys': '玩具',
+        'Shapes': '形状',
+        'Nature': '自然'
+      };
+      return chineseNames[categoryName] || categoryName;
     },
 
     // 获取单词数量
@@ -826,30 +863,104 @@ export default {
   padding: 0 24px 32px;
 }
 
-/* 分类网格 - 完全按照原型的2x3布局 */
+/* 分类网格 - 现代化响应式布局 */
 .categories-grid-prototype {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 24px;
-  max-width: 600px;
+  max-width: 1200px;
   margin: 0 auto;
 }
 
-/* 分类卡片 - 完全复刻原型设计 */
-.category-card-prototype {
-  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
-  border-radius: 16px;
-  padding: 24px;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
-  cursor: pointer;
-  transition: all 0.3s ease;
-  text-align: center;
-  border: 2px solid transparent;
+@media (max-width: 768px) {
+  .categories-grid-prototype {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+  
+  .category-card-modern {
+    height: 160px;
+  }
+  
+  .category-title-english {
+    font-size: 1rem;
+  }
+  
+  .category-title-chinese {
+    font-size: 0.8rem;
+  }
+  
+  .word-count-modern {
+    font-size: 0.75rem;
+  }
 }
 
-.category-card-prototype:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+/* 现代化分类卡片 - 参考竞品设计 */
+.category-card-modern {
+  background: white;
+  border-radius: 20px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+  position: relative;
+  height: 200px;
+}
+
+.category-card-modern:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+}
+
+.category-content-modern {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.category-image-container-modern {
+  flex: 1;
+  overflow: hidden;
+  border-radius: 20px 20px 0 0;
+}
+
+.category-image-modern {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.category-card-modern:hover .category-image-modern {
+  transform: scale(1.05);
+}
+
+.category-text-content {
+  padding: 15px 20px;
+  background: white;
+  text-align: center;
+}
+
+.category-title-english {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #333;
+  margin: 0 0 4px 0;
+  line-height: 1.2;
+}
+
+.category-title-chinese {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #666;
+  margin: 0 0 8px 0;
+  line-height: 1.2;
+}
+
+.word-count-modern {
+  font-size: 0.8rem;
+  color: #999;
+  font-weight: 500;
 }
 
 .category-content {
