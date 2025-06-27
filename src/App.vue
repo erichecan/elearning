@@ -48,7 +48,12 @@
             <h2 class="welcome-title">Choose Learning Category</h2>
             <p class="welcome-subtitle">Select a category you're interested in to start learning!</p>
             <!-- 调试信息 -->
-            <p v-if="categories.length === 0" class="debug-info">Loading categories...</p>
+            <p v-if="categories.length === 0" class="debug-info">
+              Loading categories...
+              <button @click="initSupabaseData" style="margin-left: 10px; padding: 5px 10px; background: #667eea; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                初始化测试数据
+              </button>
+            </p>
             <p v-else class="debug-info">Found {{ categories.length }} categories, showing first 6</p>
           </div>
         </section>
@@ -345,6 +350,14 @@ export default {
     console.log('应用启动，开始获取分类数据...');
     this.fetchCategories();
     this.loadSettings();
+    
+    // 如果获取不到分类数据，尝试初始化测试数据
+    setTimeout(() => {
+      if (this.categories.length === 0) {
+        console.log('未获取到分类数据，尝试初始化测试数据...');
+        this.initSupabaseData();
+      }
+    }, 3000);
   },
   watch: {
     currentItemIndex() {
@@ -442,30 +455,39 @@ export default {
 
     // 获取分类数据
     async fetchCategories() {
-      const { data, error } = await supabase.from('categories').select('*');
-      if (error) {
-        console.error('获取分类失败:', error);
+      console.log('开始从 Supabase 获取分类数据...');
+      try {
+        const { data, error } = await supabase.from('categories').select('*');
+        if (error) {
+          console.error('Supabase 获取分类失败:', error);
+          console.error('错误详情:', error.message);
+          this.categories = [];
+          return;
+        }
+        console.log('Supabase 返回的分类数据:', data);
+        this.categories = data || [];
+        console.log('设置的分类数量:', this.categories.length);
+        // 获取每个分类的单词数量
+        this.categories.forEach(category => {
+          this.fetchWordCount(category.id);
+        });
+      } catch (err) {
+        console.error('fetchCategories 异常:', err);
         this.categories = [];
-        return;
       }
-      this.categories = data || [];
-      // 获取每个分类的单词数量
-      this.categories.forEach(category => {
-        this.fetchWordCount(category.id);
-      });
     },
 
     // 获取单词数量
     async fetchWordCount(categoryId) {
-      const { count, error } = await supabase
+      const { data, error } = await supabase
         .from('words')
-        .select('*', { count: 'exact', head: true })
+        .select('*')
         .eq('category_id', categoryId);
       if (error) {
         console.error('获取单词数量失败:', error);
         return;
       }
-      this.wordCounts[categoryId] = count || 0;
+      this.wordCounts[categoryId] = (data || []).length;
     },
 
     // 选择分类
@@ -559,6 +581,59 @@ export default {
     // 开始游戏
     startGame(gameType) {
       alert(`Starting ${gameType} game! This feature will be added soon.`);
+    },
+
+    // 初始化 Supabase 测试数据（开发时使用）
+    async initSupabaseData() {
+      console.log('开始初始化 Supabase 测试数据...');
+      try {
+        // 插入分类数据
+        const categoriesData = [
+          { name: 'Animals', icon: '🐾', description: 'Learn about different animals' },
+          { name: 'Food', icon: '🍎', description: 'Food and drinks vocabulary' },
+          { name: 'Colors', icon: '🎨', description: 'Learn colors in English' },
+          { name: 'Family', icon: '🏠', description: 'Family members' },
+          { name: 'Numbers', icon: '🔢', description: 'Counting numbers' },
+          { name: 'Toys', icon: '🧸', description: 'Toys and games' }
+        ];
+
+        for (const category of categoriesData) {
+          const { error } = await supabase
+            .from('categories')
+            .upsert(category, { onConflict: 'name' });
+          if (error) {
+            console.error('插入分类失败:', category.name, error);
+          }
+        }
+
+        // 插入单词数据
+        const wordsData = [
+          { text: 'cat', pronunciation: 'kæt', definition: 'A small domesticated carnivorous mammal', category_id: 1, difficulty_level: 1 },
+          { text: 'dog', pronunciation: 'dɔːɡ', definition: 'A domesticated carnivorous mammal', category_id: 1, difficulty_level: 1 },
+          { text: 'bird', pronunciation: 'bɜːrd', definition: 'A warm-blooded egg-laying vertebrate', category_id: 1, difficulty_level: 1 },
+          { text: 'apple', pronunciation: 'ˈæpəl', definition: 'A round fruit with red or green skin', category_id: 2, difficulty_level: 1 },
+          { text: 'bread', pronunciation: 'bred', definition: 'A food made from flour and water', category_id: 2, difficulty_level: 1 },
+          { text: 'milk', pronunciation: 'mɪlk', definition: 'A white liquid produced by mammals', category_id: 2, difficulty_level: 1 },
+          { text: 'red', pronunciation: 'red', definition: 'The color of blood', category_id: 3, difficulty_level: 1 },
+          { text: 'blue', pronunciation: 'bluː', definition: 'The color of the sky', category_id: 3, difficulty_level: 1 },
+          { text: 'green', pronunciation: 'ɡriːn', definition: 'The color of grass', category_id: 3, difficulty_level: 1 }
+        ];
+
+        for (const word of wordsData) {
+          const { error } = await supabase
+            .from('words')
+            .upsert(word, { onConflict: 'text' });
+          if (error) {
+            console.error('插入单词失败:', word.text, error);
+          }
+        }
+
+        console.log('Supabase 测试数据初始化完成');
+        // 重新获取分类数据
+        this.fetchCategories();
+      } catch (err) {
+        console.error('初始化 Supabase 数据异常:', err);
+      }
     }
   }
 }
