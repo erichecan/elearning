@@ -179,7 +179,7 @@ def import_extracted_words():
                 continue
             
             # 生成图片URL（使用Unsplash）
-            image_url = f"https://images.unsplash.com/400x300/?{word}"
+            image_url = f"https://source.unsplash.com/400x300/?{word}"
             
             cursor.execute('''
                 INSERT OR IGNORE INTO word (text, image_url, category_id, difficulty_level) 

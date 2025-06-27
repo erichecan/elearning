@@ -558,10 +558,83 @@ export default {
         
         if (this.currentItems.length === 0) {
           alert('No words found in this category.');
+        } else {
+          // 预加载图片
+          this.preloadImages(this.currentItems);
         }
       } else {
         this.currentItems = [];
         alert('Phrases mode is not yet supported.');
+      }
+    },
+
+    // 预加载图片
+    async preloadImages(words) {
+      if (!words || words.length === 0) return;
+      
+      console.log('开始预加载图片...');
+      
+      const loadPromises = words.slice(0, 5).map(word => { // 只预加载前5张图片
+        return new Promise((resolve) => {
+          if (!word.image_url) {
+            resolve(false);
+            return;
+          }
+          
+          const img = new Image();
+          img.onload = () => {
+            console.log('预加载成功:', word.text);
+            resolve(true);
+          };
+          img.onerror = () => {
+            console.log('预加载失败:', word.text, word.image_url);
+            // 尝试修复图片URL
+            this.tryFixImageUrl(word);
+            resolve(false);
+          };
+          
+          // 设置超时
+          setTimeout(() => {
+            if (!img.complete) {
+              console.log('预加载超时:', word.text);
+              resolve(false);
+            }
+          }, 5000); // 5秒超时
+          
+          img.src = word.image_url;
+        });
+      });
+      
+      try {
+        const results = await Promise.all(loadPromises);
+        const successCount = results.filter(r => r).length;
+        console.log(`预加载完成: ${successCount}/${Math.min(5, words.length)} 张图片成功`);
+      } catch (error) {
+        console.error('预加载过程出错:', error);
+      }
+    },
+
+    // 尝试修复图片URL
+    async tryFixImageUrl(word) {
+      if (!word || !word.id) return;
+      
+      const newImageUrl = `https://source.unsplash.com/400x300/?${encodeURIComponent(word.text)}`;
+      
+      try {
+        const { error } = await supabase
+          .from('words')
+          .update({ image_url: newImageUrl })
+          .eq('id', word.id);
+        
+        if (!error) {
+          console.log('修复图片URL成功:', word.text, newImageUrl);
+          // 更新本地数据
+          word.image_url = newImageUrl;
+        } else {
+          console.error('修复图片URL失败:', error);
+        }
+      } catch (err) {
+        console.error('修复图片URL异常:', err);
       }
     },
 
@@ -610,7 +683,7 @@ export default {
       }
     },
     
-    // 处理图片错误
+    // 处理图片错误 - 改进版本，提供多个备用方案
     handleImageError(event) {
       if (this.currentItems && this.currentItems.length > 0 && 
           this.currentItemIndex >= 0 && this.currentItemIndex < this.currentItems.length) {
@@ -618,10 +691,72 @@ export default {
         
         const currentItem = this.currentItems[this.currentItemIndex];
         const text = currentItem && currentItem.text ? currentItem.text : 'Image';
-        const fallbackUrl = `https://via.placeholder.com/400x300/667eea/ffffff?text=${encodeURIComponent(text)}`;
-        console.log('使用备用图片:', fallbackUrl);
-        event.target.src = fallbackUrl;
+        const currentSrc = event.target.src;
+        
+        // 如果当前已经是占位符图片，则不再处理
+        if (currentSrc.includes('via.placeholder.com')) {
+          return;
+        }
+        
+        // 记录失败次数，避免无限递归
+        if (!event.target.retryCount) {
+          event.target.retryCount = 0;
+        }
+        event.target.retryCount++;
+        
+        // 尝试多个图片源
+        if (event.target.retryCount === 1) {
+          // 第一次失败，尝试 Pixabay
+          const pixabayUrl = `https://pixabay.com/api/?key=your-key&q=${encodeURIComponent(text)}&image_type=photo&category=&min_width=400&min_height=300&per_page=3`;
+          // 暂时使用另一个 Unsplash 格式
+          const backupUrl = `https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=400&h=300&fit=crop&auto=format&q=80`;
+          console.log('尝试备用图片源:', backupUrl);
+          event.target.src = backupUrl;
+        } else if (event.target.retryCount === 2) {
+          // 第二次失败，使用精美的 SVG 图片
+          const svgImage = this.generateWordSVG(text);
+          console.log('使用SVG图片:', text);
+          event.target.src = svgImage;
+        } else {
+          // 最后备用方案：占位符
+          const fallbackUrl = `https://via.placeholder.com/400x300/42a5f5/ffffff?text=${encodeURIComponent(text)}`;
+          console.log('使用最终备用图片:', fallbackUrl);
+          event.target.src = fallbackUrl;
+        }
       }
+    },
+
+    // 生成单词的SVG图片
+    generateWordSVG(word) {
+      const uniqueId = `word-${Math.random().toString(36).substr(2, 9)}`;
+      const colors = [
+        { bg: '#FF6B6B', accent: '#FF5252' }, // 红色
+        { bg: '#4ECDC4', accent: '#26A69A' }, // 青色
+        { bg: '#45B7D1', accent: '#2196F3' }, // 蓝色
+        { bg: '#96CEB4', accent: '#66BB6A' }, // 绿色
+        { bg: '#FFEAA7', accent: '#FFCA28' }, // 黄色
+        { bg: '#DDA0DD', accent: '#BA68C8' }, // 紫色
+      ];
+      
+      const colorScheme = colors[word.length % colors.length];
+      
+      const svg = `
+        <svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300">
+          <defs>
+            <linearGradient id="${uniqueId}" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style="stop-color:${colorScheme.bg};stop-opacity:1" />
+              <stop offset="100%" style="stop-color:${colorScheme.accent};stop-opacity:0.8" />
+            </linearGradient>
+          </defs>
+          <rect width="400" height="300" fill="url(#${uniqueId})" rx="20"/>
+          <circle cx="350" cy="50" r="25" fill="white" opacity="0.1"/>
+          <circle cx="50" cy="250" r="30" fill="white" opacity="0.1"/>
+          <circle cx="350" cy="250" r="20" fill="white" opacity="0.15"/>
+          <text x="200" y="180" text-anchor="middle" font-size="36" font-family="system-ui, -apple-system, sans-serif" font-weight="bold" fill="white">${word.toUpperCase()}</text>
+          <rect x="100" y="200" width="200" height="4" fill="white" opacity="0.3" rx="2"/>
+        </svg>
+      `;
+      return `data:image/svg+xml;base64,${btoa(unescape(encodeURIComponent(svg)))}`;
     },
 
     // 开始游戏
