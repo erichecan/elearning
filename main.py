@@ -16,7 +16,7 @@ app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'asdf#FGSgvasgf$5$WGT')
 if os.environ.get('FLASK_ENV') == 'production':
     # 生产环境只允许特定域名
     CORS(app, origins=[
-        'https://your-netlify-app.netlify.app',
+        'https://englishlearning-app.netlify.app',
         'https://*.netlify.app'
     ])
 else:

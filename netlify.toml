@@ -11,4 +11,4 @@
   status = 200
 
 [context.production.environment]
-  VUE_APP_API_URL = "https://english-learning-api.onrender.com" 
+  VUE_APP_API_URL = "https://english-learning-app-vtwp.onrender.com" 

@@ -73,8 +73,14 @@ ehthumbs.db
 # PowerPoint files
 *.pptx
 
-# Large text files from PDFs
+# Large text files from PDFs (but keep important config files)
 *.txt
+!requirements.txt
+!README.md
+!DEPLOYMENT.md
+!todo.md
+!app_design.md
+!UI_UPDATE_NOTES.md
 
 # Temporary scripts
 fix_*.py
