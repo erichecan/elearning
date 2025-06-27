@@ -4,7 +4,7 @@ const config = {
     apiBaseUrl: 'http://localhost:5001'
   },
   production: {
-    apiBaseUrl: process.env.VUE_APP_API_URL || 'https://your-render-app.onrender.com'
+    apiBaseUrl: process.env.VUE_APP_API_URL || 'https://english-learning-api.onrender.com'
   }
 };
 
