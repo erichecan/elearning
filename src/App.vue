@@ -313,7 +313,7 @@
 </template>
 
 <script>
-import config from './config.js';
+import { supabase } from './supabaseClient';
 
 export default {
   name: 'App',
@@ -343,7 +343,6 @@ export default {
   },
   mounted() {
     console.log('应用启动，开始获取分类数据...');
-    console.log('API地址:', config.apiBaseUrl);
     this.fetchCategories();
     this.loadSettings();
   },
@@ -442,36 +441,31 @@ export default {
     },
 
     // 获取分类数据
-    fetchCategories() {
-      fetch(`${config.apiBaseUrl}/api/learning/categories`)
-        .then(res => res.json())
-        .then(response => {
-          // 后端返回格式: {data: [...], success: true}
-          const data = response.data || response;
-          this.categories = Array.isArray(data) ? data : [];
-          // 获取每个分类的单词数量
-          this.categories.forEach(category => {
-            this.fetchWordCount(category.id);
-          });
-        })
-        .catch(err => {
-          console.error('获取分类失败:', err);
-          this.categories = [];
-        });
+    async fetchCategories() {
+      const { data, error } = await supabase.from('categories').select('*');
+      if (error) {
+        console.error('获取分类失败:', error);
+        this.categories = [];
+        return;
+      }
+      this.categories = data || [];
+      // 获取每个分类的单词数量
+      this.categories.forEach(category => {
+        this.fetchWordCount(category.id);
+      });
     },
 
-    // 获取单词数量 - 修复Vue 3兼容性
-    fetchWordCount(categoryId) {
-      fetch(`${config.apiBaseUrl}/api/learning/categories/${categoryId}/words`)
-        .then(res => res.json())
-        .then(response => {
-          // 处理可能的不同数据格式
-          const data = response.data || response;
-          this.wordCounts[categoryId] = (Array.isArray(data) ? data : []).length;
-        })
-        .catch(err => {
-          console.error('获取单词数量失败:', err);
-        });
+    // 获取单词数量
+    async fetchWordCount(categoryId) {
+      const { count, error } = await supabase
+        .from('words')
+        .select('*', { count: 'exact', head: true })
+        .eq('category_id', categoryId);
+      if (error) {
+        console.error('获取单词数量失败:', error);
+        return;
+      }
+      this.wordCounts[categoryId] = count || 0;
     },
 
     // 选择分类
@@ -484,28 +478,27 @@ export default {
     },
 
     // 加载学习内容
-    loadLearningItems() {
-      const endpoint = this.learningMode === 'words' 
-        ? `${config.apiBaseUrl}/api/learning/categories/${this.selectedCategory.id}/words`
-        : `${config.apiBaseUrl}/api/learning/categories/${this.selectedCategory.id}/phrases`;
-        
-      console.log('加载学习内容:', endpoint);
-      fetch(endpoint)
-        .then(res => res.json())
-        .then(response => {
-          // 处理可能的不同数据格式
-          const data = response.data || response;
-          this.currentItems = Array.isArray(data) ? data : [];
-          this.currentItemIndex = 0;
-          console.log('加载的学习内容:', this.currentItems);
-          if (this.currentItems.length === 0) {
-            alert(`No ${this.learningMode} found in this category.`);
-          }
-        })
-        .catch(err => {
-          console.error(`获取${this.learningMode}失败:`, err);
+    async loadLearningItems() {
+      if (!this.selectedCategory) return;
+      if (this.learningMode === 'words') {
+        const { data, error } = await supabase
+          .from('words')
+          .select('*')
+          .eq('category_id', this.selectedCategory.id);
+        if (error) {
+          console.error('获取单词失败:', error);
           this.currentItems = [];
-        });
+          return;
+        }
+        this.currentItems = data || [];
+        this.currentItemIndex = 0;
+        if (this.currentItems.length === 0) {
+          alert('No words found in this category.');
+        }
+      } else {
+        this.currentItems = [];
+        alert('Phrases mode is not yet supported.');
+      }
     },
 
     // 返回首页

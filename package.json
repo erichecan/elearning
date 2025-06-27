@@ -18,6 +18,7 @@
   "author": "Manus AI",
   "license": "MIT",
   "dependencies": {
+    "@supabase/supabase-js": "^2.50.2",
     "vue": "^3.2.0",
     "vue-router": "^4.0.0"
   },
