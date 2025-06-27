@@ -21,19 +21,20 @@ jobs:
         
     - name: Install dependencies
       run: |
-        npm install @supabase/supabase-js
+        npm install @supabase/supabase-js @google/generative-ai
         
-    - name: Generate daily words
+    - name: Generate daily words with Gemini AI
       run: |
-        node scripts/auto-generate-words.js
+        node scripts/ai-word-generator.js
       env:
         SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
         SUPABASE_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+        GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         
     - name: Commit and push if changed
       run: |
-        git config --global user.name 'AI Word Generator'
+        git config --global user.name 'Gemini AI Word Generator'
         git config --global user.email 'ai@english-learning.com'
         git add .
-        git diff --staged --quiet || git commit -m "🤖 Daily AI word generation - $(date '+%Y-%m-%d')"
+        git diff --staged --quiet || git commit -m "🤖 Daily Gemini AI word generation - $(date '+%Y-%m-%d')"
         git push || echo "No changes to push" 
