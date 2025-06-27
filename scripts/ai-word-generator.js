@@ -169,13 +169,18 @@ function generateFallbackWords(category, count = 5) {
   return words.slice(0, count);
 }
 
-// 获取 Unsplash 图片
-function generateImageUrl(wordText, imageKeyword = null) {
+// 智能图片服务
+const SmartImageService = require('./smart-image-service');
+
+// 获取智能匹配的图片
+function generateImageUrl(wordText, imageKeyword = null, category = null) {
+  const imageService = new SmartImageService();
+  
   // 优先使用AI生成的精确关键词，否则使用单词本身
   const searchTerm = imageKeyword || wordText;
   
-  // 使用 Unsplash Source API 根据关键词获取图片
-  return `https://source.unsplash.com/400x300/?${encodeURIComponent(searchTerm)}`;
+  // 使用智能图片服务获取匹配的图片
+  return imageService.getImageUrl(searchTerm, category);
 }
 
 // 主函数
@@ -204,7 +209,7 @@ async function runAIGenerator() {
       for (const word of newWords) {
         if (totalGenerated >= dailyTarget) break;
         
-        const imageUrl = generateImageUrl(word.text, word.imageKeyword);
+        const imageUrl = generateImageUrl(word.text, word.imageKeyword, category.name);
         
         // 检查单词是否已存在
         const { data: existingWords } = await supabase
