@@ -9,9 +9,15 @@
         <div class="dynamic-island"></div>
       </div>
       <div class="status-right">
-        <i class="fas fa-signal"></i>
-        <i class="fas fa-wifi"></i>
-        <i class="fas fa-battery-three-quarters"></i>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M2 17h20v2H2v-2zM1.15 12.95L6 18l1.41-1.41L3.27 12.5l4.14-4.09L6 7l-4.85 5.95zM22.85 12.95L18 7l-1.41 1.41L20.73 12.5l-4.14 4.09L18 18l4.85-5.05z"/>
+        </svg>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.07 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/>
+        </svg>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M15.67 4H14V2c0-1.1-.9-2-2-2s-2 .9-2 2v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4zM11 2c.55 0 1 .45 1 1v1h-2V3c0-.55.45-1 1-1zM15 20H9V6h6v14z"/>
+        </svg>
       </div>
     </div>
 
@@ -24,7 +30,10 @@
           <div class="nav-content">
             <div class="nav-left">
               <div class="nav-icon">
-                <i class="fas fa-graduation-cap"></i>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+                  <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+                </svg>
         </div>
               <div class="nav-text">
                 <h1 class="nav-title">English Learning</h1>
@@ -32,11 +41,17 @@
           </div>
         </div>
             <div class="nav-right">
-              <button class="nav-button">
-                <i class="fas fa-search"></i>
+              <button class="nav-button modern-btn">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <path d="M21 21l-4.35-4.35"></path>
+                </svg>
               </button>
-              <button class="nav-button" @click="showSettings = true">
-                <i class="fas fa-cog"></i>
+              <button class="nav-button modern-btn" @click="showSettings = true">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="3"></circle>
+                  <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1 1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                </svg>
               </button>
             </div>
           </div>
@@ -84,19 +99,32 @@
         <!-- 底部导航 - 统一样式 -->
         <div class="bottom-navigation">
           <div class="nav-item active" @click="currentView = 'home'">
-            <i class="fas fa-home"></i>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+              <polyline points="9,22 9,12 15,12 15,22"></polyline>
+            </svg>
             <span>Home</span>
           </div>
           <div class="nav-item" @click="currentView = 'learning'">
-            <i class="fas fa-book-open"></i>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+            </svg>
             <span>Learn</span>
           </div>
           <div class="nav-item" @click="currentView = 'practice'">
-            <i class="fas fa-gamepad"></i>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+              <line x1="8" y1="21" x2="16" y2="21"></line>
+              <line x1="12" y1="17" x2="12" y2="21"></line>
+            </svg>
             <span>Practice</span>
           </div>
           <div class="nav-item" @click="showSettings = true">
-            <i class="fas fa-cog"></i>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="3"></circle>
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1 1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+            </svg>
             <span>Settings</span>
           </div>
             </div>
@@ -106,15 +134,19 @@
       <div v-else-if="currentView === 'learning'" class="learning-view">
         <!-- 学习页面顶部 -->
         <div class="learning-header">
-          <button class="back-button" @click="goHome">
-            <i class="fas fa-arrow-left"></i>
+          <button class="back-button modern-btn" @click="goHome">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M19 12H6M12 5l-7 7 7 7"/>
+            </svg>
           </button>
           <div class="learning-title">
             <h2>{{ selectedCategory?.name || 'Learning' }}</h2>
             <div class="progress-info">{{ currentItemIndex + 1 }} / {{ currentItems.length }}</div>
           </div>
-          <button class="favorite-button">
-            <i class="fas fa-heart"></i>
+          <button class="favorite-button modern-btn">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+            </svg>
           </button>
         </div>
 
@@ -126,11 +158,13 @@
           
           <!-- 左侧导航按钮 -->
           <button 
-            class="side-nav-btn left-nav-btn" 
+            class="side-nav-btn left-nav-btn modern-btn" 
             @click="previousItem" 
             :disabled="currentItemIndex === 0"
           >
-            <i class="fas fa-chevron-left"></i>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M15 18l-6-6 6-6"/>
+            </svg>
           </button>
           
           <div class="learning-card">
@@ -141,8 +175,11 @@
                 class="word-image"
                 @error="handleImageError"
               />
-              <button class="audio-button" @click="playAudio">
-                <i class="fas fa-volume-up"></i>
+              <button class="audio-button modern-btn" @click="playAudio">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                  <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                </svg>
               </button>
             </div>
             
@@ -167,30 +204,45 @@
           
           <!-- 右侧导航按钮 -->
           <button 
-            class="side-nav-btn right-nav-btn" 
+            class="side-nav-btn right-nav-btn modern-btn" 
             @click="nextItem" 
             :disabled="currentItemIndex === currentItems.length - 1"
           >
-            <i class="fas fa-chevron-right"></i>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 18l6-6-6-6"/>
+            </svg>
           </button>
         </div>
 
         <!-- 底部导航 -->
         <div class="bottom-navigation">
           <div class="nav-item" @click="currentView = 'home'">
-            <i class="fas fa-home"></i>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+              <polyline points="9,22 9,12 15,12 15,22"></polyline>
+            </svg>
             <span>Home</span>
           </div>
           <div class="nav-item active">
-            <i class="fas fa-book-open"></i>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+            </svg>
             <span>Learn</span>
           </div>
           <div class="nav-item" @click="currentView = 'practice'">
-            <i class="fas fa-gamepad"></i>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+              <line x1="8" y1="21" x2="16" y2="21"></line>
+              <line x1="12" y1="17" x2="12" y2="21"></line>
+            </svg>
             <span>Practice</span>
           </div>
           <div class="nav-item" @click="showSettings = true">
-            <i class="fas fa-cog"></i>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="3"></circle>
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1 1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+            </svg>
             <span>Settings</span>
           </div>
         </div>
