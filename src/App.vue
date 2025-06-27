@@ -549,6 +549,13 @@ export default {
         }
         this.currentItems = data || [];
         this.currentItemIndex = 0;
+        
+        console.log('加载学习内容:', this.currentItems);
+        if (this.currentItems.length > 0) {
+          console.log('第一个单词:', this.currentItems[0]);
+          console.log('图片URL:', this.currentItems[0].image_url);
+        }
+        
         if (this.currentItems.length === 0) {
           alert('No words found in this category.');
         }
@@ -607,9 +614,13 @@ export default {
     handleImageError(event) {
       if (this.currentItems && this.currentItems.length > 0 && 
           this.currentItemIndex >= 0 && this.currentItemIndex < this.currentItems.length) {
+        console.log('图片加载失败:', event.target.src);
+        
         const currentItem = this.currentItems[this.currentItemIndex];
         const text = currentItem && currentItem.text ? currentItem.text : 'Image';
-        event.target.src = 'https://via.placeholder.com/400x300/42a5f5/ffffff?text=' + encodeURIComponent(text);
+        const fallbackUrl = `https://via.placeholder.com/400x300/667eea/ffffff?text=${encodeURIComponent(text)}`;
+        console.log('使用备用图片:', fallbackUrl);
+        event.target.src = fallbackUrl;
       }
     },
 
@@ -1312,33 +1323,41 @@ input:checked + .slider:before {
 
 /* 侧边导航按钮 */
 .side-nav-btn {
-  width: 60px;
-  height: 60px;
+  width: 70px;
+  height: 70px;
   border-radius: 50%;
-  border: none;
+  border: 3px solid white;
   background: linear-gradient(135deg, #667eea, #764ba2);
   color: white;
-  font-size: 1.5rem;
+  font-size: 1.8rem;
+  font-weight: bold;
   cursor: pointer;
   transition: all 0.3s ease;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
   z-index: 10;
+  position: relative;
 }
 
 .side-nav-btn:hover:not(:disabled) {
-  transform: scale(1.1);
+  transform: scale(1.15);
   background: linear-gradient(135deg, #764ba2, #667eea);
+  box-shadow: 0 15px 30px rgba(102, 126, 234, 0.5);
 }
 
 .side-nav-btn:disabled {
-  opacity: 0.4;
+  opacity: 0.3;
   cursor: not-allowed;
   background: #e0e0e0;
   color: #999;
   box-shadow: none;
+  border-color: #ddd;
+}
+
+.side-nav-btn i {
+  text-shadow: 0 1px 2px rgba(0,0,0,0.2);
 }
 
 .left-nav-btn {
