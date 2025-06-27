@@ -48,12 +48,7 @@
             <h2 class="welcome-title">Choose Learning Category</h2>
             <p class="welcome-subtitle">Select a category you're interested in to start learning!</p>
             <!-- 调试信息 -->
-            <p v-if="categories.length === 0" class="debug-info">
-              Loading categories...
-              <button @click="initSupabaseData" style="margin-left: 10px; padding: 5px 10px; background: #667eea; color: white; border: none; border-radius: 5px; cursor: pointer;">
-                初始化测试数据
-              </button>
-            </p>
+            <p v-if="categories.length === 0" class="debug-info">Loading categories...</p>
             <p v-else class="debug-info">Found {{ categories.length }} categories, showing first 6</p>
           </div>
         </section>
@@ -350,14 +345,6 @@ export default {
     console.log('应用启动，开始获取分类数据...');
     this.fetchCategories();
     this.loadSettings();
-    
-    // 如果获取不到分类数据，尝试初始化测试数据
-    setTimeout(() => {
-      if (this.categories.length === 0) {
-        console.log('未获取到分类数据，尝试初始化测试数据...');
-        this.initSupabaseData();
-      }
-    }, 3000);
   },
   watch: {
     currentItemIndex() {
