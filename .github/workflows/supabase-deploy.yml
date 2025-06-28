@@ -20,13 +20,19 @@ jobs:
         run: |
           curl -sL https://github.com/supabase/cli/releases/latest/download/install.sh | sh -s -- -b $HOME/.supabase/bin
           echo "$HOME/.supabase/bin" >> $GITHUB_PATH
-          
+          export PATH=$HOME/.supabase/bin:$PATH
+          supabase --version
+        env:
+          PATH: ${{ env.HOME }}/.supabase/bin:${{ env.PATH }}
+
       - name: Link Supabase project
         run: supabase link --project-ref ${{ secrets.SUPABASE_PROJECT_ID }}
         env:
           SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+          PATH: ${{ env.HOME }}/.supabase/bin:${{ env.PATH }}
           
       - name: Deploy schema and data
         run: supabase db push
         env:
-          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }} 
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+          PATH: ${{ env.HOME }}/.supabase/bin:${{ env.PATH }} 
