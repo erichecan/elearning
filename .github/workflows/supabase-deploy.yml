@@ -19,7 +19,7 @@ jobs:
       - name: Setup environment
         run: |
           sudo apt-get update
-          sudo apt-get install -y curl bash wget
+          sudo apt-get install -y curl bash wget postgresql-client
           
       - name: Install Supabase CLI
         run: |
@@ -41,16 +41,20 @@ jobs:
           # Verify installation
           $HOME/.supabase/bin/supabase --version
 
-      - name: Link Supabase project
+      - name: Deploy migrations using psql
         run: |
-          supabase link --project-ref ${{ secrets.SUPABASE_PROJECT_ID }} --debug
-        env:
-          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+          # 使用psql直接执行迁移文件，更稳定
+          export PGPASSWORD="${{ secrets.SUPABASE_DB_PASSWORD }}"
           
-      - name: Deploy migrations
-        run: |
-          # 使用数据库URL直接执行迁移到远程数据库
-          DB_URL="postgresql://postgres:${{ secrets.SUPABASE_DB_PASSWORD }}@${{ secrets.SUPABASE_DB_HOST }}:5432/postgres"
-          supabase migration up --db-url "$DB_URL" --debug
+          # 执行所有迁移文件
+          for migration_file in supabase/migrations/*.sql; do
+            if [ -f "$migration_file" ]; then
+              echo "正在执行迁移文件: $migration_file"
+              psql -h "${{ secrets.SUPABASE_DB_HOST }}" -U postgres -d postgres -p 5432 -f "$migration_file"
+              echo "迁移文件执行完成: $migration_file"
+            fi
+          done
+          
+          echo "所有迁移文件执行完成！"
         env:
           SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }} 
