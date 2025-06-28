@@ -19,8 +19,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         
-      - name: Ensure curl is installed
-        run: sudo apt-get update && sudo apt-get install -y curl
+      - name: Ensure curl and bash are installed
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y curl
+          sudo apt-get install -y bash
 
       - name: Install Supabase CLI
         run: |
