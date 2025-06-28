@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { ArrowLeft, Volume2, Heart, RotateCcw, Play } from 'lucide-react'
+import { speechService } from '../services/speech'
 
 interface CardScreenProps {
   word: any
@@ -15,10 +16,20 @@ const CardScreen: React.FC<CardScreenProps> = ({ word, onBack }) => {
     setIsFlipped(!isFlipped)
   }
 
-  const handlePlayAudio = () => {
-    setIsPlaying(true)
-    // 模拟音频播放
-    setTimeout(() => setIsPlaying(false), 2000)
+  const handlePlayAudio = async () => {
+    if (!speechService.isSupported()) {
+      alert('您的浏览器不支持语音播放功能')
+      return
+    }
+
+    try {
+      setIsPlaying(true)
+      await speechService.speakWord(word.word)
+    } catch (error) {
+      console.error('语音播放失败:', error)
+    } finally {
+      setIsPlaying(false)
+    }
   }
 
   const toggleFavorite = () => {

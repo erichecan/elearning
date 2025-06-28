@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import { Volume2, Heart, ArrowLeft } from 'lucide-react'
 import { wordService, favoriteService } from '../services/api'
 import { Word } from '../lib/database'
+import { speechService } from '../services/speech'
 
 interface CategoryScreenProps {
   category: string
@@ -90,10 +91,22 @@ const CategoryScreen: React.FC<CategoryScreenProps> = ({ category, onNavigate, o
     }
   }
 
-  const playAudio = (wordId: number, e: React.MouseEvent) => {
+  const playAudio = async (wordId: number, e: React.MouseEvent) => {
     e.stopPropagation()
-    console.log('Play audio for word:', wordId)
-    // TODO: 实现音频播放功能
+    
+    const word = words.find(w => w.id === wordId)
+    if (!word) return
+
+    if (!speechService.isSupported()) {
+      alert('您的浏览器不支持语音播放功能')
+      return
+    }
+
+    try {
+      await speechService.speakWord(word.word)
+    } catch (error) {
+      console.error('语音播放失败:', error)
+    }
   }
 
   // 组件卸载时清除定时器

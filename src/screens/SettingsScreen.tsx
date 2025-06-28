@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
-import { ArrowLeft, Volume2, Eye, Clock, Palette, Shield, Info } from 'lucide-react'
+import { ArrowLeft, Volume2, Eye, Clock, Palette, Shield, Info, Play } from 'lucide-react'
+import { speechService } from '../services/speech'
 
 interface SettingsScreenProps {
   onBack: () => void
@@ -12,14 +13,41 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack }) => {
     showChinese: true,
     dailyLimit: 30,
     theme: 'auto',
-    soundVolume: 80
+    soundVolume: 80,
+    speechRate: 0.8,
+    speechPitch: 1.0,
+    speechLang: 'en-US'
   })
+
+  const [isTestingAudio, setIsTestingAudio] = useState(false)
 
   const handleSettingChange = (key: string, value: any) => {
     setSettings(prev => ({
       ...prev,
       [key]: value
     }))
+  }
+
+  const testAudio = async () => {
+    if (!speechService.isSupported()) {
+      alert('您的浏览器不支持语音播放功能')
+      return
+    }
+
+    try {
+      setIsTestingAudio(true)
+      await speechService.speakWord('Hello', {
+        rate: settings.speechRate,
+        pitch: settings.speechPitch,
+        volume: settings.soundVolume / 100,
+        lang: settings.speechLang
+      })
+    } catch (error) {
+      console.error('音频测试失败:', error)
+      alert('音频测试失败，请检查浏览器设置')
+    } finally {
+      setIsTestingAudio(false)
+    }
   }
 
   return (
@@ -136,6 +164,7 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack }) => {
           </h2>
           
           <div className="space-y-4">
+            {/* 音量控制 */}
             <div>
               <div className="flex justify-between items-center mb-2">
                 <p className="text-white font-medium">音量大小</p>
@@ -154,6 +183,79 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack }) => {
                 <span>静音</span>
                 <span>最大</span>
               </div>
+            </div>
+
+            {/* 语速控制 */}
+            <div>
+              <div className="flex justify-between items-center mb-2">
+                <p className="text-white font-medium">语速控制</p>
+                <span className="text-white text-sm">{(settings.speechRate * 100).toFixed(0)}%</span>
+              </div>
+              <input
+                type="range"
+                min="0.5"
+                max="2.0"
+                step="0.1"
+                value={settings.speechRate}
+                onChange={(e) => handleSettingChange('speechRate', parseFloat(e.target.value))}
+                className="w-full h-2 bg-white/20 rounded-lg appearance-none cursor-pointer slider"
+              />
+              <div className="flex justify-between text-xs text-white/60 mt-1">
+                <span>慢速</span>
+                <span>快速</span>
+              </div>
+            </div>
+
+            {/* 音调控制 */}
+            <div>
+              <div className="flex justify-between items-center mb-2">
+                <p className="text-white font-medium">音调高低</p>
+                <span className="text-white text-sm">{(settings.speechPitch * 100).toFixed(0)}%</span>
+              </div>
+              <input
+                type="range"
+                min="0.5"
+                max="2.0"
+                step="0.1"
+                value={settings.speechPitch}
+                onChange={(e) => handleSettingChange('speechPitch', parseFloat(e.target.value))}
+                className="w-full h-2 bg-white/20 rounded-lg appearance-none cursor-pointer slider"
+              />
+              <div className="flex justify-between text-xs text-white/60 mt-1">
+                <span>低音</span>
+                <span>高音</span>
+              </div>
+            </div>
+
+            {/* 语言选择 */}
+            <div>
+              <p className="text-white font-medium mb-2">语音语言</p>
+              <select
+                value={settings.speechLang}
+                onChange={(e) => handleSettingChange('speechLang', e.target.value)}
+                className="w-full p-2 bg-white/20 text-white rounded-lg border border-white/30 focus:border-blue-400 focus:outline-none"
+              >
+                <option value="en-US" className="text-black">English (US)</option>
+                <option value="en-GB" className="text-black">English (UK)</option>
+                <option value="en-AU" className="text-black">English (AU)</option>
+                <option value="zh-CN" className="text-black">中文 (普通话)</option>
+              </select>
+            </div>
+
+            {/* 音频测试 */}
+            <div className="pt-2">
+              <button
+                onClick={testAudio}
+                disabled={isTestingAudio}
+                className={`w-full flex items-center justify-center gap-2 p-3 rounded-lg transition-all ${
+                  isTestingAudio 
+                    ? 'bg-green-500/50 cursor-not-allowed' 
+                    : 'bg-blue-500/70 hover:bg-blue-500/90'
+                } text-white font-medium`}
+              >
+                <Play size={16} />
+                {isTestingAudio ? '正在播放...' : '测试语音 (Hello)'}
+              </button>
             </div>
           </div>
         </div>
