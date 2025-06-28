@@ -3,11 +3,10 @@ import { ArrowLeft, Volume2, Heart, RotateCcw, Play } from 'lucide-react'
 
 interface CardScreenProps {
   word: any
-  onNavigate: (screen: 'home' | 'card' | 'settings', word?: any) => void
   onBack: () => void
 }
 
-const CardScreen: React.FC<CardScreenProps> = ({ word, onNavigate, onBack }) => {
+const CardScreen: React.FC<CardScreenProps> = ({ word, onBack }) => {
   const [isFlipped, setIsFlipped] = useState(false)
   const [showWord, setShowWord] = useState(true)
   const [isPlaying, setIsPlaying] = useState(false)

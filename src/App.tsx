@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import HomeScreen from './screens/HomeScreen'
 import CardScreen from './screens/CardScreen'
 import SettingsScreen from './screens/SettingsScreen'
@@ -38,13 +38,11 @@ function App() {
         {currentScreen === 'card' && selectedWord && (
           <CardScreen 
             word={selectedWord}
-            onNavigate={navigateTo}
             onBack={() => navigateTo('category', selectedCategory)}
           />
         )}
         {currentScreen === 'settings' && (
           <SettingsScreen 
-            onNavigate={navigateTo}
             onBack={() => navigateTo('home')}
           />
         )}

@@ -2,11 +2,10 @@ import React, { useState } from 'react'
 import { ArrowLeft, Volume2, Eye, Clock, Palette, Shield, Info } from 'lucide-react'
 
 interface SettingsScreenProps {
-  onNavigate: (screen: 'home' | 'category' | 'card' | 'settings', category?: string) => void
   onBack: () => void
 }
 
-const SettingsScreen: React.FC<SettingsScreenProps> = ({ onNavigate, onBack }) => {
+const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack }) => {
   const [settings, setSettings] = useState({
     autoPlay: true,
     showWord: true,
