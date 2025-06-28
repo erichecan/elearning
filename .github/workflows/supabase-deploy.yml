@@ -12,10 +12,16 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
         
+      - name: Ensure curl is installed
+        run: sudo apt-get update && sudo apt-get install -y curl
+
       - name: Install Supabase CLI
         run: |
           curl -sL https://github.com/supabase/cli/releases/latest/download/install.sh | sh -s -- -b $HOME/.supabase/bin
