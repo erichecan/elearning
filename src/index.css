@@ -37,7 +37,6 @@
   .flip-card {
     perspective: 1000px;
     width: 100%;
-    height: 100%;
   }
   
   .flip-card-inner {
