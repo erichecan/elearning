@@ -43,14 +43,20 @@ jobs:
 
       - name: Deploy migrations using psql
         run: |
-          # 使用psql直接执行迁移文件，更稳定
+          # 使用psql直接执行迁移文件，强制IPv4连接
           export PGPASSWORD="${{ secrets.SUPABASE_DB_PASSWORD }}"
+          
+          # 强制使用IPv4解析
+          echo "获取主机IP地址..."
+          HOST_IP=$(getent ahostsv4 "${{ secrets.SUPABASE_DB_HOST }}" | head -n1 | awk '{print $1}')
+          echo "主机IP: $HOST_IP"
           
           # 执行所有迁移文件
           for migration_file in supabase/migrations/*.sql; do
             if [ -f "$migration_file" ]; then
               echo "正在执行迁移文件: $migration_file"
-              psql -h "${{ secrets.SUPABASE_DB_HOST }}" -U postgres -d postgres -p 5432 -f "$migration_file"
+              # 使用IP地址而不是主机名，强制IPv4连接
+              psql -h "$HOST_IP" -U postgres -d postgres -p 5432 -f "$migration_file" --set ON_ERROR_STOP=1
               echo "迁移文件执行完成: $migration_file"
             fi
           done
