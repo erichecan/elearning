@@ -126,4 +126,82 @@ FROM categories c,
     ('Aunt', '阿姨', '/ænt/', 'https://images.unsplash.com/photo-1494790108755-2616c2e930a8?w=400&h=300&fit=crop', null, 3)
 ) AS word_data(word, chinese, phonetic, image_url, audio_url, difficulty_level)
 WHERE c.name = 'family'
-ON CONFLICT (word, category_id) DO NOTHING; 
+ON CONFLICT (word, category_id) DO NOTHING;
+
+-- 插入自然天气类单词
+INSERT INTO words (word, chinese, phonetic, image_url, audio_url, category_id, difficulty_level) VALUES
+('Sun', '太阳', '/sʌn/', 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop', null, 10, 1),
+('Moon', '月亮', '/muːn/', 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop', null, 10, 1),
+('Star', '星星', '/stɑːr/', 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop', null, 10, 1),
+('Cloud', '云', '/klaʊd/', 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop', null, 10, 1),
+('Rain', '雨', '/reɪn/', 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop', null, 10, 2),
+('Snow', '雪', '/snoʊ/', 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop', null, 10, 2),
+('Wind', '风', '/wɪnd/', 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop', null, 10, 2),
+('Tree', '树', '/triː/', 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=400&h=300&fit=crop', null, 10, 2),
+('Flower', '花', '/ˈflaʊər/', 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=400&h=300&fit=crop', null, 10, 2),
+('Grass', '草', '/ɡræs/', 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=400&h=300&fit=crop', null, 10, 3);
+
+-- 插入日常短语类数据
+INSERT INTO words (word, chinese, phonetic, image_url, audio_url, category_id, difficulty_level) VALUES
+('Good morning', '早上好', '/ɡʊd ˈmɔːrnɪŋ/', 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop', null, 11, 1),
+('Good night', '晚安', '/ɡʊd naɪt/', 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop', null, 11, 1),
+('Thank you', '谢谢', '/θæŋk juː/', 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop', null, 11, 1),
+('You are welcome', '不客气', '/juː ɑːr ˈwelkəm/', 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop', null, 11, 2),
+('Excuse me', '对不起', '/ɪkˈskjuːz miː/', 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop', null, 11, 2),
+('I am sorry', '我很抱歉', '/aɪ æm ˈsɑːri/', 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop', null, 11, 2),
+('How are you', '你好吗', '/haʊ ɑːr juː/', 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop', null, 11, 2),
+('I am fine', '我很好', '/aɪ æm faɪn/', 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop', null, 11, 2),
+('See you later', '再见', '/siː juː ˈleɪtər/', 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop', null, 11, 3),
+('Have a nice day', '祝你愉快', '/hæv ə naɪs deɪ/', 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop', null, 11, 3);
+
+-- 插入问候短语类数据
+INSERT INTO words (word, chinese, phonetic, image_url, audio_url, category_id, difficulty_level) VALUES
+('Hello', '你好', '/həˈloʊ/', 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop', null, 12, 1),
+('Hi', '嗨', '/haɪ/', 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop', null, 12, 1),
+('Goodbye', '再见', '/ɡʊdˈbaɪ/', 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop', null, 12, 1),
+('Nice to meet you', '很高兴认识你', '/naɪs tuː miːt juː/', 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop', null, 12, 2),
+('My name is', '我的名字是', '/maɪ neɪm ɪz/', 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop', null, 12, 2),
+('What is your name', '你叫什么名字', '/wɑːt ɪz jɔːr neɪm/', 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop', null, 12, 2),
+('How old are you', '你多大了', '/haʊ oʊld ɑːr juː/', 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop', null, 12, 2),
+('I am years old', '我岁了', '/aɪ æm jɪrz oʊld/', 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop', null, 12, 2),
+('Where are you from', '你来自哪里', '/wer ɑːr juː frʌm/', 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop', null, 12, 3),
+('I am from', '我来自', '/aɪ æm frʌm/', 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop', null, 12, 3);
+
+-- 插入动作短语类数据
+INSERT INTO words (word, chinese, phonetic, image_url, audio_url, category_id, difficulty_level) VALUES
+('Stand up', '站起来', '/stænd ʌp/', 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop', null, 13, 1),
+('Sit down', '坐下', '/sɪt daʊn/', 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop', null, 13, 1),
+('Come here', '过来', '/kʌm hɪr/', 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop', null, 13, 1),
+('Go away', '走开', '/ɡoʊ əˈweɪ/', 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop', null, 13, 2),
+('Look at me', '看着我', '/lʊk æt miː/', 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop', null, 13, 2),
+('Listen carefully', '仔细听', '/ˈlɪsən ˈkerfəli/', 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop', null, 13, 2),
+('Open the door', '开门', '/ˈoʊpən ðə dɔːr/', 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop', null, 13, 2),
+('Close the window', '关窗', '/kloʊz ðə ˈwɪndoʊ/', 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop', null, 13, 2),
+('Turn on the light', '开灯', '/tɜːrn ɑːn ðə laɪt/', 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop', null, 13, 3),
+('Turn off the TV', '关电视', '/tɜːrn ɔːf ðə ˌtiː ˈviː/', 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop', null, 13, 3);
+
+-- 插入简单句子类数据
+INSERT INTO words (word, chinese, phonetic, image_url, audio_url, category_id, difficulty_level) VALUES
+('I am a student', '我是一个学生', '/aɪ æm ə ˈstjuːdənt/', 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop', null, 14, 1),
+('This is my book', '这是我的书', '/ðɪs ɪz maɪ bʊk/', 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop', null, 14, 1),
+('I like apples', '我喜欢苹果', '/aɪ laɪk ˈæpəlz/', 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop', null, 14, 1),
+('She is my friend', '她是我的朋友', '/ʃiː ɪz maɪ frend/', 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop', null, 14, 2),
+('We are happy', '我们很开心', '/wiː ɑːr ˈhæpi/', 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop', null, 14, 2),
+('The cat is sleeping', '猫在睡觉', '/ðə kæt ɪz ˈsliːpɪŋ/', 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop', null, 14, 2),
+('I can swim', '我会游泳', '/aɪ kæn swɪm/', 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop', null, 14, 2),
+('The sun is bright', '太阳很亮', '/ðə sʌn ɪz braɪt/', 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop', null, 14, 2),
+('I want to eat', '我想吃东西', '/aɪ wɑːnt tuː iːt/', 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop', null, 14, 3),
+('The weather is nice', '天气很好', '/ðə ˈweðər ɪz naɪs/', 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop', null, 14, 3);
+
+-- 插入对话句子类数据
+INSERT INTO words (word, chinese, phonetic, image_url, audio_url, category_id, difficulty_level) VALUES
+('What is this', '这是什么', '/wɑːt ɪz ðɪs/', 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop', null, 15, 1),
+('It is a cat', '这是一只猫', '/ɪt ɪz ə kæt/', 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop', null, 15, 1),
+('Where is my bag', '我的包在哪里', '/wer ɪz maɪ bæɡ/', 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop', null, 15, 2),
+('It is on the table', '它在桌子上', '/ɪt ɪz ɑːn ðə ˈteɪbəl/', 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop', null, 15, 2),
+('What time is it', '几点了', '/wɑːt taɪm ɪz ɪt/', 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop', null, 15, 2),
+('It is three o clock', '三点钟了', '/ɪt ɪz θriː ə klɑːk/', 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop', null, 15, 2),
+('Do you like ice cream', '你喜欢冰淇淋吗', '/duː juː laɪk aɪs kriːm/', 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop', null, 15, 3),
+('Yes I do', '是的我喜欢', '/jes aɪ duː/', 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop', null, 15, 3),
+('Can you help me', '你能帮我吗', '/kæn juː help miː/', 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop', null, 15, 3),
+('Of course I can', '当然可以', '/əv kɔːrs aɪ kæn/', 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop', null, 15, 3); 

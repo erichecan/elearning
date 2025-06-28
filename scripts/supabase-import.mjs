@@ -1,167 +1,116 @@
 import { createClient } from '@supabase/supabase-js';
+import fs from 'fs';
+import path from 'path';
 
-// 从环境变量获取配置
+// 从环境变量获取Supabase配置
 const supabaseUrl = process.env.VITE_SUPABASE_URL;
 const supabaseKey = process.env.VITE_SUPABASE_ANON_KEY;
 
 if (!supabaseUrl || !supabaseKey) {
-  console.error('请设置 VITE_SUPABASE_URL 和 VITE_SUPABASE_ANON_KEY 环境变量');
+  console.error('请设置环境变量 VITE_SUPABASE_URL 和 VITE_SUPABASE_ANON_KEY');
   process.exit(1);
 }
 
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-// 批量导入单词数据
-const batchImportWords = async () => {
+// 读取SQL文件
+function readSqlFile(filename) {
+  const filePath = path.join(process.cwd(), 'database', filename);
+  return fs.readFileSync(filePath, 'utf8');
+}
+
+// 执行SQL语句
+async function executeSql(sql) {
   try {
-    console.log('开始批量导入单词到Supabase...');
-    
-    // 更多单词数据 - 可以轻松扩展到1500个单词
-    const wordsData = [
-      // 身体部位类
-      { word: 'Head', chinese: '头', phonetic: '/hed/', category_name: 'body', difficulty: 1 },
-      { word: 'Hand', chinese: '手', phonetic: '/hænd/', category_name: 'body', difficulty: 1 },
-      { word: 'Foot', chinese: '脚', phonetic: '/fʊt/', category_name: 'body', difficulty: 1 },
-      { word: 'Eye', chinese: '眼睛', phonetic: '/aɪ/', category_name: 'body', difficulty: 1 },
-      { word: 'Nose', chinese: '鼻子', phonetic: '/noʊz/', category_name: 'body', difficulty: 1 },
-      { word: 'Mouth', chinese: '嘴巴', phonetic: '/maʊθ/', category_name: 'body', difficulty: 1 },
-      { word: 'Ear', chinese: '耳朵', phonetic: '/ɪr/', category_name: 'body', difficulty: 1 },
-      { word: 'Arm', chinese: '胳膊', phonetic: '/ɑːrm/', category_name: 'body', difficulty: 1 },
-      { word: 'Leg', chinese: '腿', phonetic: '/leɡ/', category_name: 'body', difficulty: 1 },
-      { word: 'Finger', chinese: '手指', phonetic: '/ˈfɪŋɡər/', category_name: 'body', difficulty: 2 },
-      
-      // 服装配饰类
-      { word: 'Shirt', chinese: 'T恤', phonetic: '/ʃɜːrt/', category_name: 'clothes', difficulty: 1 },
-      { word: 'Pants', chinese: '裤子', phonetic: '/pænts/', category_name: 'clothes', difficulty: 1 },
-      { word: 'Dress', chinese: '连衣裙', phonetic: '/dres/', category_name: 'clothes', difficulty: 1 },
-      { word: 'Shoes', chinese: '鞋子', phonetic: '/ʃuːz/', category_name: 'clothes', difficulty: 1 },
-      { word: 'Hat', chinese: '帽子', phonetic: '/hæt/', category_name: 'clothes', difficulty: 1 },
-      { word: 'Socks', chinese: '袜子', phonetic: '/sɑːks/', category_name: 'clothes', difficulty: 2 },
-      { word: 'Jacket', chinese: '夹克', phonetic: '/ˈdʒækɪt/', category_name: 'clothes', difficulty: 2 },
-      { word: 'Skirt', chinese: '裙子', phonetic: '/skɜːrt/', category_name: 'clothes', difficulty: 2 },
-      { word: 'Sweater', chinese: '毛衣', phonetic: '/ˈswetər/', category_name: 'clothes', difficulty: 2 },
-      { word: 'Gloves', chinese: '手套', phonetic: '/ɡlʌvz/', category_name: 'clothes', difficulty: 2 },
-      
-      // 食物饮料类
-      { word: 'Bread', chinese: '面包', phonetic: '/bred/', category_name: 'food', difficulty: 1 },
-      { word: 'Milk', chinese: '牛奶', phonetic: '/mɪlk/', category_name: 'food', difficulty: 1 },
-      { word: 'Water', chinese: '水', phonetic: '/ˈwɔːtər/', category_name: 'food', difficulty: 1 },
-      { word: 'Rice', chinese: '米饭', phonetic: '/raɪs/', category_name: 'food', difficulty: 1 },
-      { word: 'Noodle', chinese: '面条', phonetic: '/ˈnuːdəl/', category_name: 'food', difficulty: 2 },
-      { word: 'Cake', chinese: '蛋糕', phonetic: '/keɪk/', category_name: 'food', difficulty: 1 },
-      { word: 'Cookie', chinese: '饼干', phonetic: '/ˈkʊki/', category_name: 'food', difficulty: 2 },
-      { word: 'Juice', chinese: '果汁', phonetic: '/dʒuːs/', category_name: 'food', difficulty: 1 },
-      { word: 'Tea', chinese: '茶', phonetic: '/tiː/', category_name: 'food', difficulty: 1 },
-      { word: 'Coffee', chinese: '咖啡', phonetic: '/ˈkɔːfi/', category_name: 'food', difficulty: 2 },
-      
-      // 交通工具类
-      { word: 'Car', chinese: '汽车', phonetic: '/kɑːr/', category_name: 'transport', difficulty: 1 },
-      { word: 'Bus', chinese: '公交车', phonetic: '/bʌs/', category_name: 'transport', difficulty: 1 },
-      { word: 'Train', chinese: '火车', phonetic: '/treɪn/', category_name: 'transport', difficulty: 1 },
-      { word: 'Plane', chinese: '飞机', phonetic: '/pleɪn/', category_name: 'transport', difficulty: 1 },
-      { word: 'Bike', chinese: '自行车', phonetic: '/baɪk/', category_name: 'transport', difficulty: 1 },
-      { word: 'Ship', chinese: '轮船', phonetic: '/ʃɪp/', category_name: 'transport', difficulty: 2 },
-      { word: 'Taxi', chinese: '出租车', phonetic: '/ˈtæksi/', category_name: 'transport', difficulty: 2 },
-      { word: 'Truck', chinese: '卡车', phonetic: '/trʌk/', category_name: 'transport', difficulty: 2 },
-      { word: 'Boat', chinese: '小船', phonetic: '/boʊt/', category_name: 'transport', difficulty: 2 },
-      { word: 'Helicopter', chinese: '直升机', phonetic: '/ˈhelɪkɑːptər/', category_name: 'transport', difficulty: 3 },
-      
-      // 自然天气类
-      { word: 'Sun', chinese: '太阳', phonetic: '/sʌn/', category_name: 'nature', difficulty: 1 },
-      { word: 'Moon', chinese: '月亮', phonetic: '/muːn/', category_name: 'nature', difficulty: 1 },
-      { word: 'Star', chinese: '星星', phonetic: '/stɑːr/', category_name: 'nature', difficulty: 1 },
-      { word: 'Cloud', chinese: '云', phonetic: '/klaʊd/', category_name: 'nature', difficulty: 1 },
-      { word: 'Rain', chinese: '雨', phonetic: '/reɪn/', category_name: 'nature', difficulty: 1 },
-      { word: 'Snow', chinese: '雪', phonetic: '/snoʊ/', category_name: 'nature', difficulty: 1 },
-      { word: 'Wind', chinese: '风', phonetic: '/wɪnd/', category_name: 'nature', difficulty: 1 },
-      { word: 'Tree', chinese: '树', phonetic: '/triː/', category_name: 'nature', difficulty: 1 },
-      { word: 'Flower', chinese: '花', phonetic: '/ˈflaʊər/', category_name: 'nature', difficulty: 1 },
-      { word: 'Grass', chinese: '草', phonetic: '/ɡræs/', category_name: 'nature', difficulty: 1 },
-      
-      // 更多水果
-      { word: 'Grape', chinese: '葡萄', phonetic: '/ɡreɪp/', category_name: 'fruits', difficulty: 2 },
-      { word: 'Watermelon', chinese: '西瓜', phonetic: '/ˈwɔːtərmelən/', category_name: 'fruits', difficulty: 3 },
-      { word: 'Pineapple', chinese: '菠萝', phonetic: '/ˈpaɪnæpəl/', category_name: 'fruits', difficulty: 3 },
-      { word: 'Mango', chinese: '芒果', phonetic: '/ˈmæŋɡoʊ/', category_name: 'fruits', difficulty: 2 },
-      { word: 'Peach', chinese: '桃子', phonetic: '/piːtʃ/', category_name: 'fruits', difficulty: 2 },
-      { word: 'Pear', chinese: '梨', phonetic: '/per/', category_name: 'fruits', difficulty: 1 },
-      { word: 'Cherry', chinese: '樱桃', phonetic: '/ˈtʃeri/', category_name: 'fruits', difficulty: 2 },
-      { word: 'Lemon', chinese: '柠檬', phonetic: '/ˈlemən/', category_name: 'fruits', difficulty: 2 },
-      
-      // 更多动物
-      { word: 'Rabbit', chinese: '兔子', phonetic: '/ˈræbɪt/', category_name: 'animals', difficulty: 1 },
-      { word: 'Bear', chinese: '熊', phonetic: '/ber/', category_name: 'animals', difficulty: 1 },
-      { word: 'Monkey', chinese: '猴子', phonetic: '/ˈmʌŋki/', category_name: 'animals', difficulty: 2 },
-      { word: 'Zebra', chinese: '斑马', phonetic: '/ˈziːbrə/', category_name: 'animals', difficulty: 2 },
-      { word: 'Horse', chinese: '马', phonetic: '/hɔːrs/', category_name: 'animals', difficulty: 1 },
-      { word: 'Cow', chinese: '奶牛', phonetic: '/kaʊ/', category_name: 'animals', difficulty: 1 },
-      { word: 'Pig', chinese: '猪', phonetic: '/pɪɡ/', category_name: 'animals', difficulty: 1 },
-      { word: 'Sheep', chinese: '羊', phonetic: '/ʃiːp/', category_name: 'animals', difficulty: 1 }
-    ];
-
-    let successCount = 0;
-    let errorCount = 0;
-
-    for (const wordData of wordsData) {
-      try {
-        // 获取分类ID
-        const { data: category, error: categoryError } = await supabase
-          .from('categories')
-          .select('id')
-          .eq('name', wordData.category_name)
-          .single();
-        
-        if (categoryError || !category) {
-          console.warn(`分类 ${wordData.category_name} 不存在，跳过单词: ${wordData.word}`);
-          errorCount++;
-          continue;
-        }
-
-        // 检查单词是否已存在
-        const { data: existingWord, error: checkError } = await supabase
-          .from('words')
-          .select('id')
-          .eq('word', wordData.word)
-          .eq('category_id', category.id)
-          .single();
-
-        if (existingWord) {
-          console.log(`单词 ${wordData.word} 已存在，跳过`);
-          continue;
-        }
-
-        // 插入新单词
-        const { error: insertError } = await supabase
-          .from('words')
-          .insert({
-            word: wordData.word,
-            chinese: wordData.chinese,
-            phonetic: wordData.phonetic,
-            category_id: category.id,
-            difficulty_level: wordData.difficulty || 1,
-            image_url: `https://images.unsplash.com/photo-1544966503-7cc5ac882d5f?w=400&h=300&fit=crop&q=80&auto=format&txt=${encodeURIComponent(wordData.word)}`
-          });
-
-        if (insertError) throw insertError;
-
-        console.log(`✓ 成功导入: ${wordData.word} - ${wordData.chinese}`);
-        successCount++;
-
-      } catch (error) {
-        console.error(`✗ 导入失败: ${wordData.word} - ${error.message}`);
-        errorCount++;
-      }
+    const { data, error } = await supabase.rpc('exec_sql', { sql_query: sql });
+    if (error) {
+      console.error('SQL执行错误:', error);
+      return false;
     }
-
-    console.log(`\n导入完成！`);
-    console.log(`成功: ${successCount} 个`);
-    console.log(`失败: ${errorCount} 个`);
-
-  } catch (error) {
-    console.error('批量导入失败:', error);
-    process.exit(1);
+    return true;
+  } catch (err) {
+    console.error('执行SQL时出错:', err);
+    return false;
   }
-};
+}
 
-// 执行导入
-batchImportWords(); 
+// 导入分类数据
+async function importCategories() {
+  console.log('开始导入分类数据...');
+  
+  const categories = [
+    { name: 'fruits', display_name: '水果蔬菜', description: '各种水果和蔬菜的英语单词', icon: '🍎', color: '#FF6B6B' },
+    { name: 'animals', display_name: '动物世界', description: '可爱的动物朋友们', icon: '🦁', color: '#4ECDC4' },
+    { name: 'colors', display_name: '颜色形状', description: '基本颜色和形状认知', icon: '🌈', color: '#45B7D1' },
+    { name: 'numbers', display_name: '数字时间', description: '数字和时间概念', icon: '🔢', color: '#96CEB4' },
+    { name: 'family', display_name: '家庭成员', description: '家庭成员称谓', icon: '👨‍👩‍👧‍👦', color: '#FFEAA7' },
+    { name: 'body', display_name: '身体部位', description: '认识身体各部位', icon: '🙋‍♀️', color: '#DDA0DD' },
+    { name: 'clothes', display_name: '服装配饰', description: '日常服装用品', icon: '👕', color: '#98D8C8' },
+    { name: 'food', display_name: '美食餐具', description: '食物和餐具名称', icon: '🍽️', color: '#F7DC6F' },
+    { name: 'transport', display_name: '交通工具', description: '各种交通工具', icon: '🚗', color: '#AED6F1' },
+    { name: 'nature', display_name: '自然天气', description: '自然现象和天气', icon: '🌤️', color: '#A9DFBF' },
+    { name: 'daily_phrases', display_name: '日常短语', description: '生活中常用的英语短语', icon: '💬', color: '#FF9FF3' },
+    { name: 'greeting_phrases', display_name: '问候短语', description: '礼貌问候和寒暄用语', icon: '👋', color: '#54A0FF' },
+    { name: 'action_phrases', display_name: '动作短语', description: '描述动作和行为的短语', icon: '🏃‍♀️', color: '#5F27CD' },
+    { name: 'simple_sentences', display_name: '简单句子', description: '基础英语句子结构', icon: '📝', color: '#00D2D3' },
+    { name: 'conversation_sentences', display_name: '对话句子', description: '日常对话常用句子', icon: '🗣️', color: '#FF6B6B' }
+  ];
+
+  for (const category of categories) {
+    const { data, error } = await supabase
+      .from('categories')
+      .upsert(category, { onConflict: 'name' });
+    
+    if (error) {
+      console.error(`导入分类 ${category.name} 失败:`, error);
+    } else {
+      console.log(`✅ 分类 ${category.name} 导入成功`);
+    }
+  }
+}
+
+// 导入单词数据
+async function importWords() {
+  console.log('开始导入单词数据...');
+  
+  // 读取SQL文件中的单词数据
+  const sqlContent = readSqlFile('supabase-sample-data.sql');
+  
+  // 提取INSERT语句
+  const insertStatements = sqlContent.match(/INSERT INTO words[^;]+;/g);
+  
+  if (!insertStatements) {
+    console.log('没有找到单词数据');
+    return;
+  }
+
+  for (const statement of insertStatements) {
+    try {
+      const success = await executeSql(statement);
+      if (success) {
+        console.log('✅ 单词数据导入成功');
+      } else {
+        console.log('❌ 单词数据导入失败');
+      }
+    } catch (err) {
+      console.error('执行单词导入时出错:', err);
+    }
+  }
+}
+
+// 主函数
+async function main() {
+  console.log('🚀 开始导入数据到Supabase...');
+  
+  try {
+    await importCategories();
+    await importWords();
+    
+    console.log('✅ 所有数据导入完成!');
+  } catch (error) {
+    console.error('❌ 导入过程中出现错误:', error);
+  }
+}
+
+// 运行导入
+main(); 
