@@ -124,8 +124,8 @@ const CategoryScreen: React.FC<CategoryScreenProps> = ({ category, onNavigate, o
                     onClick={(e) => handleCardFlip(word.id, e)}
                   >
                     <div className="relative h-full flex flex-col">
-                      {/* 图片区域 - 固定高度比例 */}
-                      <div className="relative overflow-hidden rounded-t-lg" style={{ height: '75%' }}>
+                      {/* 图片区域 */}
+                      <div className="relative flex-1 overflow-hidden rounded-t-lg">
                         <img
                           src={word.image}
                           alt={word.word}
@@ -154,10 +154,10 @@ const CategoryScreen: React.FC<CategoryScreenProps> = ({ category, onNavigate, o
                         </div>
                       </div>
                       
-                      {/* 文字区域 - 固定高度比例 */}
-                      <div className="p-2 bg-white rounded-b-lg flex flex-col justify-center" style={{ height: '25%' }}>
-                        <h3 className="text-sm font-bold text-gray-800 mb-1 truncate leading-tight">{word.word}</h3>
-                        <p className="text-xs text-gray-600 truncate leading-tight">{word.chinese}</p>
+                      {/* 文字区域 */}
+                      <div className="p-2 bg-white rounded-b-lg">
+                        <h3 className="text-sm font-bold text-gray-800 mb-1 truncate">{word.word}</h3>
+                        <p className="text-xs text-gray-600 truncate">{word.chinese}</p>
                       </div>
                     </div>
                   </div>
