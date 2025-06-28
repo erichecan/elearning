@@ -108,7 +108,7 @@ const CategoryScreen: React.FC<CategoryScreenProps> = ({ category, onNavigate, o
 
       {/* 单词卡片网格 */}
       <div className="flex-1 overflow-hidden">
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-3 h-full overflow-y-auto pb-2">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-2 h-full overflow-y-auto pb-2">
           {words.map((word) => {
             const isFlipped = flippedCard === word.id
             return (
@@ -120,7 +120,7 @@ const CategoryScreen: React.FC<CategoryScreenProps> = ({ category, onNavigate, o
                 <div className={`flip-card-inner ${isFlipped ? 'flipped' : ''}`}>
                   {/* 卡片正面 */}
                   <div 
-                    className="flip-card-front bg-white rounded-lg shadow-lg cursor-pointer hover:shadow-xl transition-shadow"
+                    className="flip-card-front bg-white rounded-lg shadow-sm cursor-pointer group hover:shadow-md transition-all duration-200 hover:scale-105"
                     onClick={(e) => handleCardFlip(word.id, e)}
                   >
                     <div className="relative h-full flex flex-col">
@@ -155,7 +155,7 @@ const CategoryScreen: React.FC<CategoryScreenProps> = ({ category, onNavigate, o
                       </div>
                       
                       {/* 文字区域 */}
-                      <div className="p-1 bg-white rounded-b-lg">
+                      <div className="p-1 bg-white rounded-b-lg flex flex-col items-center">
                         <h3 className="text-xs font-bold text-gray-800 mb-0.5 truncate">{word.word}</h3>
                         <p className="text-[10px] text-gray-600 truncate">{word.chinese}</p>
                       </div>
