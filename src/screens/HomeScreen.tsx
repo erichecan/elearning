@@ -4,7 +4,7 @@ import { categoryService } from '../services/api'
 import { Category } from '../lib/database'
 
 interface HomeScreenProps {
-  onNavigate: (screen: 'home' | 'card' | 'settings' | 'category', category?: string) => void
+  onNavigate: (screen: 'home' | 'settings' | 'category', category?: string) => void
 }
 
 const HomeScreen: React.FC<HomeScreenProps> = ({ onNavigate }) => {

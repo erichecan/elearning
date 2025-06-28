@@ -18,11 +18,11 @@ import { chromium } from 'playwright';
     const title = await page.textContent('h1');
     console.log('首页标题:', title);
     
-    const categories = await page.$$('.category-card');
+    const categories = await page.$$('.grid > div');
     console.log(`首页分类卡片数量: ${categories.length}`);
     
-    console.log('2. 点击水果蔬菜分类...');
-    await page.click('text=水果蔬菜 🍎');
+    console.log('2. 点击第一个分类...');
+    await page.click('.grid > div:first-child');
     await page.waitForTimeout(1000);
     
     // 检查分类页面
@@ -52,7 +52,7 @@ import { chromium } from 'playwright';
       // 检查卡片内部结构
       const cardStructure = await firstCard.evaluate(el => {
         const img = el.querySelector('img');
-        const textDiv = el.querySelector('.p-3');
+        const textDiv = el.querySelector('.p-1');
         return {
           hasImage: !!img,
           imageSrc: img ? img.src : null,
@@ -61,24 +61,6 @@ import { chromium } from 'playwright';
         };
       });
       console.log('卡片内部结构:', cardStructure);
-    }
-    
-    console.log('3. 点击Apple卡片...');
-    await page.click('text=Apple');
-    await page.waitForTimeout(1000);
-    
-    // 检查学习卡片
-    const flipCard = await page.$('.flip-card');
-    if (flipCard) {
-      const flipCardStyles = await flipCard.evaluate(el => {
-        const computed = window.getComputedStyle(el);
-        return {
-          width: computed.width,
-          height: computed.height,
-          perspective: computed.perspective
-        };
-      });
-      console.log('翻转卡片样式:', flipCardStyles);
     }
     
     console.log('=== 测试完成 ===');

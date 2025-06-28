@@ -15,36 +15,25 @@ async function takeScreenshots() {
     // 等待页面完全加载
     await page.waitForTimeout(2000);
     
-    // 截图1: 首页（单词卡片网格）
+    // 截图1: 首页（分类卡片网格）
     await page.screenshot({ 
       path: 'homepage.png',
       fullPage: true 
     });
     console.log('✅ 首页截图已保存: homepage.png');
     
-    // 点击第一个单词卡片
+    // 点击第一个分类卡片
     await page.click('.grid > div:first-child');
     await page.waitForTimeout(1000);
     
-    // 截图2: 卡片学习页面
+    // 截图2: 分类页面
     await page.screenshot({ 
-      path: 'card-page.png',
+      path: 'category-page.png',
       fullPage: true 
     });
-    console.log('✅ 卡片页面截图已保存: card-page.png');
+    console.log('✅ 分类页面截图已保存: category-page.png');
     
-    // 点击翻转按钮
-    await page.click('button:has-text("查看详情")');
-    await page.waitForTimeout(500);
-    
-    // 截图3: 翻转后的卡片
-    await page.screenshot({ 
-      path: 'card-flipped.png',
-      fullPage: true 
-    });
-    console.log('✅ 翻转卡片截图已保存: card-flipped.png');
-    
-    // 验证卡片尺寸
+    // 验证分类页面卡片尺寸
     const cardElement = await page.locator('.grid > div:first-child');
     const cardBox = await cardElement.boundingBox();
     

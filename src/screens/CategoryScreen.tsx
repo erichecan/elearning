@@ -6,7 +6,7 @@ import { speechService } from '../services/speech'
 
 interface CategoryScreenProps {
   category: string
-  onNavigate: (screen: 'home' | 'category' | 'card' | 'settings', payload?: any) => void
+  onNavigate: (screen: 'home' | 'category' | 'settings', payload?: any) => void
   onBack: () => void
 }
 
@@ -36,10 +36,6 @@ const CategoryScreen: React.FC<CategoryScreenProps> = ({ category, onNavigate, o
 
     loadWords()
   }, [category])
-
-  const handleWordClick = (word: Word) => {
-    onNavigate('card', word)
-  }
 
   const handleCardFlip = (wordId: number, e: React.MouseEvent) => {
     e.stopPropagation()
@@ -229,7 +225,7 @@ const CategoryScreen: React.FC<CategoryScreenProps> = ({ category, onNavigate, o
                       <p className="text-base text-gray-700 font-medium">{word.chinese}</p>
                       
                       {/* 背面操作按钮 */}
-                      <div className="mt-4 flex gap-2 justify-center">
+                      <div className="mt-4 flex justify-center">
                         <button
                           onClick={(e) => {
                             e.stopPropagation()
@@ -238,15 +234,6 @@ const CategoryScreen: React.FC<CategoryScreenProps> = ({ category, onNavigate, o
                           className="p-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition-colors"
                         >
                           <Volume2 size={14} />
-                        </button>
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation()
-                            handleWordClick(word)
-                          }}
-                          className="px-3 py-1 bg-green-500 text-white text-xs rounded-full hover:bg-green-600 transition-colors"
-                        >
-                          学习
                         </button>
                       </div>
                     </div>
