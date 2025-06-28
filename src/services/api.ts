@@ -1,4 +1,4 @@
-import { supabase, Category, Word, Favorite, LearningProgress } from '../lib/database';
+import { supabase, Category, Word } from '../lib/database';
 
 // 生成设备唯一ID
 function getDeviceId(): string {

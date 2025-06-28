@@ -45,7 +45,7 @@ const CategoryScreen: React.FC<CategoryScreenProps> = ({ category, onNavigate, o
     
     // 清除之前的定时器
     if (timerRef.current) {
-      clearTimeout(timerRef.current)
+      window.clearTimeout(timerRef.current)
       timerRef.current = null
     }
 
@@ -57,10 +57,10 @@ const CategoryScreen: React.FC<CategoryScreenProps> = ({ category, onNavigate, o
       setFlippedCard(wordId)
       
       // 5秒后自动翻回正面
-      timerRef.current = setTimeout(() => {
+      timerRef.current = window.setTimeout(() => {
         setFlippedCard(null)
         timerRef.current = null
-      }, 5000)
+      }, 5000) as unknown as number
     }
   }
 
@@ -100,7 +100,7 @@ const CategoryScreen: React.FC<CategoryScreenProps> = ({ category, onNavigate, o
   useEffect(() => {
     return () => {
       if (timerRef.current) {
-        clearTimeout(timerRef.current)
+        window.clearTimeout(timerRef.current)
       }
     }
   }, [])
