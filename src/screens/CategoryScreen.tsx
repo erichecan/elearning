@@ -155,9 +155,9 @@ const CategoryScreen: React.FC<CategoryScreenProps> = ({ category, onNavigate, o
                       </div>
                       
                       {/* 文字区域 */}
-                      <div className="p-2 bg-white rounded-b-lg">
-                        <h3 className="text-sm font-bold text-gray-800 mb-1 truncate">{word.word}</h3>
-                        <p className="text-xs text-gray-600 truncate">{word.chinese}</p>
+                      <div className="p-1 bg-white rounded-b-lg">
+                        <h3 className="text-xs font-bold text-gray-800 mb-0.5 truncate">{word.word}</h3>
+                        <p className="text-[10px] text-gray-600 truncate">{word.chinese}</p>
                       </div>
                     </div>
                   </div>
