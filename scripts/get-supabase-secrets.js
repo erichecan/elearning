@@ -24,8 +24,9 @@ console.log(`
 4. SUPABASE_DB_HOST
    📍 获取方式：
    - 访问：https://app.supabase.com/project/ljtwkkzshbrvqrxgnuin/settings/database
-   - 在 "Connection info" 部分找到 "Host"
-   - 格式类似：aws-0-us-east-2.pooler.supabase.com
+   - 在连接字符串中找到 @ 符号后面的主机名
+   - 格式：db.ljtwkkzshbrvqrxgnuin.supabase.co
+   - 完整连接字符串示例：postgresql://postgres:[YOUR-PASSWORD]@db.ljtwkkzshbrvqrxgnuin.supabase.co:5432/postgres
 
 🔧 在 GitHub 仓库中设置 Secrets：
 
