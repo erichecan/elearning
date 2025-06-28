@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { Volume2, Heart, ArrowLeft } from 'lucide-react'
+import { wordService, favoriteService } from '../services/api'
+import { Word } from '../lib/database'
 
 interface CategoryScreenProps {
   category: string
@@ -7,38 +9,34 @@ interface CategoryScreenProps {
   onBack: () => void
 }
 
-// 所有单词数据
-const allWords = [
-  // 水果蔬菜
-  { id: 1, word: 'Apple', chinese: '苹果', image: 'https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?w=400&h=300&fit=crop', audio: 'apple.mp3', isFavorite: false, category: 'fruits' },
-  { id: 2, word: 'Banana', chinese: '香蕉', image: 'https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?w=400&h=300&fit=crop', audio: 'banana.mp3', isFavorite: true, category: 'fruits' },
-  { id: 3, word: 'Orange', chinese: '橙子', image: 'https://images.unsplash.com/photo-1547514701-42782101795e?w=400&h=300&fit=crop', audio: 'orange.mp3', isFavorite: false, category: 'fruits' },
-  { id: 4, word: 'Strawberry', chinese: '草莓', image: 'https://images.unsplash.com/photo-1464965911861-746a04b4bca6?w=400&h=300&fit=crop', audio: 'strawberry.mp3', isFavorite: false, category: 'fruits' },
-  { id: 5, word: 'Carrot', chinese: '胡萝卜', image: 'https://images.unsplash.com/photo-1447175008436-170170e8a4d7?w=400&h=300&fit=crop', audio: 'carrot.mp3', isFavorite: false, category: 'fruits' },
-  { id: 6, word: 'Tomato', chinese: '西红柿', image: 'https://images.unsplash.com/photo-1546094096-0df4bcaaa337?w=400&h=300&fit=crop', audio: 'tomato.mp3', isFavorite: false, category: 'fruits' },
-  // 动物世界
-  { id: 7, word: 'Elephant', chinese: '大象', image: 'https://images.unsplash.com/photo-1557050543-4d5f2e07c346?w=400&h=300&fit=crop', audio: 'elephant.mp3', isFavorite: false, category: 'animals' },
-  { id: 8, word: 'Lion', chinese: '狮子', image: 'https://images.unsplash.com/photo-1549366021-9f761d450615?w=400&h=300&fit=crop', audio: 'lion.mp3', isFavorite: false, category: 'animals' },
-  { id: 9, word: 'Giraffe', chinese: '长颈鹿', image: 'https://images.unsplash.com/photo-1547721064-da6cfb341d50?w=400&h=300&fit=crop', audio: 'giraffe.mp3', isFavorite: false, category: 'animals' },
-  { id: 10, word: 'Penguin', chinese: '企鹅', image: 'https://images.unsplash.com/photo-1551986782-d0169b3f8fa7?w=400&h=300&fit=crop', audio: 'penguin.mp3', isFavorite: false, category: 'animals' },
-  { id: 11, word: 'Dolphin', chinese: '海豚', image: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=400&h=300&fit=crop', audio: 'dolphin.mp3', isFavorite: false, category: 'animals' },
-  { id: 12, word: 'Butterfly', chinese: '蝴蝶', image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=300&fit=crop', audio: 'butterfly.mp3', isFavorite: false, category: 'animals' },
-  // 颜色形状
-  { id: 13, word: 'Red', chinese: '红色', image: 'https://images.unsplash.com/photo-1544966503-7cc5ac882d5f?w=400&h=300&fit=crop', audio: 'red.mp3', isFavorite: false, category: 'colors' },
-  { id: 14, word: 'Blue', chinese: '蓝色', image: 'https://images.unsplash.com/photo-1544966503-7cc5ac882d5f?w=400&h=300&fit=crop', audio: 'blue.mp3', isFavorite: false, category: 'colors' },
-  { id: 15, word: 'Green', chinese: '绿色', image: 'https://images.unsplash.com/photo-1544966503-7cc5ac882d5f?w=400&h=300&fit=crop', audio: 'green.mp3', isFavorite: false, category: 'colors' },
-  { id: 16, word: 'Yellow', chinese: '黄色', image: 'https://images.unsplash.com/photo-1544966503-7cc5ac882d5f?w=400&h=300&fit=crop', audio: 'yellow.mp3', isFavorite: false, category: 'colors' },
-  { id: 17, word: 'Circle', chinese: '圆形', image: 'https://images.unsplash.com/photo-1544966503-7cc5ac882d5f?w=400&h=300&fit=crop', audio: 'circle.mp3', isFavorite: false, category: 'colors' },
-  { id: 18, word: 'Square', chinese: '正方形', image: 'https://images.unsplash.com/photo-1544966503-7cc5ac882d5f?w=400&h=300&fit=crop', audio: 'square.mp3', isFavorite: false, category: 'colors' },
-]
-
 const CategoryScreen: React.FC<CategoryScreenProps> = ({ category, onNavigate, onBack }) => {
-  const words = allWords.filter(w => w.category === category)
+  const [words, setWords] = useState<Word[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
   // 只允许一个卡片翻转，使用单个数字而不是Set
   const [flippedCard, setFlippedCard] = useState<number | null>(null)
   const timerRef = useRef<number | null>(null)
 
-  const handleWordClick = (word: any) => {
+  // 加载单词数据
+  useEffect(() => {
+    const loadWords = async () => {
+      try {
+        setLoading(true)
+        setError(null)
+        const wordsData = await wordService.getByCategory(category)
+        setWords(wordsData)
+      } catch (err) {
+        console.error('加载单词失败:', err)
+        setError('加载单词失败，请稍后重试')
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    loadWords()
+  }, [category])
+
+  const handleWordClick = (word: Word) => {
     onNavigate('card', word)
   }
 
@@ -66,14 +64,36 @@ const CategoryScreen: React.FC<CategoryScreenProps> = ({ category, onNavigate, o
     }
   }
 
-  const toggleFavorite = (wordId: number, e: React.MouseEvent) => {
+  const toggleFavorite = async (wordId: number, e: React.MouseEvent) => {
     e.stopPropagation()
-    console.log('Toggle favorite for word:', wordId)
+    
+    try {
+      const word = words.find(w => w.id === wordId)
+      if (!word) return
+
+      if (word.is_favorite) {
+        await favoriteService.remove(wordId)
+      } else {
+        await favoriteService.add(wordId)
+      }
+
+      // 更新本地状态
+      setWords(prevWords => 
+        prevWords.map(w => 
+          w.id === wordId 
+            ? { ...w, is_favorite: !w.is_favorite }
+            : w
+        )
+      )
+    } catch (err) {
+      console.error('更新收藏失败:', err)
+    }
   }
 
   const playAudio = (wordId: number, e: React.MouseEvent) => {
     e.stopPropagation()
     console.log('Play audio for word:', wordId)
+    // TODO: 实现音频播放功能
   }
 
   // 组件卸载时清除定时器
@@ -90,6 +110,28 @@ const CategoryScreen: React.FC<CategoryScreenProps> = ({ category, onNavigate, o
     setFlippedCard(null)
   }, [category])
 
+  if (loading) {
+    return (
+      <div className="h-full w-full p-6 flex flex-col items-center justify-center">
+        <div className="text-white text-lg">加载中...</div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="h-full w-full p-6 flex flex-col items-center justify-center">
+        <div className="text-red-300 text-lg mb-4">{error}</div>
+        <button
+          onClick={() => window.location.reload()}
+          className="px-4 py-2 bg-white/20 backdrop-blur-sm rounded-lg text-white hover:bg-white/30 transition-all"
+        >
+          重新加载
+        </button>
+      </div>
+    )
+  }
+
   return (
     <div className="h-full w-full p-6 flex flex-col">
       {/* 顶部导航栏 */}
@@ -102,6 +144,7 @@ const CategoryScreen: React.FC<CategoryScreenProps> = ({ category, onNavigate, o
         </button>
         <div className="text-center text-white">
           <h1 className="text-xl font-bold">单词卡片</h1>
+          <p className="text-sm opacity-75">共 {words.length} 个单词</p>
         </div>
         <div className="w-12"></div>
       </div>
@@ -127,7 +170,7 @@ const CategoryScreen: React.FC<CategoryScreenProps> = ({ category, onNavigate, o
                       {/* 图片区域 */}
                       <div className="relative flex-1 overflow-hidden rounded-t-lg">
                         <img
-                          src={word.image}
+                          src={word.image_url || 'https://images.unsplash.com/photo-1544966503-7cc5ac882d5f?w=400&h=300&fit=crop'}
                           alt={word.word}
                           className="w-full h-full object-cover"
                         />
@@ -144,12 +187,12 @@ const CategoryScreen: React.FC<CategoryScreenProps> = ({ category, onNavigate, o
                           <button
                             onClick={(e) => toggleFavorite(word.id, e)}
                             className={`p-1 backdrop-blur-sm rounded-full transition-all ${
-                              word.isFavorite 
+                              word.is_favorite 
                                 ? 'bg-red-500/80 text-white' 
                                 : 'bg-black/50 text-white hover:bg-black/70'
                             }`}
                           >
-                            <Heart size={12} fill={word.isFavorite ? 'currentColor' : 'none'} />
+                            <Heart size={12} fill={word.is_favorite ? 'currentColor' : 'none'} />
                           </button>
                         </div>
                       </div>
@@ -169,7 +212,7 @@ const CategoryScreen: React.FC<CategoryScreenProps> = ({ category, onNavigate, o
                   >
                     <div className="text-center">
                       <h3 className="text-lg font-bold text-gray-800 mb-2">{word.word}</h3>
-                      <p className="text-sm text-gray-600 mb-2">/{word.word.toLowerCase()}/</p>
+                      <p className="text-sm text-gray-600 mb-2">{word.phonetic || `/${word.word.toLowerCase()}/`}</p>
                       <p className="text-base text-gray-700 font-medium">{word.chinese}</p>
                       
                       {/* 背面操作按钮 */}
