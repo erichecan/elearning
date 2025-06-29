@@ -4,30 +4,30 @@ import { categoryService } from '../services/api'
 import { Category } from '../lib/database'
 
 interface HomeScreenProps {
-  onNavigate: (screen: 'home' | 'settings' | 'category', category?: string) => void
+  onNavigate: (screen: 'home' | 'settings' | 'category' | 'admin', category?: string) => void
 }
 
-// 为每个分类设置对应的背景图片
+// 使用AI优化的智能图片搜索 - 更好的匹配度和质量
 const getCategoryImage = (categoryName: string): string => {
   const imageMap: { [key: string]: string } = {
-    'fruits': 'https://images.unsplash.com/photo-1619566636858-adf3ef46400b?w=400&h=300&fit=crop&auto=format',
-    'animals': 'https://images.unsplash.com/photo-1574870111867-089730e5a72b?w=400&h=300&fit=crop&auto=format',
-    'colors': 'https://images.unsplash.com/photo-1541845157-a6d2d100c931?w=400&h=300&fit=crop&auto=format',
-    'numbers': 'https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=400&h=300&fit=crop&auto=format',
-    'family': 'https://images.unsplash.com/photo-1511895426328-dc8714191300?w=400&h=300&fit=crop&auto=format',
-    'body': 'https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=400&h=300&fit=crop&auto=format',
-    'clothes': 'https://images.unsplash.com/photo-1445205170230-053b83016050?w=400&h=300&fit=crop&auto=format',
-    'food': 'https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=400&h=300&fit=crop&auto=format',
-    'transport': 'https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=400&h=300&fit=crop&auto=format',
-    'nature': 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=400&h=300&fit=crop&auto=format',
-    'daily_phrases': 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=400&h=300&fit=crop&auto=format',
-    'greeting_phrases': 'https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?w=400&h=300&fit=crop&auto=format',
-    'action_phrases': 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=300&fit=crop&auto=format',
-    'simple_sentences': 'https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=400&h=300&fit=crop&auto=format',
-    'conversation_sentences': 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&h=300&fit=crop&auto=format'
+    'fruits': 'https://source.unsplash.com/400x300/?fruits,fresh,colorful',
+    'animals': 'https://source.unsplash.com/400x300/?animals,cute,wildlife',
+    'colors': 'https://source.unsplash.com/400x300/?colors,rainbow,bright',
+    'numbers': 'https://source.unsplash.com/400x300/?numbers,counting,math',
+    'family': 'https://source.unsplash.com/400x300/?family,people,happy',
+    'body': 'https://source.unsplash.com/400x300/?human,body,health',
+    'clothes': 'https://source.unsplash.com/400x300/?clothes,fashion,kids',
+    'food': 'https://source.unsplash.com/400x300/?food,healthy,cooking',
+    'transport': 'https://source.unsplash.com/400x300/?transport,vehicles,travel',
+    'nature': 'https://source.unsplash.com/400x300/?nature,landscape,beautiful',
+    'daily_phrases': 'https://source.unsplash.com/400x300/?conversation,people,daily',
+    'greeting_phrases': 'https://source.unsplash.com/400x300/?greeting,hello,people',
+    'action_phrases': 'https://source.unsplash.com/400x300/?action,movement,people',
+    'simple_sentences': 'https://source.unsplash.com/400x300/?learning,education,simple',
+    'conversation_sentences': 'https://source.unsplash.com/400x300/?conversation,talking,people'
   }
   
-  return imageMap[categoryName] || 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=400&h=300&fit=crop&auto=format'
+  return imageMap[categoryName] || 'https://source.unsplash.com/400x300/?learning,education'
 }
 
 // 为每个分类设置对应的英文显示名称
@@ -80,6 +80,21 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ onNavigate }) => {
   const [categories, setCategories] = useState<Category[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [adminClickCount, setAdminClickCount] = useState(0)
+
+  // 处理admin入口
+  const handleAdminAccess = () => {
+    setAdminClickCount(prev => prev + 1)
+    if (adminClickCount >= 4) {
+      onNavigate('admin')
+      setAdminClickCount(0)
+    }
+    
+    // 重置计数器
+    setTimeout(() => {
+      setAdminClickCount(0)
+    }, 3000)
+  }
 
   // 加载分类数据
   useEffect(() => {
@@ -127,7 +142,13 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ onNavigate }) => {
       {/* 顶部导航栏 */}
       <div className="flex items-center justify-between mb-6">
         <div className="text-white">
-          <h1 className="text-3xl font-bold mb-1">FlashCard Kids 🎯</h1>
+          <h1 
+            className="text-3xl font-bold mb-1 cursor-pointer select-none"
+            onClick={handleAdminAccess}
+            title="连续点击5次进入管理模式"
+          >
+            FlashCard Kids 🎯
+          </h1>
           <p className="text-base opacity-90">儿童英语认知学习</p>
           <p className="text-sm opacity-75">共 {categories.length} 个分类</p>
         </div>

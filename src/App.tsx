@@ -2,8 +2,9 @@ import { useState } from 'react'
 import HomeScreen from './screens/HomeScreen'
 import SettingsScreen from './screens/SettingsScreen'
 import CategoryScreen from './screens/CategoryScreen'
+import AdminScreen from './screens/AdminScreen'
 
-type Screen = 'home' | 'category' | 'settings'
+type Screen = 'home' | 'category' | 'settings' | 'admin'
 
 function App() {
   const [currentScreen, setCurrentScreen] = useState<Screen>('home')
@@ -32,6 +33,11 @@ function App() {
         )}
         {currentScreen === 'settings' && (
           <SettingsScreen 
+            onBack={() => navigateTo('home')}
+          />
+        )}
+        {currentScreen === 'admin' && (
+          <AdminScreen 
             onBack={() => navigateTo('home')}
           />
         )}
