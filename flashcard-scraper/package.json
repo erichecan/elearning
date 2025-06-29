@@ -1,0 +1,50 @@
+{
+  "name": "flashcard-scraper",
+  "version": "1.0.0",
+  "description": "A web scraper for kids-flashcards.com using Playwright",
+  "main": "scraper.js",
+  "scripts": {
+    "explore": "node explore.js",
+    "explore-totcards": "node explore-totcards.js",
+    "explore-emojiflashcards": "node explore-emojiflashcards.js",
+    "explore-emoji-categories": "node explore-emojiflashcards-categories.js",
+    "scrape": "node scraper.js",
+    "scrape-to-db": "node database-scraper.js",
+    "scrape-local": "node local-scraper.js",
+    "scrape-totcards": "node totcards-scraper.js",
+    "scrape-totcards-all": "node totcards-comprehensive-scraper.js",
+    "scrape-emojiflashcards": "node emojiflashcards-scraper.js",
+    "generate-totcards-migration": "node generate-totcards-migration.js",
+    "generate-comprehensive-migration": "node generate-comprehensive-migration.js",
+    "generate-emojiflashcards-migration": "node generate-emojiflashcards-migration.js",
+    "test-single": "node test-single.js",
+    "test-db": "node test-database.js",
+    "view-data": "node view-data.js",
+    "view-stats": "node view-data.js stats",
+    "view-words": "node view-data.js words",
+    "view-categories": "node view-data.js categories",
+    "export-data": "node view-data.js export",
+    "test-local": "node test-local.js",
+    "install-browsers": "npx playwright install",
+    "test": "echo \"No tests specified\" && exit 0"
+  },
+  "keywords": [
+    "scraper",
+    "playwright",
+    "flashcards",
+    "education"
+  ],
+  "author": "",
+  "license": "MIT",
+  "type": "commonjs",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.50.2",
+    "axios": "^1.10.0",
+    "better-sqlite3": "^12.2.0",
+    "cheerio": "^1.1.0",
+    "dotenv": "^17.0.0",
+    "fs-extra": "^11.3.0",
+    "playwright": "^1.53.1",
+    "sqlite3": "^5.1.7"
+  }
+}

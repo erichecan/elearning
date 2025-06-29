@@ -1,0 +1,45 @@
+# 下载的文件
+downloads/
+test-downloads/
+
+# 本地数据库文件
+*.db
+*.sqlite
+*.sqlite3
+flashcards.db
+test-flashcards.db
+
+# 导出的数据文件
+exported-data.json
+exported-data.sql
+test-export.json
+
+# 报告文件
+exploration-report.json
+scraping-report.json
+database-scraping-report.json
+
+# 环境变量
+.env
+.env.local
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# 临时文件
+*.tmp
+*.temp
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# 日志文件
+*.log 
