@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
-import { Settings, Eye, Check, X, RefreshCw, Upload, Trash2, LogOut } from 'lucide-react'
+import { Settings, Check, X, LogOut } from 'lucide-react'
 import { Word, Category } from '../lib/database'
 import { wordService, categoryService } from '../services/api'
-import { adminApiService, adminStorageService, ImageOptimizationResult } from '../services/admin-api'
+import { adminApiService, adminStorageService } from '../services/admin-api'
 
 interface AdminScreenProps {
   onBack: () => void
@@ -29,7 +29,6 @@ const AdminScreen: React.FC<AdminScreenProps> = ({ onBack }) => {
     approved: 0
   })
 
-  // 简单的密码验证
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault()
     if (password === 'admin123') {
@@ -41,10 +40,8 @@ const AdminScreen: React.FC<AdminScreenProps> = ({ onBack }) => {
     }
   }
 
-  // 加载统计数据
   const loadStats = async () => {
     try {
-      // 由于wordService没有getAll方法，我们从所有分类中获取单词
       const allCategories = await categoryService.getAll()
       let allWords: Word[] = []
       
@@ -58,7 +55,7 @@ const AdminScreen: React.FC<AdminScreenProps> = ({ onBack }) => {
       setStats({
         totalWords: allWords.length,
         wordsWithImages: allWords.filter((w: Word) => w.image_url).length,
-        pendingReview: allWords.filter((w: Word) => w.image_url && !localStorage.getItem(`approved_${w.id}`)).length,
+        pendingReview: allWords.filter((w: Word) => w.image_url && !adminStorageService.getApprovalStatus(w.id).approved).length,
         approved: approved.length
       })
     } catch (error) {
@@ -66,7 +63,6 @@ const AdminScreen: React.FC<AdminScreenProps> = ({ onBack }) => {
     }
   }
 
-  // 加载分类
   const loadCategories = async () => {
     try {
       const categoriesData = await categoryService.getAll()
@@ -76,7 +72,6 @@ const AdminScreen: React.FC<AdminScreenProps> = ({ onBack }) => {
     }
   }
 
-  // 加载单词
   const loadWords = async (category: string) => {
     setLoading(true)
     try {
@@ -98,7 +93,6 @@ const AdminScreen: React.FC<AdminScreenProps> = ({ onBack }) => {
     }
   }
 
-  // 生成优化的图片URL
   const generateOptimizedImageUrl = (word: string, category: string) => {
     const categoryKeywords: { [key: string]: string } = {
       'fruits': 'fruit,fresh,healthy',
@@ -117,7 +111,6 @@ const AdminScreen: React.FC<AdminScreenProps> = ({ onBack }) => {
     return `https://source.unsplash.com/400x300/?${word},${keywords},realistic,clear`
   }
 
-  // 批量优化图片
   const optimizeImages = async () => {
     if (!selectedCategory) {
       alert('请先选择分类')
@@ -127,10 +120,8 @@ const AdminScreen: React.FC<AdminScreenProps> = ({ onBack }) => {
     setLoading(true)
     try {
       const wordsToOptimize = words.filter(w => !w.image_url)
-      
       const optimizationResults = await adminApiService.optimizeWordImages(wordsToOptimize, selectedCategory)
       
-      // 更新界面状态
       optimizationResults.forEach(result => {
         if (result.success) {
           setWords(prev => prev.map(w => 
@@ -142,7 +133,8 @@ const AdminScreen: React.FC<AdminScreenProps> = ({ onBack }) => {
       })
       
       const successCount = optimizationResults.filter(r => r.success).length
-      alert(`已为 ${successCount} 个单词生成优化图片，请审核后同步`)
+      alert(`已为 ${successCount} 个单词生成优化图片，请在"审核管理"页面审核`)
+      setCurrentTab('review')
     } catch (error) {
       console.error('优化失败:', error)
       alert('优化失败')
@@ -151,20 +143,16 @@ const AdminScreen: React.FC<AdminScreenProps> = ({ onBack }) => {
     }
   }
 
-  // 审核图片
   const reviewImage = (wordId: number, approved: boolean) => {
     adminStorageService.setApprovalStatus(wordId, approved)
-    
     setWords(prev => prev.map(w => 
       w.id === wordId 
         ? { ...w, isApproved: approved, isRejected: !approved }
         : w
     ))
-    
     loadStats()
   }
 
-  // 同步到数据库
   const syncApprovedImages = async () => {
     const approvedWords = words.filter(w => w.isApproved && w.optimizedImageUrl)
     
@@ -175,38 +163,29 @@ const AdminScreen: React.FC<AdminScreenProps> = ({ onBack }) => {
 
     setLoading(true)
     try {
-      // 检查Supabase连接
       const connectionStatus = await adminApiService.checkSupabaseConnection()
       if (!connectionStatus.connected) {
         throw new Error(`数据库连接失败: ${connectionStatus.error}`)
       }
 
-      // 准备同步数据
       const imageUpdates = approvedWords.map(word => ({
         wordId: word.id,
         word: word.word,
         imageUrl: word.optimizedImageUrl!
       }))
 
-      // 同步到Supabase
       const syncResult = await adminApiService.syncImagesToSupabase(imageUpdates)
       
-      // 显示结果
       if (syncResult.updated > 0) {
-        alert(`✅ 成功同步 ${syncResult.updated} 张图片到数据库！${syncResult.failed > 0 ? `\n❌ ${syncResult.failed} 张图片同步失败` : ''}`)
-        
-        // 清除已同步的审核状态
+        alert(`✅ 成功同步 ${syncResult.updated} 张图片到数据库！`)
         approvedWords.forEach(word => {
           adminStorageService.clearApprovalStatus(word.id)
         })
-        
-        // 重新加载数据
         await loadWords(selectedCategory)
         await loadStats()
       } else {
         throw new Error('没有图片成功同步')
       }
-      
     } catch (error) {
       console.error('同步失败:', error)
       alert(`同步失败: ${error instanceof Error ? error.message : '未知错误'}`)
@@ -264,7 +243,8 @@ const AdminScreen: React.FC<AdminScreenProps> = ({ onBack }) => {
 
   // 主界面
   return (
-    <div className="h-full w-full bg-gray-100">
+    <div className="h-full w-full bg-gray-100 flex flex-col">
+      {/* 顶部导航 */}
       <div className="bg-white shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 py-4">
           <div className="flex justify-between items-center">
@@ -284,6 +264,7 @@ const AdminScreen: React.FC<AdminScreenProps> = ({ onBack }) => {
         </div>
       </div>
 
+      {/* 标签导航 */}
       <div className="bg-white border-b">
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex space-x-8">
@@ -309,127 +290,198 @@ const AdminScreen: React.FC<AdminScreenProps> = ({ onBack }) => {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        {currentTab === 'overview' && (
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-            <div className="bg-white p-6 rounded-lg shadow">
-              <h3 className="text-lg font-medium">总单词数</h3>
-              <p className="text-3xl font-bold text-blue-600 mt-2">{stats.totalWords}</p>
+      {/* 内容区域 */}
+      <div className="flex-1 overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 py-8 h-full overflow-y-auto">
+          {currentTab === 'overview' && (
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+              <div className="bg-white p-6 rounded-lg shadow">
+                <h3 className="text-lg font-medium">总单词数</h3>
+                <p className="text-3xl font-bold text-blue-600 mt-2">{stats.totalWords}</p>
+              </div>
+              <div className="bg-white p-6 rounded-lg shadow">
+                <h3 className="text-lg font-medium">有图片单词</h3>
+                <p className="text-3xl font-bold text-green-600 mt-2">{stats.wordsWithImages}</p>
+              </div>
+              <div className="bg-white p-6 rounded-lg shadow">
+                <h3 className="text-lg font-medium">待审核</h3>
+                <p className="text-3xl font-bold text-yellow-600 mt-2">{stats.pendingReview}</p>
+              </div>
+              <div className="bg-white p-6 rounded-lg shadow">
+                <h3 className="text-lg font-medium">已审核通过</h3>
+                <p className="text-3xl font-bold text-purple-600 mt-2">{stats.approved}</p>
+              </div>
             </div>
-            <div className="bg-white p-6 rounded-lg shadow">
-              <h3 className="text-lg font-medium">有图片单词</h3>
-              <p className="text-3xl font-bold text-green-600 mt-2">{stats.wordsWithImages}</p>
-            </div>
-            <div className="bg-white p-6 rounded-lg shadow">
-              <h3 className="text-lg font-medium">待审核</h3>
-              <p className="text-3xl font-bold text-yellow-600 mt-2">{stats.pendingReview}</p>
-            </div>
-            <div className="bg-white p-6 rounded-lg shadow">
-              <h3 className="text-lg font-medium">已审核通过</h3>
-              <p className="text-3xl font-bold text-purple-600 mt-2">{stats.approved}</p>
-            </div>
-          </div>
-        )}
+          )}
 
-        {currentTab === 'optimize' && (
-          <div className="bg-white p-6 rounded-lg shadow">
-            <h3 className="text-lg font-medium mb-4">选择分类进行优化</h3>
-            <div className="flex items-center space-x-4 mb-4">
-              <select
-                value={selectedCategory}
-                onChange={(e) => {
-                  setSelectedCategory(e.target.value)
-                  if (e.target.value) {
-                    loadWords(e.target.value)
-                  }
-                }}
-                className="px-3 py-2 border rounded-lg"
-              >
-                <option value="">选择分类</option>
-                {categories.map(cat => (
-                  <option key={cat.id} value={cat.name}>{cat.display_name}</option>
-                ))}
-              </select>
+          {currentTab === 'optimize' && (
+            <div className="bg-white p-6 rounded-lg shadow">
+              <h3 className="text-lg font-medium mb-4">选择分类进行优化</h3>
+              <div className="flex items-center space-x-4 mb-4">
+                <select
+                  value={selectedCategory}
+                  onChange={(e) => {
+                    setSelectedCategory(e.target.value)
+                    if (e.target.value) {
+                      loadWords(e.target.value)
+                    }
+                  }}
+                  className="px-3 py-2 border rounded-lg"
+                >
+                  <option value="">选择分类</option>
+                  {categories.map(cat => (
+                    <option key={cat.id} value={cat.name}>{cat.display_name}</option>
+                  ))}
+                </select>
+                
+                <button
+                  onClick={optimizeImages}
+                  disabled={!selectedCategory || loading}
+                  className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 disabled:opacity-50"
+                >
+                  {loading ? '处理中...' : '生成优化图片'}
+                </button>
+              </div>
               
-              <button
-                onClick={optimizeImages}
-                disabled={!selectedCategory || loading}
-                className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 disabled:opacity-50"
-              >
-                {loading ? '处理中...' : '生成优化图片'}
-              </button>
+              {words.length > 0 && (
+                <div className="text-gray-600">
+                  <p>找到 {words.length} 个单词，其中 {words.filter(w => !w.image_url).length} 个缺少图片</p>
+                  <p className="text-sm mt-1">点击"生成优化图片"按钮为缺少图片的单词创建AI优化图片</p>
+                </div>
+              )}
             </div>
-            
-            {words.length > 0 && (
-              <p className="text-gray-600">
-                找到 {words.length} 个单词，其中 {words.filter(w => !w.image_url).length} 个缺少图片
-              </p>
-            )}
-          </div>
-        )}
+          )}
 
-        {currentTab === 'review' && selectedCategory && (
-          <div className="bg-white p-6 rounded-lg shadow">
-            <h3 className="text-lg font-medium mb-4">审核 {selectedCategory} 分类的图片</h3>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {words.filter(w => w.optimizedImageUrl || w.image_url).map(word => (
-                <div key={word.id} className="border rounded-lg p-4">
-                  <img
-                    src={word.optimizedImageUrl || word.image_url}
-                    alt={word.word}
-                    className="w-full h-32 object-cover rounded mb-3"
-                    onError={(e) => {
-                      e.currentTarget.src = 'https://via.placeholder.com/400x300?text=加载失败'
-                    }}
-                  />
-                  
-                  <div className="text-center">
-                    <h4 className="font-medium">{word.word}</h4>
-                    <p className="text-sm text-gray-500">{word.chinese}</p>
-                    
-                    <div className="flex justify-center space-x-2 mt-3">
-                      <button
-                        onClick={() => reviewImage(word.id, true)}
-                        className={`p-2 rounded ${
-                          word.isApproved ? 'bg-green-500 text-white' : 'bg-gray-200'
-                        }`}
-                      >
-                        <Check size={16} />
-                      </button>
-                      <button
-                        onClick={() => reviewImage(word.id, false)}
-                        className={`p-2 rounded ${
-                          word.isRejected ? 'bg-red-500 text-white' : 'bg-gray-200'
-                        }`}
-                      >
-                        <X size={16} />
-                      </button>
-                    </div>
+          {currentTab === 'review' && selectedCategory && (
+            <div className="bg-white p-6 rounded-lg shadow">
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="text-lg font-medium">审核 {selectedCategory} 分类的图片</h3>
+                <div className="text-sm text-gray-600">
+                  共 {words.length} 个 | 可审核 {words.filter(w => w.optimizedImageUrl || w.image_url).length} 个
+                </div>
+              </div>
+              
+              {loading && (
+                <div className="text-center py-8">
+                  <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+                  <p className="text-gray-600 mt-2">加载中...</p>
+                </div>
+              )}
+              
+              {!loading && words.filter(w => w.optimizedImageUrl || w.image_url).length === 0 && (
+                <div className="text-center py-8">
+                  <p className="text-gray-600 mb-4">该分类暂无可审核的图片</p>
+                  <button
+                    onClick={() => setCurrentTab('optimize')}
+                    className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+                  >
+                    前往图片优化
+                  </button>
+                </div>
+              )}
+              
+              {!loading && words.filter(w => w.optimizedImageUrl || w.image_url).length > 0 && (
+                <div className="max-h-[500px] overflow-y-auto border rounded-lg p-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                    {words.filter(w => w.optimizedImageUrl || w.image_url).map(word => (
+                      <div key={word.id} className="border rounded-lg p-3 bg-gray-50">
+                        <img
+                          src={word.optimizedImageUrl || word.image_url}
+                          alt={word.word}
+                          className="w-full h-32 object-cover rounded mb-3"
+                          onError={(e) => {
+                            e.currentTarget.src = 'https://via.placeholder.com/400x300/cccccc/666666?text=' + encodeURIComponent(word.word)
+                          }}
+                        />
+                        
+                        <div className="text-center">
+                          <h4 className="font-medium text-gray-900">{word.word}</h4>
+                          <p className="text-sm text-gray-500 mb-2">{word.chinese}</p>
+                          
+                          <p className="text-xs text-gray-400 mb-3">
+                            {word.optimizedImageUrl ? '🤖 AI优化' : '📷 原始'}
+                          </p>
+                          
+                          <div className="flex justify-center space-x-2 mb-2">
+                            <button
+                              onClick={() => reviewImage(word.id, true)}
+                              className={`p-2 rounded ${
+                                word.isApproved 
+                                  ? 'bg-green-500 text-white' 
+                                  : 'bg-gray-200 hover:bg-green-100'
+                              }`}
+                            >
+                              <Check size={16} />
+                            </button>
+                            <button
+                              onClick={() => reviewImage(word.id, false)}
+                              className={`p-2 rounded ${
+                                word.isRejected 
+                                  ? 'bg-red-500 text-white' 
+                                  : 'bg-gray-200 hover:bg-red-100'
+                              }`}
+                            >
+                              <X size={16} />
+                            </button>
+                          </div>
+                          
+                          <div>
+                            {word.isApproved && <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">✅ 通过</span>}
+                            {word.isRejected && <span className="text-xs bg-red-100 text-red-800 px-2 py-1 rounded">❌ 拒绝</span>}
+                            {!word.isApproved && !word.isRejected && <span className="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded">⏳ 待审核</span>}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 </div>
-              ))}
+              )}
             </div>
-          </div>
-        )}
+          )}
 
-        {currentTab === 'sync' && (
-          <div className="bg-white p-6 rounded-lg shadow">
-            <h3 className="text-lg font-medium mb-4">数据同步</h3>
-            
-            <button
-              onClick={syncApprovedImages}
-              disabled={loading}
-              className="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600 disabled:opacity-50"
-            >
-              同步已审核图片到数据库
-            </button>
-            
-            <p className="text-gray-600 mt-4">
-              将审核通过的图片同步到本地数据库和Supabase
-            </p>
-          </div>
-        )}
+          {currentTab === 'review' && !selectedCategory && (
+            <div className="bg-white p-6 rounded-lg shadow">
+              <h3 className="text-lg font-medium mb-4">审核管理</h3>
+              <div className="text-center py-8">
+                <p className="text-gray-600 mb-4">请先在"图片优化"页面选择分类</p>
+                <button
+                  onClick={() => setCurrentTab('optimize')}
+                  className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+                >
+                  前往图片优化
+                </button>
+              </div>
+            </div>
+          )}
+
+          {currentTab === 'sync' && (
+            <div className="bg-white p-6 rounded-lg shadow">
+              <h3 className="text-lg font-medium mb-4">数据同步</h3>
+              
+              <div className="space-y-4">
+                <button
+                  onClick={syncApprovedImages}
+                  disabled={loading}
+                  className="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600 disabled:opacity-50"
+                >
+                  {loading ? '同步中...' : '同步已审核图片到数据库'}
+                </button>
+                
+                <p className="text-gray-600">
+                  将审核通过的图片同步到Supabase数据库
+                </p>
+                
+                {selectedCategory && words.filter(w => w.isApproved).length > 0 && (
+                  <div className="mt-4 p-4 bg-green-50 rounded-lg">
+                    <p className="text-green-800">
+                      当前有 {words.filter(w => w.isApproved).length} 张已审核通过的图片可以同步
+                    </p>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   )
