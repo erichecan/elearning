@@ -6,11 +6,12 @@ import { speechService } from '../services/speech'
 
 interface CategoryScreenProps {
   category: string
-  onNavigate: (screen: 'home' | 'category' | 'settings', payload?: any) => void
   onBack: () => void
 }
 
-const CategoryScreen: React.FC<CategoryScreenProps> = ({ category, onNavigate, onBack }) => {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const CategoryScreen: React.FC<CategoryScreenProps> = ({ category, onBack }) => {
+  // onNavigate 未使用，仅为类型兼容 // [自动修复] 2024-07-06 23:36:00
   const [words, setWords] = useState<Word[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)

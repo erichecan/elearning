@@ -53,29 +53,6 @@ const getCategoryEnglishName = (categoryName: string): string => {
   return nameMap[categoryName] || categoryName.charAt(0).toUpperCase() + categoryName.slice(1)
 }
 
-// 为每个分类设置对应的英文描述
-const getCategoryEnglishDescription = (categoryName: string): string => {
-  const descriptionMap: { [key: string]: string } = {
-    'fruits': 'Learn fruit and vegetable names',
-    'animals': 'Discover cute animal friends',
-    'colors': 'Basic colors and shapes',
-    'numbers': 'Numbers and time concepts',
-    'family': 'Family member titles',
-    'body': 'Learn body parts',
-    'clothes': 'Daily clothing items',
-    'food': 'Food and utensil names',
-    'transport': 'Various vehicles',
-    'nature': 'Nature and weather',
-    'daily_phrases': 'Common daily phrases',
-    'greeting_phrases': 'Polite greetings',
-    'action_phrases': 'Action and behavior phrases',
-    'simple_sentences': 'Basic sentence structures',
-    'conversation_sentences': 'Common conversation sentences'
-  }
-  
-  return descriptionMap[categoryName] || 'Learn English words'
-}
-
 const HomeScreen: React.FC<HomeScreenProps> = ({ onNavigate }) => {
   const [categories, setCategories] = useState<Category[]>([])
   const [loading, setLoading] = useState(true)

@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react'
-import { Settings, Eye, Check, X, RefreshCw, Upload, Trash2, LogOut } from 'lucide-react'
+import React, { useState } from 'react'
+import { Settings, Check, X, LogOut } from 'lucide-react'
 import { Word, Category } from '../lib/database'
 import { wordService, categoryService } from '../services/api'
-import { adminApiService, adminStorageService, ImageOptimizationResult } from '../services/admin-api'
+import { adminApiService, adminStorageService } from '../services/admin-api'
 
 interface AdminScreenProps {
   onBack: () => void

@@ -27,7 +27,6 @@ function App() {
         {currentScreen === 'category' && selectedCategory && (
           <CategoryScreen 
             category={selectedCategory}
-            onNavigate={navigateTo}
             onBack={() => navigateTo('home')}
           />
         )}

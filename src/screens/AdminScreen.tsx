@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { Settings, Check, X, LogOut, Info } from 'lucide-react'
 import { Word, Category } from '../lib/database'
 import { wordService, categoryService } from '../services/api'

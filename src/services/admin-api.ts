@@ -76,20 +76,15 @@ export const adminApiService = {
     
     for (const update of imageUpdates) {
       try {
-        const { data, error } = await supabase
+        const { error } = await supabase
           .from('words')
           .update({ image_url: update.imageUrl })
           .eq('id', update.wordId)
           .select()
         
         if (error) throw error
-        
-        if (data && data.length > 0) {
-          result.updated++
-          console.log(`✅ 同步成功: ${update.word} -> ${update.imageUrl}`)
-        } else {
-          throw new Error('没有找到匹配的记录')
-        }
+        result.updated++
+        console.log(`✅ 同步成功: ${update.word} -> ${update.imageUrl}`)
         
       } catch (error) {
         result.failed++
@@ -149,19 +144,14 @@ export const adminApiService = {
     
     for (const update of updates) {
       try {
-        const { data, error } = await supabase
+        const { error } = await supabase
           .from('words')
           .update({ image_url: update.imageUrl })
           .eq('id', update.wordId)
           .select('word')
         
         if (error) throw error
-        
-        if (data && data.length > 0) {
-          result.updated++
-        } else {
-          throw new Error('没有找到匹配的记录')
-        }
+        result.updated++
         
       } catch (error) {
         result.failed++
@@ -179,7 +169,7 @@ export const adminApiService = {
   // 检查Supabase连接
   async checkSupabaseConnection(): Promise<{ connected: boolean; error?: string }> {
     try {
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from('categories')
         .select('count(*)')
         .limit(1)

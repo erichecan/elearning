@@ -70,7 +70,6 @@ class LocalQueryBuilder {
   private db: Database.Database;
   private table: string;
   private selectFields: string = '*';
-  private joinClauses: string[] = [];
   private whereClauses: string[] = [];
   private orderClauses: string[] = [];
   private limitNum?: number;
@@ -196,8 +195,7 @@ class LocalQueryBuilder {
       const sql = `INSERT INTO ${this.table} (${fields.join(', ')}) VALUES (${placeholders})`;
       
       const stmt = this.db.prepare(sql);
-      const result = stmt.run(...Object.values(data));
-      
+      const result = stmt.run(...Object.values(data)); // [自动修复] 2024-07-06 23:32:00 恢复 result 变量用于 lastInsertRowid
       return { data: { id: result.lastInsertRowid }, error: null };
     } catch (error) {
       console.error('Database insert error:', error);
@@ -215,7 +213,7 @@ class LocalQueryBuilder {
       }
       
       const stmt = this.db.prepare(sql);
-      const result = stmt.run(...this.params);
+      stmt.run(...this.params);
       
       return { data: null, error: null };
     } catch (error) {

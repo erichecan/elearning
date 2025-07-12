@@ -56,69 +56,10 @@ class UnsplashProvider implements ImageSearchProvider {
   }
 }
 
-// Pixabay API Provider
-class PixabayProvider implements ImageSearchProvider {
-  name = 'Pixabay'
-  private apiKey: string
-
-  constructor(apiKey?: string) {
-    this.apiKey = apiKey || 'your-pixabay-api-key' // 需要免费注册获取
-  }
-
-  async searchImages(query: string, options: SearchOptions = {}): Promise<ImageSearchResult[]> {
-    const params = new URLSearchParams({
-      key: this.apiKey,
-      q: query,
-      image_type: 'photo',
-      orientation: options.orientation === 'any' ? 'all' : options.orientation || 'all',
-      category: this.mapCategoryToPixabay(options.category),
-      safesearch: options.safeSearch ? 'true' : 'false',
-      per_page: String(options.limit || 10),
-      min_width: String(options.minWidth || 300),
-      min_height: String(options.minHeight || 200)
-    })
-
-    const response = await fetch(`https://pixabay.com/api/?${params}`)
-    
-    if (!response.ok) {
-      throw new Error(`Pixabay API Error: ${response.statusText}`)
-    }
-
-    const data = await response.json()
-    return data.hits.map((hit: any) => ({
-      url: hit.webformatURL,
-      thumbnail: hit.previewURL,
-      description: hit.tags,
-      source: 'Pixabay',
-      quality: Math.min(10, Math.max(1, Math.floor(hit.downloads / 1000) + 3)),
-      style: 'photo' as const
-    }))
-  }
-
-  private mapCategoryToPixabay(category?: string): string {
-    const categoryMap: { [key: string]: string } = {
-      'animals': 'animals',
-      'food': 'food',
-      'nature': 'nature',
-      'transport': 'transportation',
-      'education': 'education',
-      'people': 'people'
-    }
-    return categoryMap[category || ''] || ''
-  }
-
-  isAvailable(): boolean {
-    return !!this.apiKey
-  }
-}
-
 // AI关键词优化器
 class AIKeywordOptimizer {
   // 针对不同分类生成更精准的搜索关键词
-  optimizeSearchKeywords(word: string, category: string, chinese?: string): string[] {
-    const baseKeywords = [word]
-    
-    // 根据分类添加上下文关键词
+  optimizeSearchKeywords(word: string, category: string): string[] {
     const categoryKeywords = this.getCategoryKeywords(category)
     const styleKeywords = this.getStyleKeywords(category)
     
@@ -210,7 +151,7 @@ class AIKeywordOptimizer {
 export class SmartImageSearchService {
   private providers: ImageSearchProvider[] = []
   private keywordOptimizer = new AIKeywordOptimizer()
-  private cache = new Map<string, ImageSearchResult[]>()
+  // [已自动修复] 2024-07-06 23:28:00 删除未使用的 PixabayProvider, chinese, baseKeywords, cache
 
   constructor() {
     // 初始化免费的图片搜索提供商
@@ -219,10 +160,10 @@ export class SmartImageSearchService {
     // this.providers.push(new PixabayProvider())
   }
 
-  async findBestImage(word: string, category: string, chinese?: string): Promise<string | null> {
+  async findBestImage(word: string, category: string): Promise<string | null> {
     try {
       // 生成优化的搜索关键词
-      const keywords = this.keywordOptimizer.optimizeSearchKeywords(word, category, chinese)
+      const keywords = this.keywordOptimizer.optimizeSearchKeywords(word, category)
       
       console.log(`🔍 为 "${word}" 生成搜索关键词:`, keywords)
       
@@ -271,7 +212,7 @@ export class SmartImageSearchService {
     
     for (const wordData of words) {
       try {
-        const bestImage = await this.findBestImage(wordData.word, wordData.category, wordData.chinese)
+        const bestImage = await this.findBestImage(wordData.word, wordData.category)
         
         if (bestImage) {
           results.push({
