@@ -10,24 +10,24 @@ interface HomeScreenProps {
 // 使用AI优化的智能图片搜索 - 更好的匹配度和质量
 const getCategoryImage = (categoryName: string): string => {
   const imageMap: { [key: string]: string } = {
-    'fruits': 'https://source.unsplash.com/400x300/?fruits,fresh,colorful',
-    'animals': 'https://source.unsplash.com/400x300/?animals,cute,wildlife',
-    'colors': 'https://source.unsplash.com/400x300/?colors,rainbow,bright',
-    'numbers': 'https://source.unsplash.com/400x300/?numbers,counting,math',
-    'family': 'https://source.unsplash.com/400x300/?family,people,happy',
-    'body': 'https://source.unsplash.com/400x300/?human,body,health',
-    'clothes': 'https://source.unsplash.com/400x300/?clothes,fashion,kids',
-    'food': 'https://source.unsplash.com/400x300/?food,healthy,cooking',
-    'transport': 'https://source.unsplash.com/400x300/?transport,vehicles,travel',
-    'nature': 'https://source.unsplash.com/400x300/?nature,landscape,beautiful',
-    'daily_phrases': 'https://source.unsplash.com/400x300/?conversation,people,daily',
-    'greeting_phrases': 'https://source.unsplash.com/400x300/?greeting,hello,people',
-    'action_phrases': 'https://source.unsplash.com/400x300/?action,movement,people',
-    'simple_sentences': 'https://source.unsplash.com/400x300/?learning,education,simple',
-    'conversation_sentences': 'https://source.unsplash.com/400x300/?conversation,talking,people'
+    'fruits': 'https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?w=400&h=300&fit=crop',
+    'animals': 'https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=400&h=300&fit=crop',
+    'colors': 'https://images.unsplash.com/photo-1558618047-b93c0c2e2041?w=400&h=300&fit=crop',
+    'numbers': 'https://images.unsplash.com/photo-1509909756405-be0199881695?w=400&h=300&fit=crop',
+    'family': 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=300&fit=crop',
+    'body': 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop',
+    'clothes': 'https://images.unsplash.com/photo-1445205170230-053b83016050?w=400&h=300&fit=crop',
+    'food': 'https://images.unsplash.com/photo-1504674900242-4197e29c3d14?w=400&h=300&fit=crop',
+    'transport': 'https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=400&h=300&fit=crop',
+    'nature': 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=400&h=300&fit=crop',
+    'daily_phrases': 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop',
+    'greeting_phrases': 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop',
+    'action_phrases': 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop',
+    'simple_sentences': 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop',
+    'conversation_sentences': 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop'
   }
   
-  return imageMap[categoryName] || 'https://source.unsplash.com/400x300/?learning,education'
+  return imageMap[categoryName] || 'https://images.unsplash.com/photo-1544966503-7cc5ac882d5f?w=400&h=300&fit=crop'
 }
 
 // 为每个分类设置对应的英文显示名称
@@ -154,6 +154,11 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ onNavigate }) => {
                     src={getCategoryImage(category.name)}
                     alt={category.display_name}
                     className="w-full h-full object-cover"
+                    onError={(e) => {
+                      // 图片加载失败时使用备用图片
+                      const target = e.target as HTMLImageElement;
+                      target.src = 'https://images.unsplash.com/photo-1544966503-7cc5ac882d5f?w=400&h=300&fit=crop';
+                    }}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
                 </div>
