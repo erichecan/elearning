@@ -180,9 +180,14 @@ const CategoryScreen: React.FC<CategoryScreenProps> = ({ category, onBack }) => 
                       {/* 图片区域 */}
                       <div className="relative flex-1 overflow-hidden rounded-t-lg">
                         <img
-                          src={word.image_url || 'https://images.unsplash.com/photo-1544966503-7cc5ac882d5f?w=400&h=300&fit=crop'}
+                          src={word.image_url || getDefaultImageForCategory(category)}
                           alt={word.word}
                           className="w-full h-full object-cover"
+                          onError={(e) => {
+                            // 图片加载失败时使用默认图片
+                            const target = e.target as HTMLImageElement;
+                            target.src = getDefaultImageForCategory(category);
+                          }}
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
                         
@@ -247,6 +252,29 @@ const CategoryScreen: React.FC<CategoryScreenProps> = ({ category, onBack }) => 
       </div>
     </div>
   )
+}
+
+// 为不同分类提供更好的默认图片
+const getDefaultImageForCategory = (category: string): string => {
+  const imageMap: { [key: string]: string } = {
+    'fruits': 'https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?w=400&h=300&fit=crop',
+    'animals': 'https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=400&h=300&fit=crop',
+    'colors': 'https://images.unsplash.com/photo-1558618047-b93c0c2e2041?w=400&h=300&fit=crop',
+    'numbers': 'https://images.unsplash.com/photo-1509909756405-be0199881695?w=400&h=300&fit=crop',
+    'family': 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=300&fit=crop',
+    'body': 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop',
+    'clothes': 'https://images.unsplash.com/photo-1445205170230-053b83016050?w=400&h=300&fit=crop',
+    'food': 'https://images.unsplash.com/photo-1504674900242-4197e29c3d14?w=400&h=300&fit=crop',
+    'transport': 'https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=400&h=300&fit=crop',
+    'nature': 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=400&h=300&fit=crop',
+    'daily_phrases': 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop',
+    'greeting_phrases': 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop',
+    'action_phrases': 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop',
+    'simple_sentences': 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop',
+    'conversation_sentences': 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop'
+  }
+  
+  return imageMap[category] || 'https://images.unsplash.com/photo-1544966503-7cc5ac882d5f?w=400&h=300&fit=crop'
 }
 
 export default CategoryScreen 
