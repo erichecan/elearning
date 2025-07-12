@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
-import { Settings, Check, X, LogOut, Info } from 'lucide-react'
+import { Settings, Eye, Check, X, RefreshCw, Upload, Trash2, LogOut } from 'lucide-react'
 import { Word, Category } from '../lib/database'
 import { wordService, categoryService } from '../services/api'
-import { adminApiService, adminStorageService } from '../services/admin-api'
+import { adminApiService, adminStorageService, ImageOptimizationResult } from '../services/admin-api'
 
 interface AdminScreenProps {
   onBack: () => void
@@ -14,7 +14,7 @@ interface OptimizedWord extends Word {
   optimizedImageUrl?: string
 }
 
-const AdminScreen: React.FC<AdminScreenProps> = ({ onBack }) => {
+const AdminScreenFixed: React.FC<AdminScreenProps> = ({ onBack }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [password, setPassword] = useState('')
   const [currentTab, setCurrentTab] = useState<'overview' | 'optimize' | 'review' | 'sync'>('overview')
@@ -29,6 +29,7 @@ const AdminScreen: React.FC<AdminScreenProps> = ({ onBack }) => {
     approved: 0
   })
 
+  // 简单的密码验证
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault()
     if (password === 'admin123') {
@@ -40,6 +41,7 @@ const AdminScreen: React.FC<AdminScreenProps> = ({ onBack }) => {
     }
   }
 
+  // 加载统计数据
   const loadStats = async () => {
     try {
       const allCategories = await categoryService.getAll()
@@ -63,6 +65,7 @@ const AdminScreen: React.FC<AdminScreenProps> = ({ onBack }) => {
     }
   }
 
+  // 加载分类
   const loadCategories = async () => {
     try {
       const categoriesData = await categoryService.getAll()
@@ -72,6 +75,7 @@ const AdminScreen: React.FC<AdminScreenProps> = ({ onBack }) => {
     }
   }
 
+  // 加载单词
   const loadWords = async (category: string) => {
     setLoading(true)
     try {
@@ -86,9 +90,7 @@ const AdminScreen: React.FC<AdminScreenProps> = ({ onBack }) => {
         }
       })
       setWords(optimizedWords)
-      console.log(`📊 加载了 ${optimizedWords.length} 个单词`)
-      console.log(`📷 有原始图片: ${optimizedWords.filter(w => w.image_url).length} 个`)
-      console.log(`🤖 有优化图片: ${optimizedWords.filter(w => w.optimizedImageUrl).length} 个`)
+      console.log(`加载了 ${optimizedWords.length} 个单词，其中 ${optimizedWords.filter(w => w.optimizedImageUrl).length} 个有优化图片`)
     } catch (error) {
       console.error('加载单词失败:', error)
     } finally {
@@ -96,6 +98,7 @@ const AdminScreen: React.FC<AdminScreenProps> = ({ onBack }) => {
     }
   }
 
+  // 生成优化的图片URL
   const generateOptimizedImageUrl = (word: string, category: string) => {
     const categoryKeywords: { [key: string]: string } = {
       'fruits': 'fruit,fresh,healthy',
@@ -111,9 +114,12 @@ const AdminScreen: React.FC<AdminScreenProps> = ({ onBack }) => {
     }
 
     const keywords = categoryKeywords[category] || 'object'
-    return `https://source.unsplash.com/400x300/?${word},${keywords},realistic,clear`
+    const url = `https://source.unsplash.com/400x300/?${word},${keywords},realistic,clear`
+    console.log(`生成图片URL: ${word} -> ${url}`)
+    return url
   }
 
+  // 批量优化图片
   const optimizeImages = async () => {
     if (!selectedCategory) {
       alert('请先选择分类')
@@ -123,10 +129,11 @@ const AdminScreen: React.FC<AdminScreenProps> = ({ onBack }) => {
     setLoading(true)
     try {
       const wordsToOptimize = words.filter(w => !w.image_url)
-      console.log(`🚀 开始优化 ${wordsToOptimize.length} 个单词的图片`)
+      console.log(`开始优化 ${wordsToOptimize.length} 个单词的图片`)
       
       const optimizationResults = await adminApiService.optimizeWordImages(wordsToOptimize, selectedCategory)
       
+      // 更新界面状态
       optimizationResults.forEach(result => {
         if (result.success) {
           setWords(prev => prev.map(w => 
@@ -138,7 +145,9 @@ const AdminScreen: React.FC<AdminScreenProps> = ({ onBack }) => {
       })
       
       const successCount = optimizationResults.filter(r => r.success).length
-      alert(`✅ 已为 ${successCount} 个单词生成优化图片！\n\n现在可以切换到"审核管理"页面查看和审核这些图片。`)
+      alert(`已为 ${successCount} 个单词生成优化图片，请在"审核管理"页面审核后同步`)
+      
+      // 自动切换到审核页面
       setCurrentTab('review')
     } catch (error) {
       console.error('优化失败:', error)
@@ -148,16 +157,20 @@ const AdminScreen: React.FC<AdminScreenProps> = ({ onBack }) => {
     }
   }
 
+  // 审核图片
   const reviewImage = (wordId: number, approved: boolean) => {
     adminStorageService.setApprovalStatus(wordId, approved)
+    
     setWords(prev => prev.map(w => 
       w.id === wordId 
         ? { ...w, isApproved: approved, isRejected: !approved }
         : w
     ))
+    
     loadStats()
   }
 
+  // 同步到数据库
   const syncApprovedImages = async () => {
     const approvedWords = words.filter(w => w.isApproved && w.optimizedImageUrl)
     
@@ -182,15 +195,18 @@ const AdminScreen: React.FC<AdminScreenProps> = ({ onBack }) => {
       const syncResult = await adminApiService.syncImagesToSupabase(imageUpdates)
       
       if (syncResult.updated > 0) {
-        alert(`✅ 成功同步 ${syncResult.updated} 张图片到数据库！`)
+        alert(`✅ 成功同步 ${syncResult.updated} 张图片到数据库！${syncResult.failed > 0 ? `\n❌ ${syncResult.failed} 张图片同步失败` : ''}`)
+        
         approvedWords.forEach(word => {
           adminStorageService.clearApprovalStatus(word.id)
         })
+        
         await loadWords(selectedCategory)
         await loadStats()
       } else {
         throw new Error('没有图片成功同步')
       }
+      
     } catch (error) {
       console.error('同步失败:', error)
       alert(`同步失败: ${error instanceof Error ? error.message : '未知错误'}`)
@@ -248,9 +264,9 @@ const AdminScreen: React.FC<AdminScreenProps> = ({ onBack }) => {
 
   // 主界面
   return (
-    <div className="h-full w-full bg-gray-100 flex flex-col">
+    <div className="h-full w-full bg-gray-100 flex flex-col overflow-hidden">
       {/* 顶部导航 */}
-      <div className="bg-white shadow-sm border-b">
+      <div className="bg-white shadow-sm border-b flex-shrink-0">
         <div className="max-w-7xl mx-auto px-4 py-4">
           <div className="flex justify-between items-center">
             <div className="flex items-center space-x-4">
@@ -270,7 +286,7 @@ const AdminScreen: React.FC<AdminScreenProps> = ({ onBack }) => {
       </div>
 
       {/* 标签导航 */}
-      <div className="bg-white border-b">
+      <div className="bg-white border-b flex-shrink-0">
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex space-x-8">
             {[
@@ -363,10 +379,7 @@ const AdminScreen: React.FC<AdminScreenProps> = ({ onBack }) => {
                 <div className="bg-white p-6 rounded-lg shadow">
                   <h3 className="text-lg font-medium mb-4">审核管理</h3>
                   <div className="text-center py-8">
-                    <div className="flex items-center justify-center mb-4">
-                      <Info className="text-blue-500 mr-2" size={24} />
-                      <p className="text-gray-600">请先在"图片优化"页面选择分类并生成优化图片</p>
-                    </div>
+                    <p className="text-gray-600 mb-4">请先在"图片优化"页面选择分类并生成优化图片</p>
                     <button
                       onClick={() => setCurrentTab('optimize')}
                       className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
@@ -382,18 +395,9 @@ const AdminScreen: React.FC<AdminScreenProps> = ({ onBack }) => {
                   <div className="flex justify-between items-center mb-4">
                     <h3 className="text-lg font-medium">审核 {selectedCategory} 分类的图片</h3>
                     <div className="text-sm text-gray-600">
-                      共 {words.length} 个 | 可审核 {words.filter(w => w.optimizedImageUrl || w.image_url).length} 个
-                    </div>
-                  </div>
-                  
-                  {/* 调试信息 */}
-                  <div className="mb-4 p-3 bg-blue-50 rounded-lg">
-                    <div className="text-sm text-blue-800">
-                      <p>📊 调试信息:</p>
-                      <p>• 总单词数: {words.length}</p>
-                      <p>• 有原始图片: {words.filter(w => w.image_url).length} 个</p>
-                      <p>• 有优化图片: {words.filter(w => w.optimizedImageUrl).length} 个</p>
-                      <p>• 可审核图片: {words.filter(w => w.optimizedImageUrl || w.image_url).length} 个</p>
+                      共 {words.length} 个单词 | 
+                      可审核 {words.filter(w => w.optimizedImageUrl || w.image_url).length} 个 |
+                      已审核 {words.filter(w => w.isApproved || w.isRejected).length} 个
                     </div>
                   </div>
                   
@@ -406,10 +410,9 @@ const AdminScreen: React.FC<AdminScreenProps> = ({ onBack }) => {
                   
                   {!loading && words.filter(w => w.optimizedImageUrl || w.image_url).length === 0 && (
                     <div className="text-center py-8">
-                      <div className="flex items-center justify-center mb-4">
-                        <Info className="text-yellow-500 mr-2" size={24} />
-                        <p className="text-gray-600">该分类暂无可审核的图片</p>
-                      </div>
+                      <p className="text-gray-600 mb-4">
+                        该分类暂无可审核的图片
+                      </p>
                       <p className="text-sm text-gray-500 mb-4">
                         请先在"图片优化"页面为该分类生成优化图片
                       </p>
@@ -426,55 +429,73 @@ const AdminScreen: React.FC<AdminScreenProps> = ({ onBack }) => {
                     <div className="max-h-[500px] overflow-y-auto border rounded-lg p-4">
                       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                         {words.filter(w => w.optimizedImageUrl || w.image_url).map(word => (
-                          <div key={word.id} className="border rounded-lg p-3 bg-gray-50">
-                            <img
-                              src={word.optimizedImageUrl || word.image_url}
-                              alt={word.word}
-                              className="w-full h-32 object-cover rounded mb-3"
-                              onError={(e) => {
-                                console.log(`❌ 图片加载失败: ${word.word}`)
-                                e.currentTarget.src = 'https://via.placeholder.com/400x300/cccccc/666666?text=' + encodeURIComponent(word.word)
-                              }}
-                              onLoad={() => {
-                                console.log(`✅ 图片加载成功: ${word.word}`)
-                              }}
-                            />
+                          <div key={word.id} className="border rounded-lg p-3 bg-gray-50 hover:bg-white transition-colors">
+                            <div className="aspect-w-4 aspect-h-3 mb-3">
+                              <img
+                                src={word.optimizedImageUrl || word.image_url}
+                                alt={word.word}
+                                className="w-full h-32 object-cover rounded"
+                                onError={(e) => {
+                                  console.log(`图片加载失败: ${word.word} - ${e.currentTarget.src}`)
+                                  e.currentTarget.src = 'https://via.placeholder.com/400x300/cccccc/666666?text=' + encodeURIComponent(`${word.word}`)
+                                }}
+                                onLoad={() => {
+                                  console.log(`图片加载成功: ${word.word}`)
+                                }}
+                              />
+                            </div>
                             
                             <div className="text-center">
                               <h4 className="font-medium text-gray-900">{word.word}</h4>
                               <p className="text-sm text-gray-500 mb-2">{word.chinese}</p>
                               
+                              {/* 显示图片来源 */}
                               <p className="text-xs text-gray-400 mb-3">
-                                {word.optimizedImageUrl ? '🤖 AI优化' : '📷 原始'}
+                                {word.optimizedImageUrl ? '🤖 AI优化图片' : '📷 原始图片'}
                               </p>
                               
                               <div className="flex justify-center space-x-2 mb-2">
                                 <button
                                   onClick={() => reviewImage(word.id, true)}
-                                  className={`p-2 rounded ${
+                                  className={`p-2 rounded transition-colors ${
                                     word.isApproved 
                                       ? 'bg-green-500 text-white' 
-                                      : 'bg-gray-200 hover:bg-green-100'
+                                      : 'bg-gray-200 hover:bg-green-100 text-gray-700'
                                   }`}
+                                  title="审核通过"
                                 >
                                   <Check size={16} />
                                 </button>
                                 <button
                                   onClick={() => reviewImage(word.id, false)}
-                                  className={`p-2 rounded ${
+                                  className={`p-2 rounded transition-colors ${
                                     word.isRejected 
                                       ? 'bg-red-500 text-white' 
-                                      : 'bg-gray-200 hover:bg-red-100'
+                                      : 'bg-gray-200 hover:bg-red-100 text-gray-700'
                                   }`}
+                                  title="审核拒绝"
                                 >
                                   <X size={16} />
                                 </button>
                               </div>
                               
+                              {/* 审核状态指示 */}
                               <div>
-                                {word.isApproved && <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">✅ 通过</span>}
-                                {word.isRejected && <span className="text-xs bg-red-100 text-red-800 px-2 py-1 rounded">❌ 拒绝</span>}
-                                {!word.isApproved && !word.isRejected && <span className="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded">⏳ 待审核</span>}
+                                {word.isApproved && (
+                                  <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">
+                                    ✅ 已通过
+                                  </span>
+                                )}
+                                {word.isRejected && (
+                                  <span className="text-xs bg-red-100 text-red-800 px-2 py-1 rounded">
+                                    ❌ 已拒绝
+                                  </span>
+                                )}
+                                {!word.isApproved && !word.isRejected && (
+                                  <span className="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded">
+                                    ⏳ 待审核
+                                  </span>
+                                )}
                               </div>
                             </div>
                           </div>
@@ -501,7 +522,7 @@ const AdminScreen: React.FC<AdminScreenProps> = ({ onBack }) => {
                 </button>
                 
                 <p className="text-gray-600">
-                  将审核通过的图片同步到Supabase数据库
+                  将审核通过的图片同步到本地数据库和Supabase
                 </p>
                 
                 {selectedCategory && words.filter(w => w.isApproved).length > 0 && (
@@ -520,4 +541,4 @@ const AdminScreen: React.FC<AdminScreenProps> = ({ onBack }) => {
   )
 }
 
-export default AdminScreen 
+export default AdminScreenFixed 
