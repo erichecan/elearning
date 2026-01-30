@@ -18,25 +18,25 @@ function App() {
   }
 
   return (
-    <div className="h-screen w-screen overflow-hidden bg-gradient-to-br from-blue-400 via-purple-500 to-pink-500">
+    <div className="h-screen w-screen overflow-hidden bg-primary-50">
       {/* 主内容区域 */}
       <div className="h-full w-full relative">
         {currentScreen === 'home' && (
           <HomeScreen onNavigate={navigateTo} />
         )}
         {currentScreen === 'category' && selectedCategory && (
-          <CategoryScreen 
+          <CategoryScreen
             category={selectedCategory}
             onBack={() => navigateTo('home')}
           />
         )}
         {currentScreen === 'settings' && (
-          <SettingsScreen 
+          <SettingsScreen
             onBack={() => navigateTo('home')}
           />
         )}
         {currentScreen === 'admin' && (
-          <AdminScreen 
+          <AdminScreen
             onBack={() => navigateTo('home')}
           />
         )}

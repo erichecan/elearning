@@ -22,18 +22,14 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack }) => {
   const [isTestingAudio, setIsTestingAudio] = useState(false)
 
   const handleSettingChange = (key: string, value: any) => {
-    setSettings(prev => ({
-      ...prev,
-      [key]: value
-    }))
+    setSettings(prev => ({ ...prev, [key]: value }))
   }
 
   const testAudio = async () => {
     if (!speechService.isSupported()) {
-      alert('您的浏览器不支持语音播放功能')
+      alert('Browser does not support speech')
       return
     }
-
     try {
       setIsTestingAudio(true)
       await speechService.speakWord('Hello', {
@@ -43,43 +39,39 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack }) => {
         lang: settings.speechLang
       })
     } catch (error) {
-      console.error('音频测试失败:', error)
-      alert('音频测试失败，请检查浏览器设置')
+      console.error('Test failed:', error)
     } finally {
       setIsTestingAudio(false)
     }
   }
 
   return (
-    <div className="h-full w-full p-6 flex flex-col">
-      {/* 顶部导航栏 */}
+    <div className="h-full w-full max-w-4xl mx-auto p-4 md:p-6 flex flex-col">
       <div className="flex items-center justify-between mb-8">
         <button
           onClick={onBack}
-          className="p-3 bg-white/20 backdrop-blur-sm rounded-xl text-white hover:bg-white/30 transition-all"
+          className="p-3 bg-white text-secondary-600 rounded-2xl shadow-soft hover:shadow-md transition-all border border-secondary-50"
         >
-          <ArrowLeft size={20} />
+          <ArrowLeft size={24} strokeWidth={2.5} />
         </button>
-        <div className="text-center text-white">
-          <h1 className="text-2xl font-bold">设置</h1>
-        </div>
-        <div className="w-12"></div> {/* 占位符保持居中 */}
+        <h1 className="text-2xl font-extrabold text-primary-900 tracking-tight">Parent Settings</h1>
+        <div className="w-12"></div>
       </div>
 
-      {/* 设置列表 */}
-      <div className="flex-1 overflow-y-auto space-y-6">
-        {/* 学习设置 */}
-        <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6">
-          <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
-            <Eye size={20} />
-            学习设置
+      <div className="flex-1 overflow-y-auto space-y-6 pb-8 custom-scrollbar px-1">
+
+        {/* Learning Settings */}
+        <section className="bg-white rounded-3xl p-6 shadow-card border border-primary-50">
+          <h2 className="text-lg font-bold text-primary-800 mb-6 flex items-center gap-2">
+            <div className="p-2 bg-primary-100 rounded-xl text-primary-600"><Eye size={20} strokeWidth={2.5} /></div>
+            Learning Experience
           </h2>
-          
-          <div className="space-y-4">
+
+          <div className="space-y-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-white font-medium">自动播放发音</p>
-                <p className="text-white/60 text-sm">翻转卡片时自动播放单词发音</p>
+                <p className="text-gray-900 font-bold">Auto-play Audio</p>
+                <p className="text-gray-400 text-sm font-medium">Hear pronunciation on flip</p>
               </div>
               <label className="relative inline-flex items-center cursor-pointer">
                 <input
@@ -88,14 +80,14 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack }) => {
                   onChange={(e) => handleSettingChange('autoPlay', e.target.checked)}
                   className="sr-only peer"
                 />
-                <div className="w-11 h-6 bg-white/20 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-500"></div>
+                <div className="w-12 h-7 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-6 after:w-6 after:shadow-sm after:transition-all peer-checked:bg-primary-500"></div>
               </label>
             </div>
 
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-white font-medium">显示英文单词</p>
-                <p className="text-white/60 text-sm">在图片下方显示英文单词</p>
+                <p className="text-gray-900 font-bold">Show Text</p>
+                <p className="text-gray-400 text-sm font-medium">Display English words</p>
               </div>
               <label className="relative inline-flex items-center cursor-pointer">
                 <input
@@ -104,227 +96,72 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack }) => {
                   onChange={(e) => handleSettingChange('showWord', e.target.checked)}
                   className="sr-only peer"
                 />
-                <div className="w-11 h-6 bg-white/20 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-500"></div>
-              </label>
-            </div>
-
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-white font-medium">显示中文释义</p>
-                <p className="text-white/60 text-sm">在卡片背面显示中文释义</p>
-              </div>
-              <label className="relative inline-flex items-center cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={settings.showChinese}
-                  onChange={(e) => handleSettingChange('showChinese', e.target.checked)}
-                  className="sr-only peer"
-                />
-                <div className="w-11 h-6 bg-white/20 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-500"></div>
+                <div className="w-12 h-7 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-6 after:w-6 after:shadow-sm after:transition-all peer-checked:bg-primary-500"></div>
               </label>
             </div>
           </div>
-        </div>
+        </section>
 
-        {/* 时间设置 */}
-        <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6">
-          <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
-            <Clock size={20} />
-            时间设置
+        {/* Audio Settings */}
+        <section className="bg-white rounded-3xl p-6 shadow-card border border-primary-50">
+          <h2 className="text-lg font-bold text-primary-800 mb-6 flex items-center gap-2">
+            <div className="p-2 bg-secondary-100 rounded-xl text-secondary-600"><Volume2 size={20} strokeWidth={2.5} /></div>
+            Sound & Speech
           </h2>
-          
-          <div className="space-y-4">
-            <div>
-              <div className="flex justify-between items-center mb-2">
-                <p className="text-white font-medium">每日学习时长限制</p>
-                <span className="text-white text-sm">{settings.dailyLimit} 分钟</span>
-              </div>
-              <input
-                type="range"
-                min="10"
-                max="120"
-                step="10"
-                value={settings.dailyLimit}
-                onChange={(e) => handleSettingChange('dailyLimit', parseInt(e.target.value))}
-                className="w-full h-2 bg-white/20 rounded-lg appearance-none cursor-pointer slider"
-              />
-              <div className="flex justify-between text-xs text-white/60 mt-1">
-                <span>10分钟</span>
-                <span>120分钟</span>
-              </div>
-            </div>
-          </div>
-        </div>
 
-        {/* 音频设置 */}
-        <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6">
-          <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
-            <Volume2 size={20} />
-            音频设置
-          </h2>
-          
-          <div className="space-y-4">
-            {/* 音量控制 */}
+          <div className="space-y-6">
             <div>
-              <div className="flex justify-between items-center mb-2">
-                <p className="text-white font-medium">音量大小</p>
-                <span className="text-white text-sm">{settings.soundVolume}%</span>
+              <div className="flex justify-between mb-2">
+                <span className="text-gray-900 font-bold">Volume</span>
+                <span className="text-secondary-500 font-bold">{settings.soundVolume}%</span>
               </div>
               <input
                 type="range"
                 min="0"
                 max="100"
-                step="10"
                 value={settings.soundVolume}
                 onChange={(e) => handleSettingChange('soundVolume', parseInt(e.target.value))}
-                className="w-full h-2 bg-white/20 rounded-lg appearance-none cursor-pointer slider"
+                className="w-full h-3 bg-gray-100 rounded-full appearance-none cursor-pointer accent-secondary-500"
               />
-              <div className="flex justify-between text-xs text-white/60 mt-1">
-                <span>静音</span>
-                <span>最大</span>
-              </div>
             </div>
 
-            {/* 语速控制 */}
-            <div>
-              <div className="flex justify-between items-center mb-2">
-                <p className="text-white font-medium">语速控制</p>
-                <span className="text-white text-sm">{(settings.speechRate * 100).toFixed(0)}%</span>
-              </div>
-              <input
-                type="range"
-                min="0.5"
-                max="2.0"
-                step="0.1"
-                value={settings.speechRate}
-                onChange={(e) => handleSettingChange('speechRate', parseFloat(e.target.value))}
-                className="w-full h-2 bg-white/20 rounded-lg appearance-none cursor-pointer slider"
-              />
-              <div className="flex justify-between text-xs text-white/60 mt-1">
-                <span>慢速</span>
-                <span>快速</span>
-              </div>
-            </div>
-
-            {/* 音调控制 */}
-            <div>
-              <div className="flex justify-between items-center mb-2">
-                <p className="text-white font-medium">音调高低</p>
-                <span className="text-white text-sm">{(settings.speechPitch * 100).toFixed(0)}%</span>
-              </div>
-              <input
-                type="range"
-                min="0.5"
-                max="2.0"
-                step="0.1"
-                value={settings.speechPitch}
-                onChange={(e) => handleSettingChange('speechPitch', parseFloat(e.target.value))}
-                className="w-full h-2 bg-white/20 rounded-lg appearance-none cursor-pointer slider"
-              />
-              <div className="flex justify-between text-xs text-white/60 mt-1">
-                <span>低音</span>
-                <span>高音</span>
-              </div>
-            </div>
-
-            {/* 语言选择 */}
-            <div>
-              <p className="text-white font-medium mb-2">语音语言</p>
-              <select
-                value={settings.speechLang}
-                onChange={(e) => handleSettingChange('speechLang', e.target.value)}
-                className="w-full p-2 bg-white/20 text-white rounded-lg border border-white/30 focus:border-blue-400 focus:outline-none"
-              >
-                <option value="en-US" className="text-black">English (US)</option>
-                <option value="en-GB" className="text-black">English (UK)</option>
-                <option value="en-AU" className="text-black">English (AU)</option>
-                <option value="zh-CN" className="text-black">中文 (普通话)</option>
-              </select>
-            </div>
-
-            {/* 音频测试 */}
             <div className="pt-2">
               <button
                 onClick={testAudio}
                 disabled={isTestingAudio}
-                className={`w-full flex items-center justify-center gap-2 p-3 rounded-lg transition-all ${
-                  isTestingAudio 
-                    ? 'bg-green-500/50 cursor-not-allowed' 
-                    : 'bg-blue-500/70 hover:bg-blue-500/90'
-                } text-white font-medium`}
+                className={`w-full flex items-center justify-center gap-2 p-4 rounded-2xl transition-all shadow-sm font-bold ${isTestingAudio
+                    ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                    : 'bg-secondary-500 hover:bg-secondary-600 text-white shadow-secondary-200'
+                  }`}
               >
-                <Play size={16} />
-                {isTestingAudio ? '正在播放...' : '测试语音 (Hello)'}
+                <Play size={20} fill="currentColor" />
+                {isTestingAudio ? 'Playing...' : 'Test Audio'}
               </button>
             </div>
           </div>
-        </div>
+        </section>
 
-        {/* 主题设置 */}
-        <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6">
-          <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
-            <Palette size={20} />
-            主题设置
+        {/* Parent Control */}
+        <section className="bg-white rounded-3xl p-6 shadow-card border border-primary-50">
+          <h2 className="text-lg font-bold text-primary-800 mb-6 flex items-center gap-2">
+            <div className="p-2 bg-rose-100 rounded-xl text-rose-500"><Shield size={20} strokeWidth={2.5} /></div>
+            Parent Controls
           </h2>
-          
-          <div className="space-y-3">
-            {['auto', 'light', 'dark'].map((theme) => (
-              <label key={theme} className="flex items-center cursor-pointer">
-                <input
-                  type="radio"
-                  name="theme"
-                  value={theme}
-                  checked={settings.theme === theme}
-                  onChange={(e) => handleSettingChange('theme', e.target.value)}
-                  className="sr-only peer"
-                />
-                <div className={`w-4 h-4 border-2 rounded-full mr-3 ${
-                  settings.theme === theme 
-                    ? 'border-blue-400 bg-blue-400' 
-                    : 'border-white/30'
-                }`}></div>
-                <span className="text-white capitalize">{theme === 'auto' ? '跟随系统' : theme === 'light' ? '浅色' : '深色'}</span>
-              </label>
-            ))}
-          </div>
-        </div>
-
-        {/* 家长控制 */}
-        <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6">
-          <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
-            <Shield size={20} />
-            家长控制
-          </h2>
-          
-          <div className="space-y-4">
-            <button className="w-full text-left p-4 bg-white/10 rounded-xl text-white hover:bg-white/20 transition-all">
-              <p className="font-medium">内容筛选</p>
-              <p className="text-sm opacity-60">设置孩子可以学习的内容分类</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <button className="p-4 bg-gray-50 rounded-2xl text-left hover:bg-primary-50 hover:text-primary-700 transition-colors group">
+              <p className="font-bold text-gray-900 group-hover:text-primary-900">Content Filter</p>
+              <p className="text-sm text-gray-400 group-hover:text-primary-400/80">Restrict categories</p>
             </button>
-            
-            <button className="w-full text-left p-4 bg-white/10 rounded-xl text-white hover:bg-white/20 transition-all">
-              <p className="font-medium">学习报告</p>
-              <p className="text-sm opacity-60">查看孩子的学习进度和统计</p>
+            <button className="p-4 bg-gray-50 rounded-2xl text-left hover:bg-primary-50 hover:text-primary-700 transition-colors group">
+              <p className="font-bold text-gray-900 group-hover:text-primary-900">Progress Report</p>
+              <p className="text-sm text-gray-400 group-hover:text-primary-400/80">View learning stats</p>
             </button>
           </div>
-        </div>
+        </section>
 
-        {/* 关于 */}
-        <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6">
-          <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
-            <Info size={20} />
-            关于应用
-          </h2>
-          
-          <div className="space-y-2 text-white/80">
-            <p>版本: 1.0.0</p>
-            <p>FlashCard Kids - 儿童英语认知学习</p>
-            <p>专为6岁儿童设计的英语学习应用</p>
-          </div>
-        </div>
       </div>
     </div>
   )
 }
 
-export default SettingsScreen 
+export default SettingsScreen

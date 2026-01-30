@@ -9,17 +9,13 @@ interface CategoryScreenProps {
   onBack: () => void
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const CategoryScreen: React.FC<CategoryScreenProps> = ({ category, onBack }) => {
-  // onNavigate 未使用，仅为类型兼容 // [自动修复] 2024-07-06 23:36:00
   const [words, setWords] = useState<Word[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  // 只允许一个卡片翻转，使用单个数字而不是Set
   const [flippedCard, setFlippedCard] = useState<number | null>(null)
   const timerRef = useRef<number | null>(null)
 
-  // 加载单词数据
   useEffect(() => {
     const loadWords = async () => {
       try {
@@ -29,32 +25,25 @@ const CategoryScreen: React.FC<CategoryScreenProps> = ({ category, onBack }) => 
         setWords(wordsData)
       } catch (err) {
         console.error('加载单词失败:', err)
-        setError('加载单词失败，请稍后重试')
+        setError('Failed to load words')
       } finally {
         setLoading(false)
       }
     }
-
     loadWords()
   }, [category])
 
   const handleCardFlip = (wordId: number, e: React.MouseEvent) => {
     e.stopPropagation()
-    
-    // 清除之前的定时器
     if (timerRef.current) {
       window.clearTimeout(timerRef.current)
       timerRef.current = null
     }
 
     if (flippedCard === wordId) {
-      // 如果点击的是已翻转的卡片，翻回正面
       setFlippedCard(null)
     } else {
-      // 翻转到新卡片（自动将之前的卡片翻回正面）
       setFlippedCard(wordId)
-      
-      // 5秒后自动翻回正面
       timerRef.current = window.setTimeout(() => {
         setFlippedCard(null)
         timerRef.current = null
@@ -64,25 +53,15 @@ const CategoryScreen: React.FC<CategoryScreenProps> = ({ category, onBack }) => 
 
   const toggleFavorite = async (wordId: number, e: React.MouseEvent) => {
     e.stopPropagation()
-    
     try {
       const word = words.find(w => w.id === wordId)
       if (!word) return
-
       if (word.is_favorite) {
         await favoriteService.remove(wordId)
       } else {
         await favoriteService.add(wordId)
       }
-
-      // 更新本地状态
-      setWords(prevWords => 
-        prevWords.map(w => 
-          w.id === wordId 
-            ? { ...w, is_favorite: !w.is_favorite }
-            : w
-        )
-      )
+      setWords(prev => prev.map(w => w.id === wordId ? { ...w, is_favorite: !w.is_favorite } : w))
     } catch (err) {
       console.error('更新收藏失败:', err)
     }
@@ -90,15 +69,12 @@ const CategoryScreen: React.FC<CategoryScreenProps> = ({ category, onBack }) => 
 
   const playAudio = async (wordId: number, e: React.MouseEvent) => {
     e.stopPropagation()
-    
     const word = words.find(w => w.id === wordId)
     if (!word) return
-
     if (!speechService.isSupported()) {
-      alert('您的浏览器不支持语音播放功能')
+      alert('Browser does not support speech')
       return
     }
-
     try {
       await speechService.speakWord(word.word)
     } catch (error) {
@@ -106,143 +82,120 @@ const CategoryScreen: React.FC<CategoryScreenProps> = ({ category, onBack }) => 
     }
   }
 
-  // 组件卸载时清除定时器
   useEffect(() => {
     return () => {
-      if (timerRef.current) {
-        window.clearTimeout(timerRef.current)
-      }
+      if (timerRef.current) window.clearTimeout(timerRef.current)
     }
   }, [])
 
-  // 组件挂载时确保所有卡片都是正面
   useEffect(() => {
     setFlippedCard(null)
   }, [category])
 
   if (loading) {
     return (
-      <div className="h-full w-full p-6 flex flex-col items-center justify-center">
-        <div className="text-white text-lg">加载中...</div>
+      <div className="h-full w-full flex items-center justify-center">
+        <div className="animate-bounce-slow text-primary-600 text-xl font-bold">Loading Words...</div>
       </div>
     )
   }
 
   if (error) {
     return (
-      <div className="h-full w-full p-6 flex flex-col items-center justify-center">
-        <div className="text-red-300 text-lg mb-4">{error}</div>
+      <div className="h-full w-full flex flex-col items-center justify-center p-6">
+        <div className="text-red-500 font-bold text-lg mb-4">{error}</div>
         <button
           onClick={() => window.location.reload()}
-          className="px-4 py-2 bg-white/20 backdrop-blur-sm rounded-lg text-white hover:bg-white/30 transition-all"
+          className="px-6 py-3 bg-primary-500 text-white rounded-2xl shadow-lg hover:bg-primary-600 transition-all font-bold"
         >
-          重新加载
+          Try Again
         </button>
       </div>
     )
   }
 
   return (
-    <div className="h-full w-full p-6 flex flex-col">
-      {/* 顶部导航栏 */}
-      <div className="flex items-center justify-between mb-6">
+    <div className="h-full w-full max-w-7xl mx-auto p-4 md:p-6 flex flex-col relative">
+      {/* Header */}
+      <div className="flex items-center justify-between mb-6 relative z-10">
         <button
           onClick={onBack}
-          className="p-3 bg-white/20 backdrop-blur-sm rounded-xl text-white hover:bg-white/30 transition-all"
+          className="p-3 bg-white text-secondary-600 rounded-2xl shadow-soft hover:shadow-md transition-all border border-secondary-50"
         >
-          <ArrowLeft size={20} />
+          <ArrowLeft size={24} strokeWidth={2.5} />
         </button>
-        <div className="text-center text-white">
-          <h1 className="text-xl font-bold">单词卡片</h1>
-          <p className="text-sm opacity-75">共 {words.length} 个单词</p>
+
+        <div className="text-center">
+          <h1 className="text-2xl font-extrabold text-primary-900 tracking-tight capitalize">{category.replace('_', ' ')}</h1>
+          <p className="text-sm font-semibold text-primary-500">{words.length} Words</p>
         </div>
+
         <div className="w-12"></div>
       </div>
 
-      {/* 单词卡片网格 */}
-      <div className="flex-1 overflow-hidden">
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-2 h-full overflow-y-auto pb-2">
+      {/* Grid */}
+      <div className="flex-1 overflow-y-auto pb-4 px-2 custom-scrollbar">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
           {words.map((word) => {
             const isFlipped = flippedCard === word.id
             return (
               <div
                 key={word.id}
-                className="flip-card mx-auto group"
-                style={{ aspectRatio: '2/3', width: '100%', maxWidth: '150px' }}
+                className="flip-card mx-auto group h-64 w-full"
               >
-                <div className={`flip-card-inner ${isFlipped ? 'flipped' : ''}`}>
-                  {/* 卡片正面 */}
-                  <div 
-                    className="flip-card-front bg-white rounded-lg shadow-sm cursor-pointer group hover:shadow-md transition-all duration-200 hover:scale-105"
-                    onClick={(e) => handleCardFlip(word.id, e)}
-                  >
-                    <div className="relative h-full flex flex-col">
-                      {/* 图片区域 */}
-                      <div className="relative flex-1 overflow-hidden rounded-t-lg">
-                        <img
-                          src={word.image_url || getDefaultImageForCategory(category)}
-                          alt={word.word}
-                          className="w-full h-full object-cover"
-                          onError={(e) => {
-                            // 图片加载失败时使用默认图片
-                            const target = e.target as HTMLImageElement;
-                            target.src = getDefaultImageForCategory(category);
-                          }}
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
-                        
-                        {/* 操作按钮 */}
-                        <div className="absolute top-2 right-2 flex gap-1">
-                          <button
-                            onClick={(e) => playAudio(word.id, e)}
-                            className="p-1 bg-black/50 backdrop-blur-sm rounded-full text-white hover:bg-black/70 transition-all"
-                          >
-                            <Volume2 size={12} />
-                          </button>
-                          <button
-                            onClick={(e) => toggleFavorite(word.id, e)}
-                            className={`p-1 backdrop-blur-sm rounded-full transition-all ${
-                              word.is_favorite 
-                                ? 'bg-red-500/80 text-white' 
-                                : 'bg-black/50 text-white hover:bg-black/70'
-                            }`}
-                          >
-                            <Heart size={12} fill={word.is_favorite ? 'currentColor' : 'none'} />
-                          </button>
-                        </div>
-                      </div>
-                      
-                      {/* 文字区域 */}
-                      <div className="p-1 bg-white rounded-b-lg flex flex-col items-center">
-                        <h3 className="text-xs font-bold text-gray-800 mb-0.5 truncate">{word.word}</h3>
-                        <p className="text-[10px] text-gray-600 truncate">{word.chinese}</p>
-                      </div>
-                    </div>
-                  </div>
+                <div
+                  className={`flip-card-inner relative w-full h-full transition-transform duration-500 preserve-3d cursor-pointer ${isFlipped ? 'flipped' : ''}`}
+                  onClick={(e) => handleCardFlip(word.id, e)}
+                >
+                  {/* Front */}
+                  <div className="flip-card-front absolute inset-0 backface-hidden bg-white rounded-3xl shadow-card border-2 border-primary-50 flex flex-col overflow-hidden">
+                    <div className="relative flex-1 overflow-hidden bg-primary-50/50">
+                      <img
+                        src={word.image_url || 'https://images.unsplash.com/photo-1544966503-7cc5ac882d5f?w=400&h=300&fit=crop'}
+                        alt={word.word}
+                        className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
+                        onError={(e) => {
+                          (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1544966503-7cc5ac882d5f?w=400&h=300&fit=crop'
+                        }}
+                      />
 
-                  {/* 卡片背面 */}
-                  <div 
-                    className="flip-card-back bg-gradient-to-br from-blue-50 to-purple-50 rounded-lg shadow-lg cursor-pointer hover:shadow-xl transition-shadow flex flex-col justify-center items-center p-4"
-                    onClick={(e) => handleCardFlip(word.id, e)}
-                  >
-                    <div className="text-center">
-                      <h3 className="text-lg font-bold text-gray-800 mb-2">{word.word}</h3>
-                      <p className="text-sm text-gray-600 mb-2">{word.phonetic || `/${word.word.toLowerCase()}/`}</p>
-                      <p className="text-base text-gray-700 font-medium">{word.chinese}</p>
-                      
-                      {/* 背面操作按钮 */}
-                      <div className="mt-4 flex justify-center">
+                      {/* Actions */}
+                      <div className="absolute top-2 right-2 flex gap-2">
                         <button
-                          onClick={(e) => {
-                            e.stopPropagation()
-                            playAudio(word.id, e)
-                          }}
-                          className="p-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition-colors"
+                          onClick={(e) => playAudio(word.id, e)}
+                          className="p-2 bg-white/80 backdrop-blur-md rounded-full text-primary-600 shadow-sm hover:scale-110 transition-transform"
                         >
-                          <Volume2 size={14} />
+                          <Volume2 size={16} strokeWidth={2.5} />
+                        </button>
+                        <button
+                          onClick={(e) => toggleFavorite(word.id, e)}
+                          className={`p-2 backdrop-blur-md rounded-full shadow-sm hover:scale-110 transition-all ${word.is_favorite
+                              ? 'bg-rose-50 text-rose-500'
+                              : 'bg-white/80 text-gray-400'
+                            }`}
+                        >
+                          <Heart size={16} fill={word.is_favorite ? 'currentColor' : 'none'} strokeWidth={2.5} />
                         </button>
                       </div>
                     </div>
+
+                    <div className="p-3 bg-white flex flex-col items-center justify-center border-t border-primary-50">
+                      <h3 className="text-lg font-extrabold text-primary-900 mb-0.5">{word.word}</h3>
+                      <p className="text-xs font-bold text-primary-400 opacity-60">Tap to flip</p>
+                    </div>
+                  </div>
+
+                  {/* Back */}
+                  <div className="flip-card-back absolute inset-0 backface-hidden bg-gradient-to-br from-secondary-400 to-secondary-500 rounded-3xl shadow-float rotate-y-180 flex flex-col items-center justify-center p-4 text-white">
+                    <h2 className="text-3xl font-black mb-2 drop-shadow-sm">{word.chinese}</h2>
+                    <p className="text-lg font-bold opacity-80 font-mono mb-4">{word.phonetic}</p>
+
+                    <button
+                      onClick={(e) => { e.stopPropagation(); playAudio(word.id, e); }}
+                      className="p-4 bg-white text-secondary-500 rounded-full shadow-lg hover:scale-110 active:scale-95 transition-all"
+                    >
+                      <Volume2 size={24} strokeWidth={3} />
+                    </button>
                   </div>
                 </div>
               </div>
@@ -254,27 +207,4 @@ const CategoryScreen: React.FC<CategoryScreenProps> = ({ category, onBack }) => 
   )
 }
 
-// 为不同分类提供更好的默认图片
-const getDefaultImageForCategory = (category: string): string => {
-  const imageMap: { [key: string]: string } = {
-    'fruits': 'https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?w=400&h=300&fit=crop',
-    'animals': 'https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=400&h=300&fit=crop',
-    'colors': 'https://images.unsplash.com/photo-1558618047-b93c0c2e2041?w=400&h=300&fit=crop',
-    'numbers': 'https://images.unsplash.com/photo-1509909756405-be0199881695?w=400&h=300&fit=crop',
-    'family': 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=300&fit=crop',
-    'body': 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop',
-    'clothes': 'https://images.unsplash.com/photo-1445205170230-053b83016050?w=400&h=300&fit=crop',
-    'food': 'https://images.unsplash.com/photo-1504674900242-4197e29c3d14?w=400&h=300&fit=crop',
-    'transport': 'https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=400&h=300&fit=crop',
-    'nature': 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=400&h=300&fit=crop',
-    'daily_phrases': 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop',
-    'greeting_phrases': 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop',
-    'action_phrases': 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop',
-    'simple_sentences': 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop',
-    'conversation_sentences': 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop'
-  }
-  
-  return imageMap[category] || 'https://images.unsplash.com/photo-1544966503-7cc5ac882d5f?w=400&h=300&fit=crop'
-}
-
-export default CategoryScreen 
+export default CategoryScreen
