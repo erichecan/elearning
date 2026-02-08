@@ -1,8 +1,10 @@
 import React, { useState } from 'react'
-import { Settings, Check, X, LogOut, Info } from 'lucide-react'
+import { Settings, LogOut, RefreshCw } from 'lucide-react'
 import { Word, Category } from '../lib/database'
 import { wordService, categoryService } from '../services/api'
 import { adminApiService, adminStorageService } from '../services/admin-api'
+import { BulkImportWizard } from './admin/BulkImportWizard';
+import { ProductList } from './admin/ProductList';
 
 interface AdminScreenProps {
   onBack: () => void
@@ -17,58 +19,17 @@ interface OptimizedWord extends Word {
 const AdminScreen: React.FC<AdminScreenProps> = ({ onBack }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [password, setPassword] = useState('')
-  const [currentTab, setCurrentTab] = useState<'overview' | 'optimize' | 'review' | 'sync'>('overview')
-  const [categories, setCategories] = useState<Category[]>([])
-  const [selectedCategory, setSelectedCategory] = useState<string>('')
+  const [currentTab, setCurrentTab] = useState<'products' | 'bulk-import' | 'sync'>('products')
   const [words, setWords] = useState<OptimizedWord[]>([])
   const [loading, setLoading] = useState(false)
-  const [stats, setStats] = useState({
-    totalWords: 0,
-    wordsWithImages: 0,
-    pendingReview: 0,
-    approved: 0
-  })
+  const [selectedCategory, setSelectedCategory] = useState<string>('')
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault()
     if (password === 'admin123') {
       setIsAuthenticated(true)
-      loadStats()
-      loadCategories()
     } else {
       alert('密码错误')
-    }
-  }
-
-  const loadStats = async () => {
-    try {
-      const allCategories = await categoryService.getAll()
-      let allWords: Word[] = []
-      
-      for (const category of allCategories) {
-        const categoryWords = await wordService.getByCategory(category.name)
-        allWords = allWords.concat(categoryWords)
-      }
-      
-      const approved = allWords.filter((w: Word) => adminStorageService.getApprovalStatus(w.id).approved)
-      
-      setStats({
-        totalWords: allWords.length,
-        wordsWithImages: allWords.filter((w: Word) => w.image_url).length,
-        pendingReview: allWords.filter((w: Word) => w.image_url && !adminStorageService.getApprovalStatus(w.id).approved).length,
-        approved: approved.length
-      })
-    } catch (error) {
-      console.error('加载统计失败:', error)
-    }
-  }
-
-  const loadCategories = async () => {
-    try {
-      const categoriesData = await categoryService.getAll()
-      setCategories(categoriesData)
-    } catch (error) {
-      console.error('加载分类失败:', error)
     }
   }
 
@@ -82,13 +43,9 @@ const AdminScreen: React.FC<AdminScreenProps> = ({ onBack }) => {
           ...word,
           isApproved: approvalStatus.approved,
           isRejected: approvalStatus.rejected,
-          optimizedImageUrl: generateOptimizedImageUrl(word.word, category)
         }
       })
       setWords(optimizedWords)
-      console.log(`📊 加载了 ${optimizedWords.length} 个单词`)
-      console.log(`📷 有原始图片: ${optimizedWords.filter(w => w.image_url).length} 个`)
-      console.log(`🤖 有优化图片: ${optimizedWords.filter(w => w.optimizedImageUrl).length} 个`)
     } catch (error) {
       console.error('加载单词失败:', error)
     } finally {
@@ -96,71 +53,9 @@ const AdminScreen: React.FC<AdminScreenProps> = ({ onBack }) => {
     }
   }
 
-  const generateOptimizedImageUrl = (word: string, category: string) => {
-    const categoryKeywords: { [key: string]: string } = {
-      'fruits': 'fruit,fresh,healthy',
-      'animals': 'animal,cute,wildlife',
-      'colors': 'color,colorful,bright',
-      'numbers': 'number,counting,math',
-      'family': 'family,people,person',
-      'body': 'human,anatomy,body',
-      'clothes': 'clothing,fashion,wear',
-      'food': 'food,cooking,meal',
-      'transport': 'vehicle,transportation,travel',
-      'nature': 'nature,outdoor,natural'
-    }
-
-    const keywords = categoryKeywords[category] || 'object'
-    return `https://source.unsplash.com/400x300/?${word},${keywords},realistic,clear`
-  }
-
-  const optimizeImages = async () => {
-    if (!selectedCategory) {
-      alert('请先选择分类')
-      return
-    }
-
-    setLoading(true)
-    try {
-      const wordsToOptimize = words.filter(w => !w.image_url)
-      console.log(`🚀 开始优化 ${wordsToOptimize.length} 个单词的图片`)
-      
-      const optimizationResults = await adminApiService.optimizeWordImages(wordsToOptimize, selectedCategory)
-      
-      optimizationResults.forEach(result => {
-        if (result.success) {
-          setWords(prev => prev.map(w => 
-            w.id === result.wordId 
-              ? { ...w, optimizedImageUrl: result.newImageUrl }
-              : w
-          ))
-        }
-      })
-      
-      const successCount = optimizationResults.filter(r => r.success).length
-      alert(`✅ 已为 ${successCount} 个单词生成优化图片！\n\n现在可以切换到"审核管理"页面查看和审核这些图片。`)
-      setCurrentTab('review')
-    } catch (error) {
-      console.error('优化失败:', error)
-      alert('优化失败')
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const reviewImage = (wordId: number, approved: boolean) => {
-    adminStorageService.setApprovalStatus(wordId, approved)
-    setWords(prev => prev.map(w => 
-      w.id === wordId 
-        ? { ...w, isApproved: approved, isRejected: !approved }
-        : w
-    ))
-    loadStats()
-  }
-
   const syncApprovedImages = async () => {
     const approvedWords = words.filter(w => w.isApproved && w.optimizedImageUrl)
-    
+
     if (approvedWords.length === 0) {
       alert('没有已审核通过的图片需要同步')
       return
@@ -180,14 +75,15 @@ const AdminScreen: React.FC<AdminScreenProps> = ({ onBack }) => {
       }))
 
       const syncResult = await adminApiService.syncImagesToSupabase(imageUpdates)
-      
+
       if (syncResult.updated > 0) {
         alert(`✅ 成功同步 ${syncResult.updated} 张图片到数据库！`)
         approvedWords.forEach(word => {
           adminStorageService.clearApprovalStatus(word.id)
         })
-        await loadWords(selectedCategory)
-        await loadStats()
+        if (selectedCategory) {
+          await loadWords(selectedCategory)
+        }
       } else {
         throw new Error('没有图片成功同步')
       }
@@ -207,9 +103,9 @@ const AdminScreen: React.FC<AdminScreenProps> = ({ onBack }) => {
           <div className="text-center mb-8">
             <Settings className="mx-auto mb-4 text-blue-500" size={48} />
             <h1 className="text-2xl font-bold text-gray-800">Admin 后台管理</h1>
-            <p className="text-gray-600 mt-2">图片优化与审核系统</p>
+            <p className="text-gray-600 mt-2">内容管理系统</p>
           </div>
-          
+
           <form onSubmit={handleLogin}>
             <div className="mb-6">
               <label className="block text-gray-700 text-sm font-bold mb-2">
@@ -224,7 +120,7 @@ const AdminScreen: React.FC<AdminScreenProps> = ({ onBack }) => {
                 required
               />
             </div>
-            
+
             <button
               type="submit"
               className="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors"
@@ -232,13 +128,13 @@ const AdminScreen: React.FC<AdminScreenProps> = ({ onBack }) => {
               登录
             </button>
           </form>
-          
+
           <div className="mt-6 text-center">
             <button
               onClick={onBack}
               className="text-gray-500 hover:text-gray-700 text-sm"
             >
-              返回主页
+              返回首页
             </button>
           </div>
         </div>
@@ -257,7 +153,7 @@ const AdminScreen: React.FC<AdminScreenProps> = ({ onBack }) => {
               <Settings className="text-blue-500" size={24} />
               <h1 className="text-xl font-bold text-gray-900">Admin 后台管理</h1>
             </div>
-            
+
             <button
               onClick={() => setIsAuthenticated(false)}
               className="flex items-center space-x-2 text-gray-500 hover:text-gray-700"
@@ -274,19 +170,17 @@ const AdminScreen: React.FC<AdminScreenProps> = ({ onBack }) => {
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex space-x-8">
             {[
-              { id: 'overview', name: '概览' },
-              { id: 'optimize', name: '图片优化' },
-              { id: 'review', name: '审核管理' },
+              { id: 'products', name: '内容管理' },
+              { id: 'bulk-import', name: '批量导入' },
               { id: 'sync', name: '数据同步' }
             ].map(tab => (
               <button
                 key={tab.id}
                 onClick={() => setCurrentTab(tab.id as any)}
-                className={`py-4 border-b-2 transition-colors ${
-                  currentTab === tab.id
-                    ? 'border-blue-500 text-blue-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700'
-                }`}
+                className={`py-4 border-b-2 transition-colors ${currentTab === tab.id
+                  ? 'border-blue-500 text-blue-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700'
+                  }`}
               >
                 {tab.name}
               </button>
@@ -297,227 +191,37 @@ const AdminScreen: React.FC<AdminScreenProps> = ({ onBack }) => {
 
       {/* 内容区域 */}
       <div className="flex-1 overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 py-8 h-full overflow-y-auto">
-          {currentTab === 'overview' && (
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-              <div className="bg-white p-6 rounded-lg shadow">
-                <h3 className="text-lg font-medium">总单词数</h3>
-                <p className="text-3xl font-bold text-blue-600 mt-2">{stats.totalWords}</p>
-              </div>
-              <div className="bg-white p-6 rounded-lg shadow">
-                <h3 className="text-lg font-medium">有图片单词</h3>
-                <p className="text-3xl font-bold text-green-600 mt-2">{stats.wordsWithImages}</p>
-              </div>
-              <div className="bg-white p-6 rounded-lg shadow">
-                <h3 className="text-lg font-medium">待审核</h3>
-                <p className="text-3xl font-bold text-yellow-600 mt-2">{stats.pendingReview}</p>
-              </div>
-              <div className="bg-white p-6 rounded-lg shadow">
-                <h3 className="text-lg font-medium">已审核通过</h3>
-                <p className="text-3xl font-bold text-purple-600 mt-2">{stats.approved}</p>
-              </div>
-            </div>
-          )}
+        {currentTab === 'products' && (
+          <ProductList />
+        )}
 
-          {currentTab === 'optimize' && (
+        {currentTab === 'bulk-import' && (
+          <BulkImportWizard onBack={() => setCurrentTab('products')} />
+        )}
+
+        {currentTab === 'sync' && (
+          <div className="max-w-7xl mx-auto px-4 py-8 h-full overflow-y-auto">
             <div className="bg-white p-6 rounded-lg shadow">
-              <h3 className="text-lg font-medium mb-4">选择分类进行优化</h3>
-              <div className="flex items-center space-x-4 mb-4">
-                <select
-                  value={selectedCategory}
-                  onChange={(e) => {
-                    setSelectedCategory(e.target.value)
-                    if (e.target.value) {
-                      loadWords(e.target.value)
-                    }
-                  }}
-                  className="px-3 py-2 border rounded-lg"
-                >
-                  <option value="">选择分类</option>
-                  {categories.map(cat => (
-                    <option key={cat.id} value={cat.name}>{cat.display_name}</option>
-                  ))}
-                </select>
-                
-                <button
-                  onClick={optimizeImages}
-                  disabled={!selectedCategory || loading}
-                  className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 disabled:opacity-50"
-                >
-                  {loading ? '处理中...' : '生成优化图片'}
-                </button>
-              </div>
-              
-              {words.length > 0 && (
-                <div className="text-gray-600">
-                  <p>找到 {words.length} 个单词，其中 {words.filter(w => !w.image_url).length} 个缺少图片</p>
-                  <p className="text-sm mt-1">点击"生成优化图片"按钮为缺少图片的单词创建AI优化图片</p>
-                </div>
-              )}
-            </div>
-          )}
-
-          {currentTab === 'review' && (
-            <div className="space-y-6">
-              {!selectedCategory && (
-                <div className="bg-white p-6 rounded-lg shadow">
-                  <h3 className="text-lg font-medium mb-4">审核管理</h3>
-                  <div className="text-center py-8">
-                    <div className="flex items-center justify-center mb-4">
-                      <Info className="text-blue-500 mr-2" size={24} />
-                      <p className="text-gray-600">请先在"图片优化"页面选择分类并生成优化图片</p>
-                    </div>
-                    <button
-                      onClick={() => setCurrentTab('optimize')}
-                      className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
-                    >
-                      前往图片优化
-                    </button>
-                  </div>
-                </div>
-              )}
-              
-              {selectedCategory && (
-                <div className="bg-white p-6 rounded-lg shadow">
-                  <div className="flex justify-between items-center mb-4">
-                    <h3 className="text-lg font-medium">审核 {selectedCategory} 分类的图片</h3>
-                    <div className="text-sm text-gray-600">
-                      共 {words.length} 个 | 可审核 {words.filter(w => w.optimizedImageUrl || w.image_url).length} 个
-                    </div>
-                  </div>
-                  
-                  {/* 调试信息 */}
-                  <div className="mb-4 p-3 bg-blue-50 rounded-lg">
-                    <div className="text-sm text-blue-800">
-                      <p>📊 调试信息:</p>
-                      <p>• 总单词数: {words.length}</p>
-                      <p>• 有原始图片: {words.filter(w => w.image_url).length} 个</p>
-                      <p>• 有优化图片: {words.filter(w => w.optimizedImageUrl).length} 个</p>
-                      <p>• 可审核图片: {words.filter(w => w.optimizedImageUrl || w.image_url).length} 个</p>
-                    </div>
-                  </div>
-                  
-                  {loading && (
-                    <div className="text-center py-8">
-                      <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
-                      <p className="text-gray-600 mt-2">加载中...</p>
-                    </div>
-                  )}
-                  
-                  {!loading && words.filter(w => w.optimizedImageUrl || w.image_url).length === 0 && (
-                    <div className="text-center py-8">
-                      <div className="flex items-center justify-center mb-4">
-                        <Info className="text-yellow-500 mr-2" size={24} />
-                        <p className="text-gray-600">该分类暂无可审核的图片</p>
-                      </div>
-                      <p className="text-sm text-gray-500 mb-4">
-                        请先在"图片优化"页面为该分类生成优化图片
-                      </p>
-                      <button
-                        onClick={() => setCurrentTab('optimize')}
-                        className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
-                      >
-                        前往图片优化
-                      </button>
-                    </div>
-                  )}
-                  
-                  {!loading && words.filter(w => w.optimizedImageUrl || w.image_url).length > 0 && (
-                    <div className="max-h-[500px] overflow-y-auto border rounded-lg p-4">
-                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                        {words.filter(w => w.optimizedImageUrl || w.image_url).map(word => (
-                          <div key={word.id} className="border rounded-lg p-3 bg-gray-50">
-                            <img
-                              src={word.optimizedImageUrl || word.image_url}
-                              alt={word.word}
-                              className="w-full h-32 object-cover rounded mb-3"
-                              onError={(e) => {
-                                console.log(`❌ 图片加载失败: ${word.word}`)
-                                e.currentTarget.src = 'https://via.placeholder.com/400x300/cccccc/666666?text=' + encodeURIComponent(word.word)
-                              }}
-                              onLoad={() => {
-                                console.log(`✅ 图片加载成功: ${word.word}`)
-                              }}
-                            />
-                            
-                            <div className="text-center">
-                              <h4 className="font-medium text-gray-900">{word.word}</h4>
-                              <p className="text-sm text-gray-500 mb-2">{word.chinese}</p>
-                              
-                              <p className="text-xs text-gray-400 mb-3">
-                                {word.optimizedImageUrl ? '🤖 AI优化' : '📷 原始'}
-                              </p>
-                              
-                              <div className="flex justify-center space-x-2 mb-2">
-                                <button
-                                  onClick={() => reviewImage(word.id, true)}
-                                  className={`p-2 rounded ${
-                                    word.isApproved 
-                                      ? 'bg-green-500 text-white' 
-                                      : 'bg-gray-200 hover:bg-green-100'
-                                  }`}
-                                >
-                                  <Check size={16} />
-                                </button>
-                                <button
-                                  onClick={() => reviewImage(word.id, false)}
-                                  className={`p-2 rounded ${
-                                    word.isRejected 
-                                      ? 'bg-red-500 text-white' 
-                                      : 'bg-gray-200 hover:bg-red-100'
-                                  }`}
-                                >
-                                  <X size={16} />
-                                </button>
-                              </div>
-                              
-                              <div>
-                                {word.isApproved && <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">✅ 通过</span>}
-                                {word.isRejected && <span className="text-xs bg-red-100 text-red-800 px-2 py-1 rounded">❌ 拒绝</span>}
-                                {!word.isApproved && !word.isRejected && <span className="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded">⏳ 待审核</span>}
-                              </div>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
-          )}
-
-          {currentTab === 'sync' && (
-            <div className="bg-white p-6 rounded-lg shadow">
-              <h3 className="text-lg font-medium mb-4">数据同步</h3>
-              
+              <h3 className="text-lg font-medium mb-4">数据同步管理</h3>
               <div className="space-y-4">
                 <button
                   onClick={syncApprovedImages}
                   disabled={loading}
-                  className="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600 disabled:opacity-50"
+                  className="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600 disabled:opacity-50 flex items-center"
                 >
+                  <RefreshCw className={`mr-2 ${loading ? 'animate-spin' : ''}`} size={18} />
                   {loading ? '同步中...' : '同步已审核图片到数据库'}
                 </button>
-                
                 <p className="text-gray-600">
                   将审核通过的图片同步到Supabase数据库
                 </p>
-                
-                {selectedCategory && words.filter(w => w.isApproved).length > 0 && (
-                  <div className="mt-4 p-4 bg-green-50 rounded-lg">
-                    <p className="text-green-800">
-                      当前有 {words.filter(w => w.isApproved).length} 张已审核通过的图片可以同步
-                    </p>
-                  </div>
-                )}
               </div>
             </div>
-          )}
-        </div>
+          </div>
+        )}
       </div>
     </div>
   )
 }
 
-export default AdminScreen 
+export default AdminScreen

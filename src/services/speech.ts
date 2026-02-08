@@ -13,9 +13,9 @@ export class SpeechService {
     const loadVoices = () => {
       const voices = this.synth.getVoices();
       // 优先选择英语语音
-      this.defaultVoice = voices.find(voice => 
+      this.defaultVoice = voices.find(voice =>
         voice.lang.startsWith('en') && voice.name.includes('Natural')
-      ) || voices.find(voice => 
+      ) || voices.find(voice =>
         voice.lang.startsWith('en')
       ) || voices[0] || null;
     };
@@ -43,13 +43,13 @@ export class SpeechService {
       this.synth.cancel();
 
       const utterance = new SpeechSynthesisUtterance(word);
-      
+
       // 设置语音参数
       utterance.rate = options.rate ?? 0.8;  // 稍微慢一点，便于学习
       utterance.pitch = options.pitch ?? 1.0;
       utterance.volume = options.volume ?? 1.0;
       utterance.lang = options.lang ?? 'en-US';
-      
+
       if (this.defaultVoice) {
         utterance.voice = this.defaultVoice;
       }
@@ -58,6 +58,33 @@ export class SpeechService {
       utterance.onerror = (event) => reject(new Error(`Speech synthesis failed: ${event.error}`));
 
       this.synth.speak(utterance);
+    });
+  }
+
+  /**
+   * 播放预生成的音频文件（推荐使用）
+   * @param audioUrl 音频文件URL
+   * @param word 单词（用于备用语音合成）
+   */
+  public playAudio(audioUrl: string | null, word: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+      // 如果有音频URL，使用预生成的MP3
+      if (audioUrl) {
+        const audio = new Audio(audioUrl);
+        audio.onended = () => resolve();
+        audio.onerror = () => {
+          // MP3加载失败，回退到语音合成
+          console.warn('Audio file failed, falling back to speech synthesis');
+          this.speakWord(word).then(resolve).catch(reject);
+        };
+        audio.play().catch(() => {
+          // 播放失败，回退到语音合成
+          this.speakWord(word).then(resolve).catch(reject);
+        });
+      } else {
+        // 没有MP3，使用语音合成
+        this.speakWord(word).then(resolve).catch(reject);
+      }
     });
   }
 
@@ -75,7 +102,7 @@ export class SpeechService {
       this.synth.cancel();
 
       const utterance = new SpeechSynthesisUtterance(chinese);
-      
+
       utterance.rate = options.rate ?? 0.8;
       utterance.pitch = options.pitch ?? 1.0;
       utterance.volume = options.volume ?? 1.0;

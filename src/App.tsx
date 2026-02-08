@@ -3,11 +3,18 @@ import HomeScreen from './screens/HomeScreen'
 import SettingsScreen from './screens/SettingsScreen'
 import CategoryScreen from './screens/CategoryScreen'
 import AdminScreen from './screens/AdminScreen'
+import MathScreen from './screens/MathScreen'
 
-type Screen = 'home' | 'category' | 'settings' | 'admin'
+type Screen = 'home' | 'category' | 'settings' | 'admin' | 'math'
 
 function App() {
-  const [currentScreen, setCurrentScreen] = useState<Screen>('home')
+  const [currentScreen, setCurrentScreen] = useState<Screen>(() => {
+    // Simple URL routing for admin access
+    if (typeof window !== 'undefined' && window.location.pathname === '/admin') {
+      return 'admin'
+    }
+    return 'home'
+  })
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
 
   const navigateTo = (screen: Screen, payload?: any) => {
@@ -40,9 +47,14 @@ function App() {
             onBack={() => navigateTo('home')}
           />
         )}
+        {currentScreen === 'math' && (
+          <MathScreen
+            onBack={() => navigateTo('home')}
+          />
+        )}
       </div>
     </div>
   )
 }
 
-export default App 
+export default App

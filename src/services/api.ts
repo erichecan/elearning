@@ -15,13 +15,11 @@ export const categoryService = {
   // 获取所有分类
   async getAll(): Promise<Category[]> {
     try {
-      const { data, error } = await supabase
-        .from('categories')
-        .select('*')
-        .order('id', { ascending: true });
-
-      if (error) throw error;
-      return data || [];
+      const response = await fetch('http://localhost:3001/api/categories');
+      if (!response.ok) {
+        throw new Error('Failed to fetch categories');
+      }
+      return await response.json();
     } catch (error) {
       console.error('获取分类失败:', error);
       throw new Error('获取分类失败');
@@ -51,32 +49,19 @@ export const wordService = {
   // 根据分类获取单词列表
   async getByCategory(categoryName: string): Promise<Word[]> {
     try {
-      const deviceId = getDeviceId();
-      
-      const { data, error } = await supabase
-        .from('words')
-        .select(`
-          *,
-          categories!inner(display_name, icon, color),
-          favorites!left(id)
-        `)
-        .eq('categories.name', categoryName)
-        .eq('is_active', true)
-        .eq('favorites.user_id', deviceId)
-        .order('id', { ascending: true });
-
-      if (error) throw error;
-
-      // 处理数据格式
-      const words = (data || []).map((word: any) => ({
+      const response = await fetch(`http://localhost:3001/api/words?category=${encodeURIComponent(categoryName)}`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch words');
+      }
+      const words = await response.json();
+      // Map category fields for compatibility
+      return words.map((word: any) => ({
         ...word,
-        category_display_name: word.categories?.display_name,
-        category_icon: word.categories?.icon,
-        category_color: word.categories?.color,
-        is_favorite: word.favorites && word.favorites.length > 0
-      })) as Word[];
-
-      return words;
+        category_display_name: word.category_display_name,
+        category_icon: word.category_icon,
+        category_color: word.category_color,
+        is_favorite: false // Will need to fetch separately if needed
+      }));
     } catch (error) {
       console.error('获取单词失败:', error);
       throw new Error('获取单词失败');
@@ -87,7 +72,7 @@ export const wordService = {
   async getById(id: number): Promise<Word | null> {
     try {
       const deviceId = getDeviceId();
-      
+
       const { data, error } = await supabase
         .from('words')
         .select(`
@@ -101,7 +86,7 @@ export const wordService = {
         .single();
 
       if (error && error.code !== 'PGRST116') throw error;
-      
+
       if (data) {
         return {
           ...data,
@@ -111,7 +96,7 @@ export const wordService = {
           is_favorite: (data as any).favorites && (data as any).favorites.length > 0
         } as Word;
       }
-      
+
       return null;
     } catch (error) {
       console.error('获取单词详情失败:', error);
@@ -123,7 +108,7 @@ export const wordService = {
   async search(query: string): Promise<Word[]> {
     try {
       const deviceId = getDeviceId();
-      
+
       const { data, error } = await supabase
         .from('words')
         .select(`
@@ -152,6 +137,30 @@ export const wordService = {
       console.error('搜索单词失败:', error);
       throw new Error('搜索单词失败');
     }
+  },
+
+  // 创建新单词
+  async create(word: Partial<Word>): Promise<Word> {
+    try {
+      // Use Backend API Proxy to avoid browser TCP issues with Neon
+      const response = await fetch('http://localhost:3001/api/words', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(word),
+      });
+
+      if (!response.ok) {
+        const err = await response.json();
+        throw new Error(err.error || 'Failed to create word via API');
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error('创建单词失败:', error);
+      throw new Error('创建单词失败');
+    }
   }
 };
 
@@ -161,7 +170,7 @@ export const favoriteService = {
   async add(wordId: number): Promise<void> {
     try {
       const deviceId = getDeviceId();
-      
+
       const { error } = await supabase
         .from('favorites')
         .insert({
@@ -180,7 +189,7 @@ export const favoriteService = {
   async remove(wordId: number): Promise<void> {
     try {
       const deviceId = getDeviceId();
-      
+
       const { error } = await supabase
         .from('favorites')
         .delete()
@@ -198,7 +207,7 @@ export const favoriteService = {
   async getAll(): Promise<Word[]> {
     try {
       const deviceId = getDeviceId();
-      
+
       const { data, error } = await supabase
         .from('favorites')
         .select(`
@@ -237,14 +246,14 @@ export const progressService = {
   async updateProgress(wordId: number, isCorrect: boolean): Promise<void> {
     try {
       const deviceId = getDeviceId();
-      
+
       if (isCorrect) {
         const { error } = await supabase
           .rpc('update_correct_progress', {
             p_user_id: deviceId,
             p_word_id: wordId
           });
-        
+
         if (error) throw error;
       } else {
         const { error } = await supabase
@@ -252,7 +261,7 @@ export const progressService = {
             p_user_id: deviceId,
             p_word_id: wordId
           });
-        
+
         if (error) throw error;
       }
     } catch (error) {
@@ -270,7 +279,7 @@ export const progressService = {
   }> {
     try {
       const deviceId = getDeviceId();
-      
+
       const [totalResult, learnedResult, masteredResult, favoriteResult] = await Promise.all([
         supabase.from('words').select('id', { count: 'exact' }).eq('is_active', true),
         supabase.from('learning_progress').select('id', { count: 'exact' }).eq('user_id', deviceId).or('correct_count.gt.0,wrong_count.gt.0'),

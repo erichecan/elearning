@@ -37,6 +37,8 @@ export interface Word {
     updated_at: string;
     category?: Category;
     is_favorite?: boolean;
+    sentence?: string;
+    sentence_cn?: string;
 }
 
 export interface Favorite {

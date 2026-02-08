@@ -39,11 +39,11 @@ export const adminApiService = {
   // 批量优化单词图片
   async optimizeWordImages(words: Word[], category: string): Promise<ImageOptimizationResult[]> {
     const results: ImageOptimizationResult[] = []
-    
+
     for (const word of words) {
       try {
         const newImageUrl = generateOptimizedImageUrl(word.word, category)
-        
+
         results.push({
           success: true,
           wordId: word.id,
@@ -62,8 +62,100 @@ export const adminApiService = {
         })
       }
     }
-    
+
     return results
+  },
+
+  // 调用本地Backend生成内容
+  async generateContent(topic: string, count: number): Promise<any[]> {
+    try {
+      const response = await fetch('http://localhost:3001/api/generate-content', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ topic, count }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Backend error: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      return data.words;
+    } catch (error) {
+      console.error('Content generation failed:', error);
+      throw error;
+    }
+  },
+
+  // 调用本地Backend抓取图片
+  async scrapeImage(query: string): Promise<string> {
+    try {
+      const response = await fetch('http://localhost:3001/api/scrape-image', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ query }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Backend error: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      return data.imageUrl;
+    } catch (error) {
+      console.error('Image scraping failed:', error);
+      throw error;
+    }
+  },
+
+  // 调用本地Backend生成AI图片 (Replicate)
+  async generateImage(prompt: string, model: 'schnell' | 'pro' = 'schnell'): Promise<string> {
+    try {
+      const response = await fetch('http://localhost:3001/api/generate-image', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ prompt, model }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Backend error: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      return data.imageUrl;
+    } catch (error) {
+      console.error('AI Image generation failed:', error);
+      throw error;
+    }
+  },
+
+  // 调用本地Backend搜索图片 (Tavily)
+  async searchImage(query: string): Promise<string> {
+    try {
+      const response = await fetch('http://localhost:3001/api/search-image', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ query }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Backend error: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      return data.imageUrl;
+    } catch (error) {
+      console.error('Image search failed:', error);
+      throw error;
+    }
   },
 
   // 同步图片到Supabase
@@ -73,7 +165,7 @@ export const adminApiService = {
       failed: 0,
       errors: []
     }
-    
+
     for (const update of imageUpdates) {
       try {
         const { error } = await supabase
@@ -81,22 +173,22 @@ export const adminApiService = {
           .update({ image_url: update.imageUrl })
           .eq('id', update.wordId)
           .select()
-        
+
         if (error) throw error
         result.updated++
         console.log(`✅ 同步成功: ${update.word} -> ${update.imageUrl}`)
-        
+
       } catch (error) {
         result.failed++
         const errorMessage = error instanceof Error ? error.message : '未知错误'
         result.errors.push({ word: update.word, error: errorMessage })
         console.error(`❌ 同步失败: ${update.word} - ${errorMessage}`)
       }
-      
+
       // 避免API限制
       await new Promise(resolve => setTimeout(resolve, 100))
     }
-    
+
     return result
   },
 
@@ -107,9 +199,9 @@ export const adminApiService = {
         .from('words')
         .update({ is_active: false }) // 软删除，标记为不活跃
         .eq('id', wordId)
-      
+
       if (error) throw error
-      
+
       return { success: true }
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : '未知错误'
@@ -124,9 +216,9 @@ export const adminApiService = {
         .from('words')
         .update({ is_active: true })
         .eq('id', wordId)
-      
+
       if (error) throw error
-      
+
       return { success: true }
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : '未知错误'
@@ -141,7 +233,7 @@ export const adminApiService = {
       failed: 0,
       errors: []
     }
-    
+
     for (const update of updates) {
       try {
         const { error } = await supabase
@@ -149,20 +241,20 @@ export const adminApiService = {
           .update({ image_url: update.imageUrl })
           .eq('id', update.wordId)
           .select('word')
-        
+
         if (error) throw error
         result.updated++
-        
+
       } catch (error) {
         result.failed++
         const errorMessage = error instanceof Error ? error.message : '未知错误'
-        result.errors.push({ 
-          word: `ID:${update.wordId}`, 
-          error: errorMessage 
+        result.errors.push({
+          word: `ID:${update.wordId}`,
+          error: errorMessage
         })
       }
     }
-    
+
     return result
   },
 
@@ -173,9 +265,9 @@ export const adminApiService = {
         .from('categories')
         .select('count(*)')
         .limit(1)
-      
+
       if (error) throw error
-      
+
       return { connected: true }
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : '未知错误'
@@ -195,13 +287,13 @@ export const adminApiService = {
         .select('image_url, categories!inner(name)')
         .eq('categories.name', categoryName)
         .eq('is_active', true)
-      
+
       if (error) throw error
-      
+
       const totalWords = data?.length || 0
       const wordsWithImages = data?.filter(w => w.image_url && w.image_url.trim() !== '').length || 0
       const wordsWithoutImages = totalWords - wordsWithImages
-      
+
       return {
         totalWords,
         wordsWithImages,
@@ -259,7 +351,7 @@ export const adminStorageService = {
   // 获取所有审核通过的单词ID
   getApprovedWordIds(): number[] {
     const approvedIds: number[] = []
-    
+
     for (let i = 0; i < localStorage.length; i++) {
       const key = localStorage.key(i)
       if (key && key.startsWith('approved_') && localStorage.getItem(key) === 'true') {
@@ -269,21 +361,21 @@ export const adminStorageService = {
         }
       }
     }
-    
+
     return approvedIds
   },
 
   // 清除所有审核状态
   clearAllApprovalStatuses() {
     const keysToRemove: string[] = []
-    
+
     for (let i = 0; i < localStorage.length; i++) {
       const key = localStorage.key(i)
       if (key && (key.startsWith('approved_') || key.startsWith('rejected_'))) {
         keysToRemove.push(key)
       }
     }
-    
+
     keysToRemove.forEach(key => localStorage.removeItem(key))
   }
 } 

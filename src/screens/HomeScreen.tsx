@@ -4,7 +4,7 @@ import { categoryService } from '../services/api'
 import { Category } from '../lib/database'
 
 interface HomeScreenProps {
-  onNavigate: (screen: 'home' | 'settings' | 'category' | 'admin', category?: string) => void
+  onNavigate: (screen: 'home' | 'settings' | 'category' | 'admin' | 'math', category?: string) => void
 }
 
 const getCategoryImage = (categoryName: string): string => {
@@ -118,7 +118,31 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ onNavigate }) => {
 
       {/* Grid */}
       <div className="flex-1 overflow-y-auto pb-4 custom-scrollbar">
+
+        {/* Featured Section: Math */}
+        <div className="px-2 mb-6">
+          <h3 className="text-xl font-bold text-primary-800 mb-4">Learning Zone</h3>
+          <div
+            onClick={() => onNavigate('math')}
+            className="bg-gradient-to-r from-blue-400 to-indigo-500 rounded-3xl p-6 shadow-float text-white cursor-pointer hover:scale-[1.02] transition-transform relative overflow-hidden"
+          >
+            <div className="relative z-10 flex items-center justify-between">
+              <div>
+                <h2 className="text-2xl font-extrabold mb-2">Math Adventure 123</h2>
+                <p className="opacity-90 font-medium">Learn Make 10 & Adding with friends!</p>
+              </div>
+              <div className="bg-white/20 p-4 rounded-full backdrop-blur-sm">
+                <span className="text-4xl">🧮</span>
+              </div>
+            </div>
+            {/* Decorative circles */}
+            <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full translate-x-1/2 -translate-y-1/2"></div>
+            <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/10 rounded-full -translate-x-1/2 translate-y-1/2"></div>
+          </div>
+        </div>
+
         <h3 className="text-xl font-bold text-primary-800 mb-4 px-2">Explore Topics</h3>
+
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 px-2">
           {categories.map((category) => (
             <div

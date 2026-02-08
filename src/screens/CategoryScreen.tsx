@@ -71,12 +71,9 @@ const CategoryScreen: React.FC<CategoryScreenProps> = ({ category, onBack }) => 
     e.stopPropagation()
     const word = words.find(w => w.id === wordId)
     if (!word) return
-    if (!speechService.isSupported()) {
-      alert('Browser does not support speech')
-      return
-    }
     try {
-      await speechService.speakWord(word.word)
+      // 使用预生成的MP3（如果有），否则回退到语音合成
+      await speechService.playAudio(word.audio_url || null, word.word)
     } catch (error) {
       console.error('语音播放失败:', error)
     }
@@ -170,8 +167,8 @@ const CategoryScreen: React.FC<CategoryScreenProps> = ({ category, onBack }) => 
                         <button
                           onClick={(e) => toggleFavorite(word.id, e)}
                           className={`p-2 backdrop-blur-md rounded-full shadow-sm hover:scale-110 transition-all ${word.is_favorite
-                              ? 'bg-rose-50 text-rose-500'
-                              : 'bg-white/80 text-gray-400'
+                            ? 'bg-rose-50 text-rose-500'
+                            : 'bg-white/80 text-gray-400'
                             }`}
                         >
                           <Heart size={16} fill={word.is_favorite ? 'currentColor' : 'none'} strokeWidth={2.5} />
