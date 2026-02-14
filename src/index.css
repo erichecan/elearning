@@ -1,0 +1,127 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* iPad优化样式 */
+@layer base {
+  html {
+    font-size: 16px;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overscroll-behavior: none;
+    font-family: 'Nunito', sans-serif;
+    background-color: #ecfdf5;
+    /* Emerald 50 */
+    color: #064e3b;
+    /* Emerald 900 */
+    /* Removed linear-gradient */
+  }
+
+  /* 禁用文本选择 */
+  * {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+
+  /* 允许输入框选择 */
+  input,
+  textarea {
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
+  }
+}
+
+@layer components {
+
+  /* 卡片翻转动画 */
+  .flip-card {
+    perspective: 1000px;
+    width: 100%;
+  }
+
+  .flip-card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+  }
+
+  .flip-card-inner.flipped {
+    transform: rotateY(180deg);
+  }
+
+  .flip-card-front,
+  .flip-card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    border-radius: 8px;
+  }
+
+  .flip-card-back {
+    transform: rotateY(180deg);
+  }
+
+  /* CategoryScreen卡片翻转样式 */
+  .transform-style-preserve-3d {
+    transform-style: preserve-3d;
+  }
+
+  .backface-hidden {
+    backface-visibility: hidden;
+  }
+
+  .rotate-y-180 {
+    transform: rotateY(180deg);
+  }
+
+  /* 按钮样式 - REMOVED GRADIENTS */
+  .btn-primary {
+    @apply bg-primary-500 text-white font-bold py-4 px-8 rounded-2xl shadow-lg transform transition-all duration-200 active:scale-95 hover:bg-primary-600;
+  }
+
+  .btn-secondary {
+    @apply bg-white text-primary-600 font-bold py-4 px-8 rounded-2xl shadow-lg transform transition-all duration-200 active:scale-95 border-2 border-primary-100 hover:bg-primary-50;
+  }
+
+  /* 分类卡片样式 */
+  .category-card {
+    @apply bg-white rounded-3xl p-6 shadow-xl transform transition-all duration-300 hover:scale-105 active:scale-95 border border-primary-100;
+  }
+
+  /* 扑克牌样式 */
+  .poker-card {
+    @apply bg-white rounded-xl shadow-lg cursor-pointer transition-all duration-300 border border-slate-100;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    /* Softer shadow */
+  }
+
+  .poker-card:hover {
+    @apply shadow-xl transform scale-105;
+    box-shadow: 0 8px 30px rgba(16, 185, 129, 0.15);
+    /* Emerald tint shadow */
+  }
+
+  /* 进度条样式 */
+  .progress-bar {
+    @apply bg-primary-100 rounded-full overflow-hidden;
+  }
+
+  .progress-fill {
+    @apply bg-primary-500 h-full transition-all duration-500;
+  }
+}

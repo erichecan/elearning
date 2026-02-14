@@ -1,0 +1,35 @@
+name: Deploy Supabase DB
+
+on:
+  push:
+    paths:
+      - 'supabase/migrations/**'
+      - '.github/workflows/supabase-deploy.yml'
+    branches:
+      - main
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Simple Migration Check
+        run: |
+          echo "🚀 GitHub Actions 配置验证成功！"
+          echo "📋 检测到的迁移文件："
+          
+          for migration_file in supabase/migrations/*.sql; do
+            if [ -f "$migration_file" ]; then
+              echo "  ✅ $(basename "$migration_file")"
+            fi
+          done
+          
+          echo ""
+          echo "💡 要手动同步数据库，请在本地运行："
+          echo "   npm run db:deploy"
+          echo ""
+          echo "🎉 GitHub Actions 运行成功！"
+          echo "�� 数据库同步请使用本地脚本完成。" 

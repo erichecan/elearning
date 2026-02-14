@@ -1,0 +1,73 @@
+import { useState } from 'react'
+import HomeScreen from './screens/HomeScreen'
+import SettingsScreen from './screens/SettingsScreen'
+import CategoryScreen from './screens/CategoryScreen'
+import AdminScreen from './screens/AdminScreen'
+import MathScreen from './screens/MathScreen'
+import FlashcardsScreen from './screens/FlashcardsScreen'
+import ScheduleFocusScreen from './screens/ScheduleFocusScreen'
+
+type Screen = 'home' | 'category' | 'settings' | 'admin' | 'math' | 'flashcards' | 'focus'
+
+function App() {
+  const [currentScreen, setCurrentScreen] = useState<Screen>(() => {
+    // Simple URL routing for admin access
+    if (typeof window !== 'undefined' && window.location.pathname === '/admin') {
+      return 'admin'
+    }
+    return 'home'
+  })
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
+
+  const navigateTo = (screen: Screen, payload?: any) => {
+    setCurrentScreen(screen)
+    if (screen === 'category') {
+      setSelectedCategory(payload)
+    }
+  }
+
+  return (
+    <div className="h-screen w-screen overflow-hidden bg-primary-50">
+      {/* 主内容区域 */}
+      <div className="h-full w-full relative">
+        {currentScreen === 'home' && (
+          <HomeScreen onNavigate={navigateTo} />
+        )}
+        {currentScreen === 'category' && selectedCategory && (
+          <CategoryScreen
+            category={selectedCategory}
+            onBack={() => navigateTo('home')}
+          />
+        )}
+        {currentScreen === 'settings' && (
+          <SettingsScreen
+            onBack={() => navigateTo('home')}
+          />
+        )}
+        {currentScreen === 'admin' && (
+          <AdminScreen
+            onBack={() => navigateTo('home')}
+          />
+        )}
+        {currentScreen === 'math' && (
+          <MathScreen
+            onBack={() => navigateTo('home')}
+          />
+        )}
+        {currentScreen === 'flashcards' && (
+          <FlashcardsScreen
+            onBack={() => navigateTo('home')}
+            onOpenCategory={(category) => navigateTo('category', category)}
+          />
+        )}
+        {currentScreen === 'focus' && (
+          <ScheduleFocusScreen
+            onBack={() => navigateTo('home')}
+          />
+        )}
+      </div>
+    </div>
+  )
+}
+
+export default App
