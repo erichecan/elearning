@@ -6,6 +6,10 @@ export default defineConfig({
   plugins: [react()],
   server: {
     port: 3000,
-    open: true
+    open: true,
+    proxy: {
+      '/images': 'http://localhost:3002',
+      '/api': 'http://localhost:3002',
+    }
   }
 }) 

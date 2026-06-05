@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { adminApiService } from '../../services/admin-api';
-import { Sparkles, Trash2, Save, RotateCw, Image as ImageIcon, Loader2, Search, Wand2, CheckCircle } from 'lucide-react';
+import { Sparkles, Save, Image as ImageIcon, Loader2, Wand2, CheckCircle } from 'lucide-react';
 
 interface BulkImportWizardProps {
     onBack: () => void;
@@ -21,7 +21,6 @@ interface BulkItem {
 }
 
 type ImportMode = 'manual' | 'magic';
-type ImageSource = 'ai' | 'search';
 
 export const BulkImportWizard: React.FC<BulkImportWizardProps> = ({ onBack }) => {
     const [mode, setMode] = useState<ImportMode>('magic');
@@ -54,29 +53,13 @@ export const BulkImportWizard: React.FC<BulkImportWizardProps> = ({ onBack }) =>
         };
         loadCategories();
     }, []);
-    const [imageSource, setImageSource] = useState<ImageSource>('search'); // Default to search as requested
     const [items, setItems] = useState<BulkItem[]>([]);
     const [progress, setProgress] = useState(0);
     const [statusMessage, setStatusMessage] = useState('');
 
-    // Default Prompts
-    const [promptTemplate, setPromptTemplate] = useState('A single {word} centered, cute soft 3D toy style, smooth edges, clean pastel color palette, soft studio lighting, subtle shadow, isolated on a warm cream background, high clarity, child-friendly, minimal detail, no text, no watermark, no extra objects');
-
-    const [imageStyle, setImageStyle] = useState('none');
-
     // Success Modal State
     const [showSuccessModal, setShowSuccessModal] = useState(false);
     const [savedCount, setSavedCount] = useState(0);
-
-    const styles = [
-        { id: 'none', name: 'Exact Match', icon: '🔍', prompt: '', query: '' },
-        { id: 'flat', name: 'Flat Cute', icon: '🧩', prompt: 'flat vector art, cute minimalist illustration, simple shapes, no outlines, pastel colors, white background, educational clipart', query: 'cute flat vector illustration' },
-        { id: 'cartoon', name: 'Cartoon', icon: '🎨', prompt: 'cute colorful cartoon style, simple lines', query: 'cartoon illustration' },
-        { id: 'realistic', name: 'Realistic', icon: '📸', prompt: 'highly detailed realistic photography, 4k, national geographic style', query: 'real photo high quality' },
-        { id: 'watercolor', name: 'Watercolor', icon: '💧', prompt: 'soft watercolor painting, artistic, pastel colors', query: 'watercolor painting' },
-        { id: '3d', name: '3D Clay', icon: '🧱', prompt: 'cute 3D clay render, isometric, plasticine texture', query: '3D render clay style' },
-        { id: 'sketch', name: 'Sketch', icon: '✏️', prompt: 'black and white pencil sketch, simple line drawing', query: 'black and white line drawing' },
-    ];
 
     // Step 1: Generate Content (Magic or Parse)
     const handleNextStep = async () => {
@@ -105,11 +88,10 @@ export const BulkImportWizard: React.FC<BulkImportWizardProps> = ({ onBack }) =>
                     sentence: '',
                     sentence_cn: '',
                     imageUrl: '',
-                    status: 'pending',
+                    status: 'done' as const,
                     isSelected: true
                 }));
             } else {
-                // Magic Mode: Generate Text Content first
                 if (!magicTopic.trim()) {
                     alert('Please enter a topic');
                     setIsLoading(false);
@@ -118,7 +100,6 @@ export const BulkImportWizard: React.FC<BulkImportWizardProps> = ({ onBack }) =>
                 }
                 setStatusMessage(`Generating word list for "${magicTopic}"...`);
 
-                // Call backend to generate word list
                 const generatedWords = await adminApiService.generateContent(magicTopic, magicCount);
 
                 initialItems = generatedWords.map((w: any) => ({
@@ -130,14 +111,15 @@ export const BulkImportWizard: React.FC<BulkImportWizardProps> = ({ onBack }) =>
                     sentence: w.sentence_en,
                     sentence_cn: w.sentence_zh,
                     imageUrl: '',
-                    status: 'pending',
+                    status: 'done' as const,
                     isSelected: true
                 }));
             }
 
+            setProgress(100);
             setItems(initialItems);
-            // Auto-start image generation for next step
-            setTimeout(() => handleGenerateImages(initialItems), 500);
+            setIsLoading(false);
+            setStep(3);
 
         } catch (error) {
             console.error(error);
@@ -145,94 +127,6 @@ export const BulkImportWizard: React.FC<BulkImportWizardProps> = ({ onBack }) =>
             setIsLoading(false);
             setStep(1);
         }
-    };
-
-    // Step 2: Generate/Search Images
-    const handleGenerateImages = async (currentItems: BulkItem[]) => {
-        setIsLoading(true);
-        let completed = 0;
-        const updatedItems = [...currentItems];
-
-        const selectedStyle = styles.find(s => s.id === imageStyle) || styles[0];
-        setStatusMessage(imageSource === 'ai' ? `Generating (${selectedStyle.name})...` : `Searching (${selectedStyle.name})...`);
-
-        for (let i = 0; i < updatedItems.length; i++) {
-            updatedItems[i].status = 'generating_image';
-            setItems([...updatedItems]); // Force render
-
-            try {
-                let url = '';
-                if (imageSource === 'ai') {
-                    // Inject style into prompt template
-                    // Basic template: "A single {word} centered..."
-                    // We append style prompt
-                    let prompt = promptTemplate.replace('{word}', updatedItems[i].word);
-                    if (selectedStyle.prompt) {
-                        prompt += `, ${selectedStyle.prompt}`;
-                    }
-
-                    url = await adminApiService.generateImage(prompt, 'schnell');
-                } else {
-                    // Tavily Search with style query
-                    // If exact match (none), just use the word
-                    let query = updatedItems[i].word;
-                    if (selectedStyle.query) {
-                        query += ` ${selectedStyle.query}`;
-                    }
-                    // Only append 'white background' if not exact match, or maybe user wants it? 
-                    // Let's keep 'white background' only if style is NOT none, to be truly exact.
-                    if (imageStyle !== 'none') {
-                        query += ` white background`;
-                    }
-
-                    url = await adminApiService.searchImage(query);
-                }
-
-                updatedItems[i].imageUrl = url;
-                updatedItems[i].status = 'done';
-            } catch (e) {
-                console.error(e);
-                updatedItems[i].status = 'error';
-                updatedItems[i].error = 'Failed';
-            }
-
-            completed++;
-            setProgress(Math.round((completed / updatedItems.length) * 100));
-            setItems([...updatedItems]);
-        }
-
-        setIsLoading(false);
-        setStep(3); // Review Step
-    };
-
-
-    // Individual Regenerate
-    const handleRegenerateOne = async (index: number) => {
-        const updatedItems = [...items];
-        updatedItems[index].status = 'generating_image';
-        updatedItems[index].imageUrl = ''; // clear old
-        setItems([...updatedItems]);
-
-        const selectedStyle = styles.find(s => s.id === imageStyle) || styles[0];
-
-        try {
-            let url = '';
-            if (imageSource === 'ai') {
-                let prompt = promptTemplate.replace('{word}', updatedItems[index].word);
-                if (selectedStyle.prompt) prompt += `, ${selectedStyle.prompt}`;
-                url = await adminApiService.generateImage(prompt, 'schnell');
-            } else {
-                let query = updatedItems[index].word;
-                if (selectedStyle.query) query += ` ${selectedStyle.query}`;
-                if (imageStyle !== 'none') query += ` white background`;
-                url = await adminApiService.searchImage(query);
-            }
-            updatedItems[index].imageUrl = url;
-            updatedItems[index].status = 'done';
-        } catch (e) {
-            updatedItems[index].status = 'error';
-        }
-        setItems([...updatedItems]);
     };
 
     // Step 3: Save
@@ -263,19 +157,16 @@ export const BulkImportWizard: React.FC<BulkImportWizardProps> = ({ onBack }) =>
 
             if (!targetCat) throw new Error('No categories found');
 
-            const supabase = (await import('../../lib/database')).supabase;
-
             for (const item of selectedItems) {
-                if (item.status === 'done' && item.imageUrl) {
+                if (item.status === 'done') {
                     try {
-                        // 3. Create Word Record directly with existing URL (skip storage for now)
                         await import('../../services/api').then(m => m.wordService.create({
                             word: item.word,
-                            chinese: item.chinese || item.word, // Fallback
+                            chinese: item.chinese || item.word,
                             phonetic: item.phonetic,
                             sentence: item.sentence,
                             sentence_cn: item.sentence_cn,
-                            image_url: item.imageUrl,
+                            image_url: item.imageUrl || '',
                             category_id: targetCat.id
                         }));
 
@@ -412,65 +303,24 @@ export const BulkImportWizard: React.FC<BulkImportWizardProps> = ({ onBack }) =>
                                 )}
                             </div>
 
-                            {/* Right Column: Image Settings */}
+                            {/* Right Column: Start */}
                             <div className="flex flex-col gap-6 border-l pl-8">
-                                <div>
-                                    <label className="font-bold text-gray-700 mb-4 block">Image Source</label>
-                                    <div className="grid grid-cols-2 gap-4">
-                                        <button
-                                            onClick={() => setImageSource('ai')}
-                                            className={`p-4 rounded-xl border-2 text-left transition-all ${imageSource === 'ai' ? 'border-blue-500 bg-blue-50 ring-1 ring-blue-500' : 'border-gray-200 hover:border-gray-300'}`}
-                                        >
-                                            <div className="font-bold text-blue-900 flex items-center gap-2">
-                                                <Sparkles size={18} /> AI Generation
-                                            </div>
-                                            <div className="text-sm text-gray-500 mt-1">Consistent 3D Toy Style (Flux)</div>
-                                            <div className="text-xs text-blue-600 mt-2 font-mono">~$0.003 / image</div>
-                                        </button>
-
-                                        <button
-                                            onClick={() => setImageSource('search')}
-                                            className={`p-4 rounded-xl border-2 text-left transition-all ${imageSource === 'search' ? 'border-blue-500 bg-blue-50 ring-1 ring-blue-500' : 'border-gray-200 hover:border-gray-300'}`}
-                                        >
-                                            <div className="font-bold text-blue-900 flex items-center gap-2">
-                                                <Search size={18} /> Web Search
-                                            </div>
-                                            <div className="text-sm text-gray-500 mt-1">Real or Cartoon (Tavily)</div>
-                                            <div className="text-xs text-green-600 mt-2 font-mono">Free / Low Cost</div>
-                                        </button>
-                                    </div>
-                                </div>
-
-                                {imageSource === 'ai' && (
+                                <div className="flex-1 flex flex-col justify-center items-center text-center gap-4 p-6 bg-amber-50 rounded-xl border-2 border-amber-100">
+                                    <div className="text-4xl">🌙</div>
                                     <div>
-                                        <label className="font-bold text-gray-700 mb-2 block">Prompt Template</label>
-                                        <textarea
-                                            className="w-full h-40 border-2 border-gray-200 rounded-xl p-3 text-sm focus:outline-none focus:border-blue-500"
-                                            value={promptTemplate}
-                                            onChange={e => setPromptTemplate(e.target.value)}
-                                        />
-                                        <p className="text-xs text-gray-400 mt-1">Use {'{word}'} as placeholder.</p>
+                                        <div className="font-bold text-amber-900 text-lg mb-1">Images Generated Overnight</div>
+                                        <div className="text-sm text-amber-700">
+                                            Words will be saved now without images. The nightly script runs automatically via Codex CLI to generate child-friendly images for all new words.
+                                        </div>
                                     </div>
-                                )}
-
-                                <div>
-                                    <label className="font-bold text-gray-700 mb-4 block">Art Style</label>
-                                    <div className="grid grid-cols-2 gap-2">
-                                        {styles.map(s => (
-                                            <button
-                                                key={s.id}
-                                                onClick={() => setImageStyle(s.id)}
-                                                className={`p-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2 ${imageStyle === s.id ? 'bg-blue-100 text-blue-700 border-2 border-blue-400' : 'bg-gray-100 text-gray-600 border-2 border-transparent hover:bg-gray-200'}`}
-                                            >
-                                                <span>{s.icon}</span> {s.name}
-                                            </button>
-                                        ))}
+                                    <div className="text-xs text-amber-600 font-mono bg-amber-100 px-3 py-1 rounded-full">
+                                        scripts/generate-images-codex.mjs
                                     </div>
                                 </div>
 
                                 <button
                                     onClick={handleNextStep}
-                                    className={`mt-auto py-4 rounded-xl font-bold text-lg shadow-lg transition-transform hover:scale-[1.02] flex items-center justify-center gap-2 ${mode === 'magic' ? 'bg-purple-600 hover:bg-purple-700 text-white' : 'bg-blue-600 hover:bg-blue-700 text-white'}`}
+                                    className={`py-4 rounded-xl font-bold text-lg shadow-lg transition-transform hover:scale-[1.02] flex items-center justify-center gap-2 ${mode === 'magic' ? 'bg-purple-600 hover:bg-purple-700 text-white' : 'bg-blue-600 hover:bg-blue-700 text-white'}`}
                                 >
                                     {mode === 'magic' ? <><Wand2 /> Magic Generate</> : <><Sparkles /> Start Process</>}
                                 </button>
@@ -522,32 +372,11 @@ export const BulkImportWizard: React.FC<BulkImportWizardProps> = ({ onBack }) =>
                                             {item.imageUrl ? (
                                                 <img src={item.imageUrl} className="w-full h-full object-cover" />
                                             ) : (
-                                                <div className="w-full h-full flex items-center justify-center text-gray-300">
-                                                    <ImageIcon />
+                                                <div className="w-full h-full flex flex-col items-center justify-center text-gray-300 gap-2">
+                                                    <ImageIcon size={32} />
+                                                    <span className="text-xs text-gray-400">Auto overnight</span>
                                                 </div>
                                             )}
-
-                                            {/* Loading Overlay */}
-                                            {item.status === 'generating_image' && (
-                                                <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
-                                                    <Loader2 className="text-white animate-spin" />
-                                                </div>
-                                            )}
-
-                                            {/* Hover Actions (No longer overlapping click to select, moving to corner or making selective) */}
-                                            {/* Actually, let's make regenerate bubble separate from card selection click */}
-                                            <div className="absolute bottom-2 right-2 flex gap-2 z-20">
-                                                <button
-                                                    onClick={(e) => {
-                                                        e.stopPropagation();
-                                                        handleRegenerateOne(index);
-                                                    }}
-                                                    className="p-1.5 bg-white/90 rounded-full shadow-sm hover:bg-blue-50 text-blue-600"
-                                                    title="Regenerate"
-                                                >
-                                                    <RotateCw size={14} />
-                                                </button>
-                                            </div>
                                         </div>
                                         <div className="p-3 space-y-2">
                                             <input
@@ -580,8 +409,8 @@ export const BulkImportWizard: React.FC<BulkImportWizardProps> = ({ onBack }) =>
                             </button>
                             <button
                                 onClick={handleSaveAll}
-                                disabled={selectedCount === 0}
-                                className={`px-8 py-3 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 shadow-lg flex items-center gap-2 ${selectedCount === 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                disabled={selectedCount === 0 || isLoading}
+                                className={`px-8 py-3 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 shadow-lg flex items-center gap-2 ${selectedCount === 0 || isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
                             >
                                 <Save size={20} /> Save Selected ({selectedCount})
                             </button>

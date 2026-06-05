@@ -2,7 +2,6 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import { contentGeneratorService } from './services/content-generator';
-import { imageScraperService } from './services/image-scraper';
 
 dotenv.config();
 
@@ -12,11 +11,6 @@ const port = process.env.PORT || 3001;
 app.use(cors());
 app.use(express.json());
 app.use(express.static('public'));
-
-// Routes
-import { imageGeneratorService } from './services/image-generator';
-
-// ... existing routes ...
 
 app.post('/api/generate-content', async (req, res) => {
     try {
@@ -30,48 +24,6 @@ app.post('/api/generate-content', async (req, res) => {
     } catch (error: any) {
         console.error('Error generating content:', error);
         res.status(500).json({ error: error.message || 'Failed to generate content' });
-    }
-});
-
-// New Replicate Image Gen Route
-app.post('/api/generate-image', async (req, res) => {
-    try {
-        const { prompt, model } = req.body; // model can be 'schnell' or 'pro'
-        const imageUrl = await imageGeneratorService.generateImage(prompt, model);
-        res.json({ imageUrl });
-    } catch (error) {
-        console.error('Image generation error:', error);
-        res.status(500).json({ error: 'Failed to generate image' });
-    }
-});
-
-app.post('/api/search-image', async (req, res) => {
-    try {
-        const { query } = req.body;
-        if (!query) return res.status(400).json({ error: 'Query is required' });
-
-        const imageUrl = await imageGeneratorService.searchImage(query);
-        res.json({ imageUrl });
-    } catch (error: any) {
-        console.error('Image search error:', error);
-        res.status(500).json({ error: error.message || 'Failed to search image' });
-    }
-});
-
-
-
-app.post('/api/scrape-image', async (req, res) => {
-    try {
-        const { query } = req.body;
-        if (!query) {
-            return res.status(400).json({ error: 'Query is required' });
-        }
-
-        const imageUrl = await imageScraperService.scrapeGoogleImage(query);
-        res.json({ imageUrl });
-    } catch (error: any) {
-        console.error('Error scraping image:', error);
-        res.status(500).json({ error: error.message || 'Failed to scrape image' });
     }
 });
 

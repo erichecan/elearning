@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
+  "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.elearning.imagegen</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>/bin/bash</string>
+        <string>-c</string>
+        <string>/Users/he/.nvm/versions/node/v22.16.0/bin/node /Users/he/Desktop/eric-workspace/projects/elearning/scripts/generate-images-codex.mjs &amp;&amp; /Users/he/.nvm/versions/node/v22.16.0/bin/node /Users/he/Desktop/eric-workspace/projects/elearning/scripts/generate-audio.mjs</string>
+    </array>
+
+    <!-- Run at 02:00 every night -->
+    <key>StartCalendarInterval</key>
+    <dict>
+        <key>Hour</key>
+        <integer>2</integer>
+        <key>Minute</key>
+        <integer>0</integer>
+    </dict>
+
+    <!-- Working directory -->
+    <key>WorkingDirectory</key>
+    <string>/Users/he/Desktop/eric-workspace/projects/elearning</string>
+
+    <!-- Log stdout/stderr -->
+    <key>StandardOutPath</key>
+    <string>/tmp/elearning-imagegen.log</string>
+    <key>StandardErrorPath</key>
+    <string>/tmp/elearning-imagegen-error.log</string>
+
+    <key>RunAtLoad</key>
+    <false/>
+
+    <key>KeepAlive</key>
+    <false/>
+
+    <!-- Throttle: don't restart more than once per 300s if it crashes -->
+    <key>ThrottleInterval</key>
+    <integer>300</integer>
+</dict>
+</plist>

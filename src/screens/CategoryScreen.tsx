@@ -1,5 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react'
-import { Volume2, Heart, ArrowLeft } from 'lucide-react'
+import React, { useState, useEffect, useRef, useCallback } from 'react'
+import { Volume2, Heart, ArrowLeft, MessageSquare } from 'lucide-react'
+
+const FALLBACK_IMG = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300"%3E%3Crect fill="%23FFEAD8" width="400" height="300"/%3E%3Ctext x="50%25" y="50%25" text-anchor="middle" dy=".3em" font-size="48" fill="%23FB7938"%3E📚%3C/text%3E%3C/svg%3E'
 import { wordService, favoriteService } from '../services/api'
 import { Word } from '../lib/database'
 import { speechService } from '../services/speech'
@@ -39,7 +41,6 @@ const CategoryScreen: React.FC<CategoryScreenProps> = ({ category, onBack }) => 
       window.clearTimeout(timerRef.current)
       timerRef.current = null
     }
-
     if (flippedCard === wordId) {
       setFlippedCard(null)
     } else {
@@ -47,7 +48,7 @@ const CategoryScreen: React.FC<CategoryScreenProps> = ({ category, onBack }) => 
       timerRef.current = window.setTimeout(() => {
         setFlippedCard(null)
         timerRef.current = null
-      }, 5000) as unknown as number
+      }, 6000) as unknown as number
     }
   }
 
@@ -67,15 +68,37 @@ const CategoryScreen: React.FC<CategoryScreenProps> = ({ category, onBack }) => 
     }
   }
 
-  const playAudio = async (wordId: number, e: React.MouseEvent) => {
+  const playWordAudio = async (wordId: number, e: React.MouseEvent) => {
     e.stopPropagation()
     const word = words.find(w => w.id === wordId)
     if (!word) return
     try {
-      // 使用预生成的MP3（如果有），否则回退到语音合成
       await speechService.playAudio(word.audio_url || null, word.word)
     } catch (error) {
       console.error('语音播放失败:', error)
+    }
+  }
+
+  const handleImgError = useCallback((e: React.SyntheticEvent<HTMLImageElement>) => {
+    const img = e.currentTarget
+    if (!img.dataset.errored) {
+      img.dataset.errored = 'true'
+      img.src = FALLBACK_IMG
+    }
+  }, [])
+
+  const playSentenceAudio = async (wordId: number, e: React.MouseEvent) => {
+    e.stopPropagation()
+    const word = words.find(w => w.id === wordId)
+    if (!word) return
+    try {
+      if (word.sentence_audio_url) {
+        await speechService.playAudio(word.sentence_audio_url, word.sentence || word.word)
+      } else if (word.sentence) {
+        await speechService.playAudio(null, word.sentence)
+      }
+    } catch (error) {
+      console.error('句子音频播放失败:', error)
     }
   }
 
@@ -91,8 +114,8 @@ const CategoryScreen: React.FC<CategoryScreenProps> = ({ category, onBack }) => 
 
   if (loading) {
     return (
-      <div className="h-full w-full flex items-center justify-center">
-        <div className="animate-bounce-slow text-primary-600 text-xl font-bold">Loading Words...</div>
+      <div className="h-full w-full flex items-center justify-center bg-primary-50">
+        <div className="animate-bounce-slow text-primary-500 text-xl font-extrabold">Loading...</div>
       </div>
     )
   }
@@ -101,10 +124,7 @@ const CategoryScreen: React.FC<CategoryScreenProps> = ({ category, onBack }) => 
     return (
       <div className="h-full w-full flex flex-col items-center justify-center p-6">
         <div className="text-red-500 font-bold text-lg mb-4">{error}</div>
-        <button
-          onClick={() => window.location.reload()}
-          className="px-6 py-3 bg-primary-500 text-white rounded-2xl shadow-lg hover:bg-primary-600 transition-all font-bold"
-        >
+        <button onClick={() => window.location.reload()} className="btn-primary">
           Try Again
         </button>
       </div>
@@ -112,87 +132,123 @@ const CategoryScreen: React.FC<CategoryScreenProps> = ({ category, onBack }) => 
   }
 
   return (
-    <div className="h-full w-full max-w-7xl mx-auto p-4 md:p-6 flex flex-col relative">
+    <div className="h-full w-full max-w-7xl mx-auto p-4 md:p-6 flex flex-col">
       {/* Header */}
-      <div className="flex items-center justify-between mb-6 relative z-10">
+      <div className="flex items-center justify-between mb-6">
         <button
           onClick={onBack}
-          className="p-3 bg-white text-secondary-600 rounded-2xl shadow-soft hover:shadow-md transition-all border border-secondary-50"
+          className="p-3 bg-white text-primary-900 rounded-2xl shadow-soft hover:shadow-card transition-all border border-primary-100"
         >
-          <ArrowLeft size={24} strokeWidth={2.5} />
+          <ArrowLeft size={22} strokeWidth={2.5} />
         </button>
 
         <div className="text-center">
-          <h1 className="text-2xl font-extrabold text-primary-900 tracking-tight capitalize">{category.replace('_', ' ')}</h1>
-          <p className="text-sm font-semibold text-primary-500">{words.length} Words</p>
+          <h1 className="text-2xl font-extrabold text-primary-900 tracking-tight capitalize">
+            {category.replace(/_/g, ' ')}
+          </h1>
+          <p className="text-sm font-bold text-secondary-400">{words.length} Words</p>
         </div>
 
-        <div className="w-12"></div>
+        <div className="w-12" />
       </div>
 
       {/* Grid */}
-      <div className="flex-1 overflow-y-auto pb-4 px-2 custom-scrollbar">
+      <div className="flex-1 overflow-y-auto pb-4 px-1 custom-scrollbar">
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
           {words.map((word) => {
             const isFlipped = flippedCard === word.id
+            const hasSentence = !!(word.sentence || word.sentence_cn)
             return (
               <div
                 key={word.id}
-                className="flip-card mx-auto group h-64 w-full"
+                className="flip-card mx-auto h-80 w-full"
+                style={{ isolation: 'isolate' }}
               >
                 <div
-                  className={`flip-card-inner relative w-full h-full transition-transform duration-500 preserve-3d cursor-pointer ${isFlipped ? 'flipped' : ''}`}
+                  className={`flip-card-inner cursor-pointer${isFlipped ? ' flipped' : ''}`}
                   onClick={(e) => handleCardFlip(word.id, e)}
                 >
                   {/* Front */}
-                  <div className="flip-card-front absolute inset-0 backface-hidden bg-white rounded-3xl shadow-card border-2 border-primary-50 flex flex-col overflow-hidden">
-                    <div className="relative flex-1 overflow-hidden bg-primary-50/50">
+                  <div className="flip-card-front bg-white shadow-card border-2 border-primary-100 flex flex-col overflow-hidden">
+                    {/* Image */}
+                    <div className="relative flex-1 overflow-hidden bg-primary-50">
                       <img
-                        src={word.image_url || 'https://images.unsplash.com/photo-1544966503-7cc5ac882d5f?w=400&h=300&fit=crop'}
+                        src={word.image_url || FALLBACK_IMG}
                         alt={word.word}
-                        className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
-                        onError={(e) => {
-                          (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1544966503-7cc5ac882d5f?w=400&h=300&fit=crop'
-                        }}
+                        className="w-full h-full object-cover"
+                        style={{ transform: 'translateZ(0)' }}
+                        onError={handleImgError}
                       />
 
-                      {/* Actions */}
-                      <div className="absolute top-2 right-2 flex gap-2">
+                      {/* Action buttons */}
+                      <div className="absolute top-2 right-2 flex gap-1.5">
                         <button
-                          onClick={(e) => playAudio(word.id, e)}
-                          className="p-2 bg-white/80 backdrop-blur-md rounded-full text-primary-600 shadow-sm hover:scale-110 transition-transform"
+                          onClick={(e) => playWordAudio(word.id, e)}
+                          className="p-2 bg-white/90 backdrop-blur-sm rounded-full text-primary-500 shadow-soft hover:scale-110 transition-transform"
                         >
-                          <Volume2 size={16} strokeWidth={2.5} />
+                          <Volume2 size={14} strokeWidth={2.5} />
                         </button>
                         <button
                           onClick={(e) => toggleFavorite(word.id, e)}
-                          className={`p-2 backdrop-blur-md rounded-full shadow-sm hover:scale-110 transition-all ${word.is_favorite
-                            ? 'bg-rose-50 text-rose-500'
-                            : 'bg-white/80 text-gray-400'
-                            }`}
+                          className={`p-2 backdrop-blur-sm rounded-full shadow-soft hover:scale-110 transition-all ${
+                            word.is_favorite ? 'bg-accent-100 text-accent-500' : 'bg-white/90 text-primary-300'
+                          }`}
                         >
-                          <Heart size={16} fill={word.is_favorite ? 'currentColor' : 'none'} strokeWidth={2.5} />
+                          <Heart size={14} fill={word.is_favorite ? 'currentColor' : 'none'} strokeWidth={2.5} />
                         </button>
                       </div>
                     </div>
 
-                    <div className="p-3 bg-white flex flex-col items-center justify-center border-t border-primary-50">
-                      <h3 className="text-lg font-extrabold text-primary-900 mb-0.5">{word.word}</h3>
-                      <p className="text-xs font-bold text-primary-400 opacity-60">Tap to flip</p>
+                    {/* Word label */}
+                    <div className="px-3 py-2.5 bg-white flex flex-col items-center border-t border-primary-50">
+                      <h3 className="text-base font-extrabold text-primary-900 leading-tight">{word.word}</h3>
+                      <p className="text-xs font-semibold text-primary-300 mt-0.5">Tap to flip ✨</p>
                     </div>
                   </div>
 
                   {/* Back */}
-                  <div className="flip-card-back absolute inset-0 backface-hidden bg-gradient-to-br from-secondary-400 to-secondary-500 rounded-3xl shadow-float rotate-y-180 flex flex-col items-center justify-center p-4 text-white">
-                    <h2 className="text-3xl font-black mb-2 drop-shadow-sm">{word.chinese}</h2>
-                    <p className="text-lg font-bold opacity-80 font-mono mb-4">{word.phonetic}</p>
+                  <div className="flip-card-back bg-gradient-to-br from-secondary-400 to-secondary-600 shadow-float flex flex-col items-center justify-center p-4 text-white">
+                    {/* Chinese + phonetic */}
+                    <h2 className="text-3xl font-black mb-0.5 drop-shadow-sm">{word.chinese}</h2>
+                    {word.phonetic && (
+                      <p className="text-sm font-bold opacity-70 font-mono mb-3">{word.phonetic}</p>
+                    )}
 
-                    <button
-                      onClick={(e) => { e.stopPropagation(); playAudio(word.id, e); }}
-                      className="p-4 bg-white text-secondary-500 rounded-full shadow-lg hover:scale-110 active:scale-95 transition-all"
-                    >
-                      <Volume2 size={24} strokeWidth={3} />
-                    </button>
+                    {/* Sentence display */}
+                    {hasSentence && (
+                      <div className="w-full bg-white/20 rounded-2xl px-3 py-2.5 mb-3 text-center backdrop-blur-sm">
+                        {word.sentence && (
+                          <p className="text-xs font-semibold leading-snug italic opacity-95">
+                            {word.sentence}
+                          </p>
+                        )}
+                        {word.sentence_cn && (
+                          <p className="text-xs font-medium leading-snug opacity-80 mt-1">
+                            {word.sentence_cn}
+                          </p>
+                        )}
+                      </div>
+                    )}
+
+                    {/* Audio buttons */}
+                    <div className="flex flex-col items-center gap-2 w-full">
+                      <button
+                        onClick={(e) => playWordAudio(word.id, e)}
+                        className="flex items-center gap-2 px-5 py-2 bg-white text-secondary-600 rounded-full shadow-soft hover:scale-105 active:scale-95 transition-transform font-extrabold text-sm"
+                      >
+                        <Volume2 size={16} strokeWidth={3} />
+                        <span>{word.word}</span>
+                      </button>
+                      {hasSentence && (
+                        <button
+                          onClick={(e) => playSentenceAudio(word.id, e)}
+                          className="flex items-center gap-2 px-4 py-1.5 bg-white/30 text-white rounded-full hover:scale-105 active:scale-95 transition-transform border border-white/50 font-bold text-xs"
+                        >
+                          <MessageSquare size={13} strokeWidth={2.5} />
+                          <span>Read sentence</span>
+                        </button>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>

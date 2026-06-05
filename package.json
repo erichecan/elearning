@@ -15,23 +15,16 @@
     "sync-images": "node scripts/full-image-sync.mjs",
     "sync-images:50": "node scripts/full-image-sync.mjs --limit 50",
     "sync-images:100": "node scripts/full-image-sync.mjs --limit 100",
-    "sync-to-supabase": "node scripts/sync-images-to-supabase.mjs"
+    "sync-to-neon": "node scripts/full-image-sync.mjs"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.0.2",
-    "@supabase/supabase-js": "^2.45.4",
-    "better-sqlite3": "^12.2.0",
     "dotenv": "^17.0.0",
     "lucide-react": "^0.294.0",
-    "playwright": "^1.53.1",
-    "puppeteer": "^24.36.1",
-    "puppeteer-extra": "^3.3.6",
-    "puppeteer-extra-plugin-stealth": "^2.11.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "@types/better-sqlite3": "^7.6.13",
     "@types/react": "^18.2.43",
     "@types/react-dom": "^18.2.17",
     "@typescript-eslint/eslint-plugin": "^6.14.0",

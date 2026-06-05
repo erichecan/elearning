@@ -1,10 +1,9 @@
-@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* iPad优化样式 */
 @layer base {
   html {
     font-size: 16px;
@@ -16,14 +15,10 @@
     -moz-osx-font-smoothing: grayscale;
     overscroll-behavior: none;
     font-family: 'Nunito', sans-serif;
-    background-color: #ecfdf5;
-    /* Emerald 50 */
-    color: #064e3b;
-    /* Emerald 900 */
-    /* Removed linear-gradient */
+    background-color: #FFF8F4;
+    color: #55504F;
   }
 
-  /* 禁用文本选择 */
   * {
     -webkit-user-select: none;
     -moz-user-select: none;
@@ -31,7 +26,6 @@
     user-select: none;
   }
 
-  /* 允许输入框选择 */
   input,
   textarea {
     -webkit-user-select: text;
@@ -43,7 +37,7 @@
 
 @layer components {
 
-  /* 卡片翻转动画 */
+  /* 卡片翻转 — Sagomini easing */
   .flip-card {
     perspective: 1000px;
     width: 100%;
@@ -54,8 +48,9 @@
     width: 100%;
     height: 100%;
     text-align: center;
-    transition: transform 0.6s;
+    transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     transform-style: preserve-3d;
+    will-change: transform;
   }
 
   .flip-card-inner.flipped {
@@ -69,14 +64,13 @@
     height: 100%;
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
-    border-radius: 8px;
+    border-radius: 20px;
   }
 
   .flip-card-back {
     transform: rotateY(180deg);
   }
 
-  /* CategoryScreen卡片翻转样式 */
   .transform-style-preserve-3d {
     transform-style: preserve-3d;
   }
@@ -89,39 +83,41 @@
     transform: rotateY(180deg);
   }
 
-  /* 按钮样式 - REMOVED GRADIENTS */
+  /* Sagomini capsule buttons */
   .btn-primary {
-    @apply bg-primary-500 text-white font-bold py-4 px-8 rounded-2xl shadow-lg transform transition-all duration-200 active:scale-95 hover:bg-primary-600;
+    @apply bg-primary-500 text-white font-bold py-3 px-8 shadow-colored transform transition-all duration-300 active:scale-95 hover:bg-primary-600;
+    border-radius: 100px;
   }
 
   .btn-secondary {
-    @apply bg-white text-primary-600 font-bold py-4 px-8 rounded-2xl shadow-lg transform transition-all duration-200 active:scale-95 border-2 border-primary-100 hover:bg-primary-50;
+    @apply bg-white text-primary-500 font-bold py-3 px-8 shadow-soft transform transition-all duration-300 active:scale-95 border-2 border-primary-200 hover:bg-primary-50;
+    border-radius: 100px;
   }
 
-  /* 分类卡片样式 */
+  /* 分类卡片 */
   .category-card {
-    @apply bg-white rounded-3xl p-6 shadow-xl transform transition-all duration-300 hover:scale-105 active:scale-95 border border-primary-100;
+    @apply bg-white p-6 shadow-card transform transition-all duration-300 active:scale-95 border border-primary-100;
+    border-radius: 20px;
   }
 
-  /* 扑克牌样式 */
-  .poker-card {
-    @apply bg-white rounded-xl shadow-lg cursor-pointer transition-all duration-300 border border-slate-100;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-    /* Softer shadow */
-  }
-
-  .poker-card:hover {
-    @apply shadow-xl transform scale-105;
-    box-shadow: 0 8px 30px rgba(16, 185, 129, 0.15);
-    /* Emerald tint shadow */
-  }
-
-  /* 进度条样式 */
+  /* 进度条 */
   .progress-bar {
     @apply bg-primary-100 rounded-full overflow-hidden;
   }
 
   .progress-fill {
     @apply bg-primary-500 h-full transition-all duration-500;
+  }
+
+  /* 自定义滚动条 */
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 4px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #FFEAD8;
+    border-radius: 100px;
   }
 }

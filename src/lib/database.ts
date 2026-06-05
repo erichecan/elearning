@@ -1,14 +1,5 @@
-// import { createClient } from '@supabase/supabase-js';
 import { neonDatabase } from './neon-database';
 
-// const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-// const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
-
-// if (!supabaseUrl || !supabaseAnonKey) {
-//   throw new Error('Missing Supabase environment variables');
-// }
-
-// export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 export const supabase = neonDatabase;
 
 // 数据类型定义
@@ -39,6 +30,7 @@ export interface Word {
     is_favorite?: boolean;
     sentence?: string;
     sentence_cn?: string;
+    sentence_audio_url?: string;
 }
 
 export interface Favorite {

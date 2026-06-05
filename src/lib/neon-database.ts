@@ -50,8 +50,7 @@ export interface LearningProgress {
     mastery_level: number;
 }
 
-// Hardcoded for User Request
-const CONNECTION_STRING = 'postgresql://neondb_owner:npg_0LEtMGW5bjxQ@ep-sparkling-forest-ahucz7zx-pooler.c-3.us-east-1.aws.neon.tech/neondb?sslmode=require';
+const CONNECTION_STRING = import.meta.env.VITE_DATABASE_URL || 'postgresql://neondb_owner:npg_3sqCUJo6KLZW@ep-purple-hat-aq0idztf-pooler.c-8.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require';
 
 class NeonDatabase {
     private pool: Pool;

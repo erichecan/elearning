@@ -1,4 +1,5 @@
-import { supabase, Word } from '../lib/database'
+import { neonDatabase } from '../lib/neon-database'
+import { Word } from '../lib/database'
 
 export interface ImageOptimizationResult {
   success: boolean
@@ -69,7 +70,7 @@ export const adminApiService = {
   // 调用本地Backend生成内容
   async generateContent(topic: string, count: number): Promise<any[]> {
     try {
-      const response = await fetch('http://localhost:3001/api/generate-content', {
+      const response = await fetch('http://localhost:3002/api/generate-content', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -89,77 +90,8 @@ export const adminApiService = {
     }
   },
 
-  // 调用本地Backend抓取图片
-  async scrapeImage(query: string): Promise<string> {
-    try {
-      const response = await fetch('http://localhost:3001/api/scrape-image', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ query }),
-      });
-
-      if (!response.ok) {
-        throw new Error(`Backend error: ${response.statusText}`);
-      }
-
-      const data = await response.json();
-      return data.imageUrl;
-    } catch (error) {
-      console.error('Image scraping failed:', error);
-      throw error;
-    }
-  },
-
-  // 调用本地Backend生成AI图片 (Replicate)
-  async generateImage(prompt: string, model: 'schnell' | 'pro' = 'schnell'): Promise<string> {
-    try {
-      const response = await fetch('http://localhost:3001/api/generate-image', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ prompt, model }),
-      });
-
-      if (!response.ok) {
-        throw new Error(`Backend error: ${response.statusText}`);
-      }
-
-      const data = await response.json();
-      return data.imageUrl;
-    } catch (error) {
-      console.error('AI Image generation failed:', error);
-      throw error;
-    }
-  },
-
-  // 调用本地Backend搜索图片 (Tavily)
-  async searchImage(query: string): Promise<string> {
-    try {
-      const response = await fetch('http://localhost:3001/api/search-image', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ query }),
-      });
-
-      if (!response.ok) {
-        throw new Error(`Backend error: ${response.statusText}`);
-      }
-
-      const data = await response.json();
-      return data.imageUrl;
-    } catch (error) {
-      console.error('Image search failed:', error);
-      throw error;
-    }
-  },
-
-  // 同步图片到Supabase
-  async syncImagesToSupabase(imageUpdates: Array<{ wordId: number; word: string; imageUrl: string }>): Promise<SyncResult> {
+  // 同步图片到数据库
+  async syncImages(imageUpdates: Array<{ wordId: number; word: string; imageUrl: string }>): Promise<SyncResult> {
     const result: SyncResult = {
       updated: 0,
       failed: 0,
@@ -168,7 +100,7 @@ export const adminApiService = {
 
     for (const update of imageUpdates) {
       try {
-        const { error } = await supabase
+        const { error } = await neonDatabase
           .from('words')
           .update({ image_url: update.imageUrl })
           .eq('id', update.wordId)
@@ -195,7 +127,7 @@ export const adminApiService = {
   // 删除单词
   async deleteWord(wordId: number): Promise<{ success: boolean; error?: string }> {
     try {
-      const { error } = await supabase
+      const { error } = await neonDatabase
         .from('words')
         .update({ is_active: false }) // 软删除，标记为不活跃
         .eq('id', wordId)
@@ -212,7 +144,7 @@ export const adminApiService = {
   // 恢复单词
   async restoreWord(wordId: number): Promise<{ success: boolean; error?: string }> {
     try {
-      const { error } = await supabase
+      const { error } = await neonDatabase
         .from('words')
         .update({ is_active: true })
         .eq('id', wordId)
@@ -236,7 +168,7 @@ export const adminApiService = {
 
     for (const update of updates) {
       try {
-        const { error } = await supabase
+        const { error } = await neonDatabase
           .from('words')
           .update({ image_url: update.imageUrl })
           .eq('id', update.wordId)
@@ -258,10 +190,10 @@ export const adminApiService = {
     return result
   },
 
-  // 检查Supabase连接
-  async checkSupabaseConnection(): Promise<{ connected: boolean; error?: string }> {
+  // 检查数据库连接
+  async checkConnection(): Promise<{ connected: boolean; error?: string }> {
     try {
-      const { error } = await supabase
+      const { error } = await neonDatabase
         .from('categories')
         .select('count(*)')
         .limit(1)
@@ -282,7 +214,7 @@ export const adminApiService = {
     wordsWithoutImages: number
   }> {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await neonDatabase
         .from('words')
         .select('image_url, categories!inner(name)')
         .eq('categories.name', categoryName)
@@ -291,7 +223,7 @@ export const adminApiService = {
       if (error) throw error
 
       const totalWords = data?.length || 0
-      const wordsWithImages = data?.filter(w => w.image_url && w.image_url.trim() !== '').length || 0
+      const wordsWithImages = data?.filter((w: { image_url?: string }) => w.image_url && w.image_url.trim() !== '').length || 0
       const wordsWithoutImages = totalWords - wordsWithImages
 
       return {

@@ -56,8 +56,8 @@ export const ProductList: React.FC<ProductListProps> = () => {
         setLoading(true);
         try {
             const [wordsRes, catsRes] = await Promise.all([
-                fetch('http://localhost:3001/api/words'),
-                fetch('http://localhost:3001/api/categories')
+                fetch('http://localhost:3002/api/words'),
+                fetch('http://localhost:3002/api/categories')
             ]);
             const wordsData = await wordsRes.json();
             const catsData = await catsRes.json();
@@ -113,7 +113,7 @@ export const ProductList: React.FC<ProductListProps> = () => {
             onConfirm: async () => {
                 try {
                     for (const id of selectedIds) {
-                        await fetch(`http://localhost:3001/api/words/${id}`, {
+                        await fetch(`http://localhost:3002/api/words/${id}`, {
                             method: 'PUT',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({ is_approved: true })
@@ -138,7 +138,7 @@ export const ProductList: React.FC<ProductListProps> = () => {
             onConfirm: async () => {
                 try {
                     for (const id of selectedIds) {
-                        await fetch(`http://localhost:3001/api/words/${id}`, { method: 'DELETE' });
+                        await fetch(`http://localhost:3002/api/words/${id}`, { method: 'DELETE' });
                     }
                     setSelectedIds(new Set());
                     loadData();
@@ -159,7 +159,7 @@ export const ProductList: React.FC<ProductListProps> = () => {
             type: 'danger',
             onConfirm: async () => {
                 try {
-                    await fetch(`http://localhost:3001/api/words/${id}`, { method: 'DELETE' });
+                    await fetch(`http://localhost:3002/api/words/${id}`, { method: 'DELETE' });
                     loadData();
                 } catch (error) {
                     console.error('Delete failed:', error);
@@ -177,7 +177,7 @@ export const ProductList: React.FC<ProductListProps> = () => {
             type: 'success',
             onConfirm: async () => {
                 try {
-                    await fetch(`http://localhost:3001/api/words/${id}`, {
+                    await fetch(`http://localhost:3002/api/words/${id}`, {
                         method: 'PUT',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ is_approved: true })
@@ -193,7 +193,7 @@ export const ProductList: React.FC<ProductListProps> = () => {
 
     const handleCategoryChange = async (wordId: number, newCategoryId: number) => {
         try {
-            await fetch(`http://localhost:3001/api/words/${wordId}`, {
+            await fetch(`http://localhost:3002/api/words/${wordId}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ category_id: newCategoryId })

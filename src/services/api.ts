@@ -1,4 +1,5 @@
-import { supabase, Category, Word } from '../lib/database';
+import { neonDatabase } from '../lib/neon-database';
+import { Category, Word } from '../lib/database';
 
 // 生成设备唯一ID
 function getDeviceId(): string {
@@ -15,7 +16,7 @@ export const categoryService = {
   // 获取所有分类
   async getAll(): Promise<Category[]> {
     try {
-      const response = await fetch('http://localhost:3001/api/categories');
+      const response = await fetch('http://localhost:3002/api/categories');
       if (!response.ok) {
         throw new Error('Failed to fetch categories');
       }
@@ -29,7 +30,7 @@ export const categoryService = {
   // 根据name获取分类
   async getByName(name: string): Promise<Category | null> {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await neonDatabase
         .from('categories')
         .select('*')
         .eq('name', name)
@@ -49,7 +50,7 @@ export const wordService = {
   // 根据分类获取单词列表
   async getByCategory(categoryName: string): Promise<Word[]> {
     try {
-      const response = await fetch(`http://localhost:3001/api/words?category=${encodeURIComponent(categoryName)}`);
+      const response = await fetch(`http://localhost:3002/api/words?category=${encodeURIComponent(categoryName)}`);
       if (!response.ok) {
         throw new Error('Failed to fetch words');
       }
@@ -73,7 +74,7 @@ export const wordService = {
     try {
       const deviceId = getDeviceId();
 
-      const { data, error } = await supabase
+      const { data, error } = await neonDatabase
         .from('words')
         .select(`
           *,
@@ -109,7 +110,7 @@ export const wordService = {
     try {
       const deviceId = getDeviceId();
 
-      const { data, error } = await supabase
+      const { data, error } = await neonDatabase
         .from('words')
         .select(`
           *,
@@ -143,7 +144,7 @@ export const wordService = {
   async create(word: Partial<Word>): Promise<Word> {
     try {
       // Use Backend API Proxy to avoid browser TCP issues with Neon
-      const response = await fetch('http://localhost:3001/api/words', {
+      const response = await fetch('http://localhost:3002/api/words', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -171,7 +172,7 @@ export const favoriteService = {
     try {
       const deviceId = getDeviceId();
 
-      const { error } = await supabase
+      const { error } = await neonDatabase
         .from('favorites')
         .insert({
           user_id: deviceId,
@@ -190,7 +191,7 @@ export const favoriteService = {
     try {
       const deviceId = getDeviceId();
 
-      const { error } = await supabase
+      const { error } = await neonDatabase
         .from('favorites')
         .delete()
         .eq('user_id', deviceId)
@@ -208,7 +209,7 @@ export const favoriteService = {
     try {
       const deviceId = getDeviceId();
 
-      const { data, error } = await supabase
+      const { data, error } = await neonDatabase
         .from('favorites')
         .select(`
           word_id,
@@ -248,7 +249,7 @@ export const progressService = {
       const deviceId = getDeviceId();
 
       if (isCorrect) {
-        const { error } = await supabase
+        const { error } = await neonDatabase
           .rpc('update_correct_progress', {
             p_user_id: deviceId,
             p_word_id: wordId
@@ -256,7 +257,7 @@ export const progressService = {
 
         if (error) throw error;
       } else {
-        const { error } = await supabase
+        const { error } = await neonDatabase
           .rpc('update_wrong_progress', {
             p_user_id: deviceId,
             p_word_id: wordId
@@ -281,10 +282,10 @@ export const progressService = {
       const deviceId = getDeviceId();
 
       const [totalResult, learnedResult, masteredResult, favoriteResult] = await Promise.all([
-        supabase.from('words').select('id', { count: 'exact' }).eq('is_active', true),
-        supabase.from('learning_progress').select('id', { count: 'exact' }).eq('user_id', deviceId).or('correct_count.gt.0,wrong_count.gt.0'),
-        supabase.from('learning_progress').select('id', { count: 'exact' }).eq('user_id', deviceId).gte('mastery_level', 4),
-        supabase.from('favorites').select('id', { count: 'exact' }).eq('user_id', deviceId)
+        neonDatabase.from('words').select('id', { count: 'exact' }).eq('is_active', true),
+        neonDatabase.from('learning_progress').select('id', { count: 'exact' }).eq('user_id', deviceId).or('correct_count.gt.0,wrong_count.gt.0'),
+        neonDatabase.from('learning_progress').select('id', { count: 'exact' }).eq('user_id', deviceId).gte('mastery_level', 4),
+        neonDatabase.from('favorites').select('id', { count: 'exact' }).eq('user_id', deviceId)
       ]);
 
       return {

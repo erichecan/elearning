@@ -63,7 +63,7 @@ const AdminScreen: React.FC<AdminScreenProps> = ({ onBack }) => {
 
     setLoading(true)
     try {
-      const connectionStatus = await adminApiService.checkSupabaseConnection()
+      const connectionStatus = await adminApiService.checkConnection()
       if (!connectionStatus.connected) {
         throw new Error(`数据库连接失败: ${connectionStatus.error}`)
       }
@@ -74,7 +74,7 @@ const AdminScreen: React.FC<AdminScreenProps> = ({ onBack }) => {
         imageUrl: word.optimizedImageUrl!
       }))
 
-      const syncResult = await adminApiService.syncImagesToSupabase(imageUpdates)
+      const syncResult = await adminApiService.syncImages(imageUpdates)
 
       if (syncResult.updated > 0) {
         alert(`✅ 成功同步 ${syncResult.updated} 张图片到数据库！`)

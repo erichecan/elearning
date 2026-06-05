@@ -104,3 +104,10 @@ Thumbs.db
 *.pdf
 !NETLIFY_DEPLOYMENT.md
 !DATABASE_SETUP.md
+
+# Generated content (AI images + TTS audio)
+backend/public/images/
+backend/public/audio/
+
+# Backend env
+backend/.env
