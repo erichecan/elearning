@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Settings, LogOut, RefreshCw } from 'lucide-react'
-import { Word, Category } from '../lib/database'
-import { wordService, categoryService } from '../services/api'
+import { Word } from '../lib/database'
+import { wordService } from '../services/api'
 import { adminApiService, adminStorageService } from '../services/admin-api'
 import { fetchChildren, getActiveChildId, setActiveChildId } from '../services/child-context'
 import { BulkImportWizard } from './admin/BulkImportWizard';
@@ -30,7 +30,7 @@ const AdminScreen: React.FC<AdminScreenProps> = ({ onBack }) => {
   const [currentTab, setCurrentTab] = useState<'products' | 'bulk-import' | 'sync' | 'core-words' | 'flashcards' | 'math' | 'storybooks' | 'vsd' | 'rewards' | 'analytics'>('products')
   const [words, setWords] = useState<OptimizedWord[]>([])
   const [loading, setLoading] = useState(false)
-  const [selectedCategory, setSelectedCategory] = useState<string>('')
+  const [selectedCategory] = useState<string>('')
   const [children, setChildren] = useState<Array<{ id: string; name: string }>>([])
   const [activeChildId, setActiveChildIdState] = useState<string | undefined>(() => getActiveChildId() || undefined)
   const [appRole, setAppRole] = useState<'parent' | 'therapist' | 'admin'>('admin')

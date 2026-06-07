@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { ArrowLeft, Volume2, Eye, Clock, Palette, Shield, Info, Play } from 'lucide-react'
+import { ArrowLeft, Volume2, Eye, Shield, Play } from 'lucide-react'
 import { speechService } from '../services/speech'
 import { CoreGridDensity, getCoreGridDensity, getFixedLongPressGuardEnabled, setCoreGridDensity, setFixedLongPressGuardEnabled } from '../services/app-settings'
 import { fetchChildren, getActiveChildId, setActiveChildId } from '../services/child-context'

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { adminApiService } from '../../services/admin-api';
-import { Sparkles, Trash2, Save, RotateCw, Image as ImageIcon, Loader2, Search, Wand2, CheckCircle } from 'lucide-react';
+import { Sparkles, Save, RotateCw, Image as ImageIcon, Loader2, Search, Wand2, CheckCircle } from 'lucide-react';
 
 interface BulkImportWizardProps {
     onBack: () => void;
@@ -26,7 +26,7 @@ type ImageSource = 'ai' | 'search';
 export const BulkImportWizard: React.FC<BulkImportWizardProps> = ({ onBack }) => {
     const [mode, setMode] = useState<ImportMode>('magic');
     const [step, setStep] = useState<1 | 2 | 3>(1);
-    const [isLoading, setIsLoading] = useState(false);
+    const [, setIsLoading] = useState(false);
 
     // Manual Mode State
     const [rawInput, setRawInput] = useState('');
@@ -262,8 +262,6 @@ export const BulkImportWizard: React.FC<BulkImportWizardProps> = ({ onBack }) =>
             const targetCat = categories.find(c => c.name.toLowerCase().includes(categoryName.toLowerCase()) || c.display_name.toLowerCase().includes(categoryName.toLowerCase())) || categories[0];
 
             if (!targetCat) throw new Error('No categories found');
-
-            const supabase = (await import('../../lib/database')).supabase;
 
             for (const item of selectedItems) {
                 if (item.status === 'done' && item.imageUrl) {

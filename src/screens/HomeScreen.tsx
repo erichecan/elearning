@@ -70,11 +70,13 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ onNavigate }) => {
     }
   }
 
+  // 循证修订（A2）：核心词与场景解耦 —— 切换 at home / at school 时
+  // 核心词网格不重载、位置不变；场景只影响 VSD 背景与 AI 推荐高亮。
   useEffect(() => {
-    const loadHomeData = async () => {
+    const loadCoreAndStatus = async () => {
       try {
         const [wordsRes, taskRes, rewardRes] = await Promise.all([
-          apiFetch(`/api/home/core-words?scene=${scene}${activeChildId ? `&childId=${activeChildId}` : ''}`),
+          apiFetch(`/api/home/core-words${activeChildId ? `?childId=${activeChildId}` : ''}`),
           apiFetch(`/api/home/task-reminder${activeChildId ? `?childId=${activeChildId}` : ''}`),
           apiFetch(`/api/home/reward-summary${activeChildId ? `?childId=${activeChildId}` : ''}`),
         ])
@@ -91,8 +93,9 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ onNavigate }) => {
       }
     }
 
-    loadHomeData()
-  }, [scene])
+    loadCoreAndStatus()
+    // 仅在挂载/儿童切换时加载一次，绝不随 scene 变化重载核心词
+  }, [activeChildId])
 
   useEffect(() => {
     const loadScene = async () => {
@@ -322,47 +325,32 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ onNavigate }) => {
       fixedIds.add(candidate.id)
     }
 
-    const dynamicPool = coreWords.filter(w => !fixedIds.has(w.id))
-
-    const roleGroups = {
-      pronoun: dynamicPool.filter(w => classifyRole(w.en) === 'pronoun'),
-      verb: dynamicPool.filter(w => classifyRole(w.en) === 'verb'),
-      object: dynamicPool.filter(w => classifyRole(w.en) === 'object'),
-      descriptor: dynamicPool.filter(w => classifyRole(w.en) === 'descriptor'),
-      question: dynamicPool.filter(w => classifyRole(w.en) === 'question'),
-      social: dynamicPool.filter(w => classifyRole(w.en) === 'social'),
-      preposition: dynamicPool.filter(w => classifyRole(w.en) === 'preposition'),
-      other: dynamicPool.filter(w => classifyRole(w.en) === 'other')
-    }
-
-    const last = sentence[sentence.length - 1]?.toLowerCase() || ''
-    const lastRole = last ? classifyRole(last) : 'other'
-    const rolePriority: WordRole[] =
-      sentence.length === 0
-        ? ['verb', 'social', 'object', 'descriptor', 'question', 'preposition', 'other', 'pronoun']
-        : lastRole === 'pronoun'
-          ? ['verb', 'social', 'object', 'descriptor', 'preposition', 'question', 'other', 'pronoun']
-          : lastRole === 'verb'
-            ? ['object', 'descriptor', 'preposition', 'social', 'question', 'other', 'pronoun', 'verb']
-            : lastRole === 'object'
-              ? ['verb', 'social', 'descriptor', 'preposition', 'question', 'other', 'pronoun', 'object']
-              : ['verb', 'object', 'social', 'descriptor', 'preposition', 'question', 'other', 'pronoun']
-
+    // 循证修订（方案①全固定）：扩展词区采用稳定、确定性的排序
+    // （按词性顺序 + 词 id 升序），不依赖 sentence —— 词的位置永不随
+    // 交互改变，以保护运动规划记忆（🟢 Thistle 2018 / LAMP）。
+    const remaining = coreWords.filter(w => !fixedIds.has(w.id))
+    const stableRoleOrder: WordRole[] = ['pronoun', 'verb', 'object', 'descriptor', 'preposition', 'question', 'social', 'other']
     const dynamic: CoreWord[] = []
     const used = new Set<number>(fixedIds)
-    rolePriority.forEach(role => {
-      roleGroups[role].forEach(word => {
-        if (dynamic.length >= dynamicSlots || used.has(word.id)) return
-        dynamic.push(word)
-        used.add(word.id)
-      })
+    stableRoleOrder.forEach(role => {
+      remaining
+        .filter(w => classifyRole(w.en) === role)
+        .sort((a, b) => a.id - b.id)
+        .forEach(word => {
+          if (dynamic.length >= dynamicSlots || used.has(word.id)) return
+          dynamic.push(word)
+          used.add(word.id)
+        })
     })
     if (dynamic.length < dynamicSlots) {
-      dynamicPool.forEach(word => {
-        if (dynamic.length >= dynamicSlots || used.has(word.id)) return
-        dynamic.push(word)
-        used.add(word.id)
-      })
+      remaining
+        .slice()
+        .sort((a, b) => a.id - b.id)
+        .forEach(word => {
+          if (dynamic.length >= dynamicSlots || used.has(word.id)) return
+          dynamic.push(word)
+          used.add(word.id)
+        })
     }
 
     return {
@@ -371,7 +359,7 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ onNavigate }) => {
       fixedWords: fixedWords.slice(0, fixedSlots),
       dynamicWords: dynamic.slice(0, dynamicSlots)
     }
-  }, [coreWords, sentence, gridDensity])
+  }, [coreWords, gridDensity])
 
   const gridClassName = useMemo(() => {
     if (gridState.cols === 4) return 'grid grid-cols-4 gap-2 md:gap-2.5'
@@ -408,7 +396,7 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ onNavigate }) => {
     if (role === 'pronoun') return `已选 "${last}"，下一步推荐动作词`
     if (role === 'verb') return `已选 "${last}"，下一步推荐对象词`
     if (role === 'object') return `已选 "${last}"，下一步可补充动作或修饰词`
-    return `已选 "${last}"，系统正在调整下一步词汇`
+    return `已选 "${last}"，继续选词造句`
   }, [sentence])
 
   const handleClear = async () => {
@@ -662,7 +650,7 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ onNavigate }) => {
               )
             })}
           </div>
-          <div className="text-[11px] font-bold text-[#0ea5e9] mb-1">动态区（成句引导）</div>
+          <div className="text-[11px] font-bold text-[#0ea5e9] mb-1">更多核心词（位置固定）</div>
           <div className={`${gridClassName} pb-1`}>
             {gridState.dynamicWords.map((item) => {
               const isRecommended = recommendedIds.has(item.id)

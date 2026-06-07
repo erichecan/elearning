@@ -195,12 +195,8 @@ export const adminApiService = {
   // 删除单词
   async deleteWord(wordId: number): Promise<{ success: boolean; error?: string }> {
     try {
-      const { error } = await supabase
-        .from('words')
-        .update({ is_active: false }) // 软删除，标记为不活跃
-        .eq('id', wordId)
-
-      if (error) throw error
+      const response = await apiFetch(`/api/words/${wordId}`, { method: 'DELETE' })
+      if (!response.ok) throw new Error('Failed to delete word')
 
       return { success: true }
     } catch (error) {
@@ -212,12 +208,12 @@ export const adminApiService = {
   // 恢复单词
   async restoreWord(wordId: number): Promise<{ success: boolean; error?: string }> {
     try {
-      const { error } = await supabase
-        .from('words')
-        .update({ is_active: true })
-        .eq('id', wordId)
-
-      if (error) throw error
+      const response = await apiFetch(`/api/words/${wordId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ is_active: true })
+      })
+      if (!response.ok) throw new Error('Failed to restore word')
 
       return { success: true }
     } catch (error) {
@@ -236,13 +232,12 @@ export const adminApiService = {
 
     for (const update of updates) {
       try {
-        const { error } = await supabase
-          .from('words')
-          .update({ image_url: update.imageUrl })
-          .eq('id', update.wordId)
-          .select('word')
-
-        if (error) throw error
+        const response = await apiFetch(`/api/words/${update.wordId}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ image_url: update.imageUrl })
+        })
+        if (!response.ok) throw new Error('Failed to update image')
         result.updated++
 
       } catch (error) {
@@ -261,12 +256,8 @@ export const adminApiService = {
   // 检查Supabase连接
   async checkSupabaseConnection(): Promise<{ connected: boolean; error?: string }> {
     try {
-      const { error } = await supabase
-        .from('categories')
-        .select('count(*)')
-        .limit(1)
-
-      if (error) throw error
+      const response = await apiFetch('/api/health/db')
+      if (!response.ok) throw new Error('Database health check failed')
 
       return { connected: true }
     } catch (error) {
@@ -282,16 +273,13 @@ export const adminApiService = {
     wordsWithoutImages: number
   }> {
     try {
-      const { data, error } = await supabase
-        .from('words')
-        .select('image_url, categories!inner(name)')
-        .eq('categories.name', categoryName)
-        .eq('is_active', true)
+      const response = await apiFetch(`/api/words?category=${encodeURIComponent(categoryName)}`)
+      if (!response.ok) throw new Error('Failed to load category stats')
+      const data = await response.json()
+      const words: Array<{ image_url?: string }> = Array.isArray(data) ? data : (data.items || [])
 
-      if (error) throw error
-
-      const totalWords = data?.length || 0
-      const wordsWithImages = data?.filter(w => w.image_url && w.image_url.trim() !== '').length || 0
+      const totalWords = words.length
+      const wordsWithImages = words.filter(w => w.image_url && w.image_url.trim() !== '').length
       const wordsWithoutImages = totalWords - wordsWithImages
 
       return {

@@ -253,7 +253,7 @@ class NeonQueryBuilder {
 
             if (fields.length === 0) return { data: [], error: null };
 
-            const setClauses = fields.map((field, i) => {
+            const setClauses = fields.map((field) => {
                 const paramIndex = this.params.length + 1;
                 this.params.push(data[field]);
                 return `${field} = $${paramIndex}`;
@@ -288,7 +288,6 @@ class NeonQueryBuilder {
                 this.params = []; // Reset
 
                 // Add SET params
-                const setParamIndices = fields.map((_, i) => `$${this.params.length + 1 + i}`); // broken logic for mapping?
                 // simpler:
                 fields.forEach(field => {
                     this.params.push(data[field]);
@@ -305,7 +304,7 @@ class NeonQueryBuilder {
                 // We need to shift those indices.
                 // REGEX replace $N with $(N+offset)
                 const shiftedWhere = this.whereClauses.map(clause => {
-                    return clause.replace(/\$(\d+)/g, (match, n) => `$${parseInt(n) + offset}`);
+                    return clause.replace(/\$(\d+)/g, (_match, n) => `$${parseInt(n) + offset}`);
                 }).join(' AND ');
 
                 sql = `UPDATE ${this.table} SET ${setString} WHERE ${shiftedWhere} RETURNING *`;
