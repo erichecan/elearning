@@ -1,0 +1,802 @@
+[
+  {
+    "category": "verb",
+    "count": 2652
+  },
+  {
+    "category": "signaling system",
+    "count": 490
+  },
+  {
+    "category": "qualifying adjective",
+    "count": 461
+  },
+  {
+    "category": "professional",
+    "count": 423
+  },
+  {
+    "category": "core vocabulary-communication",
+    "count": 357
+  },
+  {
+    "category": "routine",
+    "count": 300
+  },
+  {
+    "category": "land transport",
+    "count": 284
+  },
+  {
+    "category": "disruptive behavior",
+    "count": 255
+  },
+  {
+    "category": "country",
+    "count": 249
+  },
+  {
+    "category": "commercial building",
+    "count": 216
+  },
+  {
+    "category": "oviparous",
+    "count": 209
+  },
+  {
+    "category": "christianity",
+    "count": 206
+  },
+  {
+    "category": "work tool",
+    "count": 195
+  },
+  {
+    "category": "usual verbs",
+    "count": 190
+  },
+  {
+    "category": "flag",
+    "count": 189
+  },
+  {
+    "category": "clothes",
+    "count": 187
+  },
+  {
+    "category": "physical exercise",
+    "count": 183
+  },
+  {
+    "category": "covid-19",
+    "count": 177
+  },
+  {
+    "category": "sport material",
+    "count": 177
+  },
+  {
+    "category": "hygiene product",
+    "count": 174
+  },
+  {
+    "category": "human anatomy",
+    "count": 172
+  },
+  {
+    "category": "feeling",
+    "count": 169
+  },
+  {
+    "category": "terrestrial animal",
+    "count": 166
+  },
+  {
+    "category": "gastronomy",
+    "count": 164
+  },
+  {
+    "category": "building facility",
+    "count": 162
+  },
+  {
+    "category": "wild animal",
+    "count": 162
+  },
+  {
+    "category": "cookery",
+    "count": 155
+  },
+  {
+    "category": "sanitary professional",
+    "count": 155
+  },
+  {
+    "category": "educational material",
+    "count": 153
+  },
+  {
+    "category": "symptom",
+    "count": 153
+  },
+  {
+    "category": "sport modality",
+    "count": 153
+  },
+  {
+    "category": "human response",
+    "count": 153
+  },
+  {
+    "category": "carnivorous",
+    "count": 152
+  },
+  {
+    "category": "number",
+    "count": 146
+  },
+  {
+    "category": "construction",
+    "count": 145
+  },
+  {
+    "category": "day hours",
+    "count": 145
+  },
+  {
+    "category": "family",
+    "count": 144
+  },
+  {
+    "category": "health personnel",
+    "count": 144
+  },
+  {
+    "category": "expression",
+    "count": 143
+  },
+  {
+    "category": "numeral adjective",
+    "count": 142
+  },
+  {
+    "category": "beverage",
+    "count": 141
+  },
+  {
+    "category": "electrical appliance",
+    "count": 141
+  },
+  {
+    "category": "core vocabulary-living being",
+    "count": 138
+  },
+  {
+    "category": "core vocabulary-knowledge",
+    "count": 138
+  },
+  {
+    "category": "corporal hygiene",
+    "count": 135
+  },
+  {
+    "category": "medical procedure",
+    "count": 135
+  },
+  {
+    "category": "utensil",
+    "count": 134
+  },
+  {
+    "category": "core vocabulary-object",
+    "count": 133
+  },
+  {
+    "category": "educational task",
+    "count": 133
+  },
+  {
+    "category": "accessories",
+    "count": 130
+  },
+  {
+    "category": "mass media",
+    "count": 126
+  },
+  {
+    "category": "special education",
+    "count": 120
+  },
+  {
+    "category": "nursing equipment",
+    "count": 114
+  },
+  {
+    "category": "furniture",
+    "count": 113
+  },
+  {
+    "category": "toy",
+    "count": 113
+  },
+  {
+    "category": "baking",
+    "count": 113
+  },
+  {
+    "category": "building room",
+    "count": 112
+  },
+  {
+    "category": "mammal",
+    "count": 106
+  },
+  {
+    "category": "viviparous",
+    "count": 105
+  },
+  {
+    "category": "basic concepts",
+    "count": 104
+  },
+  {
+    "category": "medical test",
+    "count": 103
+  },
+  {
+    "category": "residential building",
+    "count": 102
+  },
+  {
+    "category": "security and defense",
+    "count": 100
+  },
+  {
+    "category": "herbivorous",
+    "count": 97
+  },
+  {
+    "category": "christmas",
+    "count": 96
+  },
+  {
+    "category": "omnivorous",
+    "count": 95
+  },
+  {
+    "category": "road safety",
+    "count": 94
+  },
+  {
+    "category": "letter",
+    "count": 93
+  },
+  {
+    "category": "agriculture",
+    "count": 91
+  },
+  {
+    "category": "core vocabulary-feeding",
+    "count": 90
+  },
+  {
+    "category": "traditional game",
+    "count": 90
+  },
+  {
+    "category": "ultra-processed food",
+    "count": 90
+  },
+  {
+    "category": "hospital room",
+    "count": 89
+  },
+  {
+    "category": "educational space",
+    "count": 88
+  },
+  {
+    "category": "group",
+    "count": 87
+  },
+  {
+    "category": "architectural element",
+    "count": 87
+  },
+  {
+    "category": "aerial transport",
+    "count": 86
+  },
+  {
+    "category": "recreational facility",
+    "count": 86
+  },
+  {
+    "category": "traditional dish",
+    "count": 84
+  },
+  {
+    "category": "childcare",
+    "count": 83
+  },
+  {
+    "category": "athlete",
+    "count": 83
+  },
+  {
+    "category": "fruit",
+    "count": 82
+  },
+  {
+    "category": "vehicle component",
+    "count": 81
+  },
+  {
+    "category": "marine animal",
+    "count": 79
+  },
+  {
+    "category": "hospitality industry",
+    "count": 78
+  },
+  {
+    "category": "ophthalmology",
+    "count": 78
+  },
+  {
+    "category": "basic needs",
+    "count": 74
+  },
+  {
+    "category": "swimming",
+    "count": 74
+  },
+  {
+    "category": "disease",
+    "count": 74
+  },
+  {
+    "category": "core vocabulary-time",
+    "count": 73
+  },
+  {
+    "category": "trade",
+    "count": 73
+  },
+  {
+    "category": "miscellaneous",
+    "count": 73
+  },
+  {
+    "category": "footwear",
+    "count": 71
+  },
+  {
+    "category": "musical art",
+    "count": 71
+  },
+  {
+    "category": "categorization",
+    "count": 71
+  },
+  {
+    "category": "universal decimal classification",
+    "count": 71
+  },
+  {
+    "category": "vegetable",
+    "count": 70
+  },
+  {
+    "category": "cleaning product",
+    "count": 70
+  },
+  {
+    "category": "medical equipment",
+    "count": 70
+  },
+  {
+    "category": "gardening",
+    "count": 68
+  },
+  {
+    "category": "orthopedic product",
+    "count": 68
+  },
+  {
+    "category": "hardware",
+    "count": 67
+  },
+  {
+    "category": "fish-animal",
+    "count": 67
+  },
+  {
+    "category": "obstetrics",
+    "count": 67
+  },
+  {
+    "category": "work organization",
+    "count": 66
+  },
+  {
+    "category": "hairdresser",
+    "count": 65
+  },
+  {
+    "category": "monument",
+    "count": 65
+  },
+  {
+    "category": "domestic animal",
+    "count": 64
+  },
+  {
+    "category": "processed food",
+    "count": 64
+  },
+  {
+    "category": "food",
+    "count": 64
+  },
+  {
+    "category": "education professionals",
+    "count": 63
+  },
+  {
+    "category": "fishing",
+    "count": 63
+  },
+  {
+    "category": "atmospheric phenomena",
+    "count": 63
+  },
+  {
+    "category": "container",
+    "count": 62
+  },
+  {
+    "category": "beach",
+    "count": 61
+  },
+  {
+    "category": "street furniture",
+    "count": 60
+  },
+  {
+    "category": "core vocabulary-work",
+    "count": 58
+  },
+  {
+    "category": "tale character",
+    "count": 58
+  },
+  {
+    "category": "patient",
+    "count": 58
+  },
+  {
+    "category": "meat",
+    "count": 57
+  },
+  {
+    "category": "river animal",
+    "count": 57
+  },
+  {
+    "category": "spain province",
+    "count": 57
+  },
+  {
+    "category": "bird",
+    "count": 56
+  },
+  {
+    "category": "pet",
+    "count": 56
+  },
+  {
+    "category": "mathematics",
+    "count": 56
+  },
+  {
+    "category": "core vocabulary-place",
+    "count": 55
+  },
+  {
+    "category": "water transport",
+    "count": 55
+  },
+  {
+    "category": "body sensation",
+    "count": 55
+  },
+  {
+    "category": "entertainment facility",
+    "count": 55
+  },
+  {
+    "category": "carpentry",
+    "count": 54
+  },
+  {
+    "category": "seller",
+    "count": 54
+  },
+  {
+    "category": "playground",
+    "count": 53
+  },
+  {
+    "category": "flying animal",
+    "count": 53
+  },
+  {
+    "category": "cattle farming",
+    "count": 53
+  },
+  {
+    "category": "child",
+    "count": 53
+  },
+  {
+    "category": "law and justice",
+    "count": 53
+  },
+  {
+    "category": "physical features",
+    "count": 52
+  },
+  {
+    "category": "computing",
+    "count": 52
+  },
+  {
+    "category": "death",
+    "count": 52
+  },
+  {
+    "category": "crime",
+    "count": 52
+  },
+  {
+    "category": "students",
+    "count": 52
+  },
+  {
+    "category": "swimming pool",
+    "count": 51
+  },
+  {
+    "category": "clothing industry",
+    "count": 51
+  },
+  {
+    "category": "sports facility",
+    "count": 51
+  },
+  {
+    "category": "historical character",
+    "count": 51
+  },
+  {
+    "category": "outdoor activity",
+    "count": 50
+  },
+  {
+    "category": "feeding",
+    "count": 49
+  },
+  {
+    "category": "medical treatment",
+    "count": 49
+  },
+  {
+    "category": "room",
+    "count": 49
+  },
+  {
+    "category": "subject",
+    "count": 49
+  },
+  {
+    "category": "percussion instrument",
+    "count": 48
+  },
+  {
+    "category": "senses",
+    "count": 48
+  },
+  {
+    "category": "skating",
+    "count": 48
+  },
+  {
+    "category": "medicament",
+    "count": 48
+  },
+  {
+    "category": "religious act",
+    "count": 48
+  },
+  {
+    "category": "political representation",
+    "count": 48
+  },
+  {
+    "category": "tourism",
+    "count": 47
+  },
+  {
+    "category": "animal anatomy",
+    "count": 47
+  },
+  {
+    "category": "spain region",
+    "count": 47
+  },
+  {
+    "category": "adverb of time",
+    "count": 47
+  },
+  {
+    "category": "infrastructure",
+    "count": 46
+  },
+  {
+    "category": "odontology",
+    "count": 46
+  },
+  {
+    "category": "football",
+    "count": 45
+  },
+  {
+    "category": "decorative item",
+    "count": 45
+  },
+  {
+    "category": "educational staff",
+    "count": 45
+  },
+  {
+    "category": "birthday",
+    "count": 45
+  },
+  {
+    "category": "body position",
+    "count": 45
+  },
+  {
+    "category": "medical device",
+    "count": 45
+  },
+  {
+    "category": "catering establishment",
+    "count": 44
+  },
+  {
+    "category": "tree",
+    "count": 43
+  },
+  {
+    "category": "halloween",
+    "count": 43
+  },
+  {
+    "category": "mountain",
+    "count": 43
+  },
+  {
+    "category": "appliance",
+    "count": 43
+  },
+  {
+    "category": "adult",
+    "count": 43
+  },
+  {
+    "category": "cultural building",
+    "count": 42
+  },
+  {
+    "category": "person according to their age",
+    "count": 42
+  },
+  {
+    "category": "library science",
+    "count": 41
+  },
+  {
+    "category": "religious event",
+    "count": 41
+  },
+  {
+    "category": "mass media device",
+    "count": 40
+  },
+  {
+    "category": "core vocabulary-leisure",
+    "count": 40
+  },
+  {
+    "category": "core vocabulary-education",
+    "count": 40
+  },
+  {
+    "category": "event",
+    "count": 40
+  },
+  {
+    "category": "sensory stimulation material",
+    "count": 40
+  },
+  {
+    "category": "object",
+    "count": 39
+  },
+  {
+    "category": "landform",
+    "count": 39
+  },
+  {
+    "category": "educational building",
+    "count": 39
+  },
+  {
+    "category": "human value",
+    "count": 39
+  },
+  {
+    "category": "costume",
+    "count": 38
+  },
+  {
+    "category": "flower",
+    "count": 38
+  },
+  {
+    "category": "multimedia buttons",
+    "count": 38
+  },
+  {
+    "category": "trousseau",
+    "count": 37
+  },
+  {
+    "category": "crockery",
+    "count": 37
+  },
+  {
+    "category": "literature",
+    "count": 37
+  },
+  {
+    "category": "herbaceous plant",
+    "count": 37
+  },
+  {
+    "category": "educational_building",
+    "count": 37
+  },
+  {
+    "category": "trade document",
+    "count": 37
+  },
+  {
+    "category": "show",
+    "count": 37
+  },
+  {
+    "category": "communication aid",
+    "count": 37
+  },
+  {
+    "category": "prevention measure",
+    "count": 37
+  },
+  {
+    "category": "insect",
+    "count": 36
+  }
+]

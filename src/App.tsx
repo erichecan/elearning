@@ -6,8 +6,11 @@ import AdminScreen from './screens/AdminScreen'
 import MathScreen from './screens/MathScreen'
 import FlashcardsScreen from './screens/FlashcardsScreen'
 import ScheduleFocusScreen from './screens/ScheduleFocusScreen'
+import EmotionScreen from './screens/EmotionScreen'
+import StorybooksScreen from './screens/StorybooksScreen'
+import RewardsScreen from './screens/RewardsScreen'
 
-type Screen = 'home' | 'category' | 'settings' | 'admin' | 'math' | 'flashcards' | 'focus'
+type Screen = 'home' | 'category' | 'settings' | 'admin' | 'math' | 'flashcards' | 'focus' | 'emotion' | 'storybooks' | 'rewards'
 
 function App() {
   const [currentScreen, setCurrentScreen] = useState<Screen>(() => {
@@ -62,6 +65,21 @@ function App() {
         )}
         {currentScreen === 'focus' && (
           <ScheduleFocusScreen
+            onBack={() => navigateTo('home')}
+          />
+        )}
+        {currentScreen === 'emotion' && (
+          <EmotionScreen
+            onBack={() => navigateTo('home')}
+          />
+        )}
+        {currentScreen === 'storybooks' && (
+          <StorybooksScreen
+            onBack={() => navigateTo('home')}
+          />
+        )}
+        {currentScreen === 'rewards' && (
+          <RewardsScreen
             onBack={() => navigateTo('home')}
           />
         )}

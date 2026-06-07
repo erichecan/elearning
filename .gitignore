@@ -8,7 +8,9 @@ node_modules/
 /dist
 
 # Environment variables
-# .env - 允许提交，包含公共API密钥
+# .env (根目录) - 允许提交，仅含前端公共 API 密钥（Supabase anon key）
+# backend/.env - 含数据库连接串(带密码)与私密 key，禁止提交
+backend/.env
 .env.local
 .env.development.local
 .env.test.local
@@ -106,3 +108,6 @@ Thumbs.db
 !DATABASE_SETUP.md
 backup/
 elearning-main_Audrey2.0.zip
+
+# Large local symbol asset libraries (keep local, do not commit full raw set)
+backend/assets/symbols/arasaac/raw/png/

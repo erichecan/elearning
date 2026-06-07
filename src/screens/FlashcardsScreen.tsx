@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react'
 import { ArrowLeft } from 'lucide-react'
 import { categoryService } from '../services/api'
 import { Category } from '../lib/database'
+import { apiFetch } from '../services/api-client'
+import { speechService } from '../services/speech'
+import { getActiveChildId } from '../services/child-context'
 
 interface FlashcardsScreenProps {
   onBack: () => void
@@ -42,8 +45,11 @@ const getCategoryEnglishName = (categoryName: string): string => {
 
 const FlashcardsScreen: React.FC<FlashcardsScreenProps> = ({ onBack, onOpenCategory }) => {
   const [categories, setCategories] = useState<Category[]>([])
+  const [cards, setCards] = useState<Array<{ id: number; word_en: string; word_zh?: string; image_url?: string; audio_url?: string }>>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [mode, setMode] = useState<'categories' | 'study'>('study')
+  const [index, setIndex] = useState(0)
 
   useEffect(() => {
     const loadCategories = async () => {
@@ -52,6 +58,10 @@ const FlashcardsScreen: React.FC<FlashcardsScreenProps> = ({ onBack, onOpenCateg
         setError(null)
         const categoriesData = await categoryService.getAll()
         setCategories(categoriesData)
+        const childId = getActiveChildId()
+        const cardRes = await apiFetch(`/api/public/flashcards${childId ? `?childId=${encodeURIComponent(childId)}` : ''}`)
+        const cardJson = await cardRes.json()
+        setCards(Array.isArray(cardJson) ? cardJson : [])
       } catch (err) {
         console.error('加载分类失败:', err)
         setError('Failed to load categories')
@@ -95,40 +105,74 @@ const FlashcardsScreen: React.FC<FlashcardsScreenProps> = ({ onBack, onOpenCateg
         </button>
         <div className="text-center">
           <h1 className="text-2xl font-extrabold text-primary-900 tracking-tight">Flashcards</h1>
-          <p className="text-sm font-semibold text-primary-500">{categories.length} Categories</p>
+          <p className="text-sm font-semibold text-primary-500">{mode === 'study' ? `${cards.length} Cards` : `${categories.length} Categories`}</p>
         </div>
         <div className="w-12"></div>
       </header>
 
-      <div className="flex-1 overflow-y-auto pb-4 px-2 custom-scrollbar">
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-          {categories.map((category) => (
-            <div
-              key={category.id}
-              onClick={() => onOpenCategory(category.name)}
-              className="group bg-white rounded-3xl p-3 shadow-card hover:shadow-float hover:-translate-y-1 transition-all duration-300 cursor-pointer border border-primary-100/50"
-            >
-              <div className="aspect-[4/3] rounded-2xl overflow-hidden mb-3 relative bg-primary-50">
-                <img
-                  src={getCategoryImage(category.name)}
-                  alt={category.display_name}
-                  className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
-                  onError={(e) => {
-                    (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1544966503-7cc5ac882d5f?w=400&h=300&fit=crop'
-                  }}
-                />
-                <div className="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors"></div>
-              </div>
+      <div className="mb-3 flex gap-2 px-2">
+        <button onClick={() => setMode('study')} className={`px-3 py-1.5 rounded-full text-sm font-bold ${mode === 'study' ? 'bg-blue-500 text-white' : 'bg-white text-slate-600'}`}>学习卡片</button>
+        <button onClick={() => setMode('categories')} className={`px-3 py-1.5 rounded-full text-sm font-bold ${mode === 'categories' ? 'bg-blue-500 text-white' : 'bg-white text-slate-600'}`}>分类浏览</button>
+      </div>
 
-              <div className="text-center">
-                <h3 className="text-primary-900 font-extrabold text-lg leading-tight mb-1">
-                  {getCategoryEnglishName(category.name)}
-                </h3>
-                <p className="text-primary-400 text-sm font-medium">{category.display_name}</p>
+      <div className="flex-1 overflow-y-auto pb-4 px-2 custom-scrollbar">
+        {mode === 'categories' ? (
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+            {categories.map((category) => (
+              <div
+                key={category.id}
+                onClick={() => onOpenCategory(category.name)}
+                className="group bg-white rounded-3xl p-3 shadow-card hover:shadow-float hover:-translate-y-1 transition-all duration-300 cursor-pointer border border-primary-100/50"
+              >
+                <div className="aspect-[4/3] rounded-2xl overflow-hidden mb-3 relative bg-primary-50">
+                  <img
+                    src={getCategoryImage(category.name)}
+                    alt={category.display_name}
+                    className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1544966503-7cc5ac882d5f?w=400&h=300&fit=crop'
+                    }}
+                  />
+                  <div className="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors"></div>
+                </div>
+
+                <div className="text-center">
+                  <h3 className="text-primary-900 font-extrabold text-lg leading-tight mb-1">
+                    {getCategoryEnglishName(category.name)}
+                  </h3>
+                  <p className="text-primary-400 text-sm font-medium">{category.display_name}</p>
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        ) : (
+          <div className="max-w-xl mx-auto">
+            {cards.length === 0 ? (
+              <div className="text-slate-500 text-center font-semibold">暂无可学习闪卡</div>
+            ) : (
+              <div className="bg-white rounded-3xl p-4 shadow-card border border-primary-100">
+                <img
+                  src={cards[index]?.image_url || 'https://images.unsplash.com/photo-1544966503-7cc5ac882d5f?w=400&h=300&fit=crop'}
+                  className="w-full h-64 object-cover rounded-2xl"
+                />
+                <div className="mt-3 text-center">
+                  <div className="text-3xl font-extrabold text-slate-900">{cards[index]?.word_en || ''}</div>
+                  <div className="text-sm text-slate-500">{cards[index]?.word_zh || ''}</div>
+                </div>
+                <div className="mt-4 flex items-center justify-between">
+                  <button onClick={() => setIndex((prev) => (prev - 1 + cards.length) % cards.length)} className="px-3 py-2 rounded-xl bg-slate-100 text-slate-700">上一张</button>
+                  <button
+                    onClick={() => speechService.playAudio(cards[index]?.audio_url || null, cards[index]?.word_en || '').catch(() => undefined)}
+                    className="px-3 py-2 rounded-xl bg-emerald-100 text-emerald-700 font-bold"
+                  >
+                    发音
+                  </button>
+                  <button onClick={() => setIndex((prev) => (prev + 1) % cards.length)} className="px-3 py-2 rounded-xl bg-slate-100 text-slate-700">下一张</button>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   )

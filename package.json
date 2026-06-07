@@ -15,7 +15,8 @@
     "sync-images": "node scripts/full-image-sync.mjs",
     "sync-images:50": "node scripts/full-image-sync.mjs --limit 50",
     "sync-images:100": "node scripts/full-image-sync.mjs --limit 100",
-    "sync-to-supabase": "node scripts/sync-images-to-supabase.mjs"
+    "sync-to-supabase": "node scripts/sync-images-to-supabase.mjs",
+    "smoke:corewords": "node scripts/smoke-corewords.mjs"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.0.2",

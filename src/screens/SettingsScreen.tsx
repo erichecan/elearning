@@ -1,12 +1,16 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { ArrowLeft, Volume2, Eye, Clock, Palette, Shield, Info, Play } from 'lucide-react'
 import { speechService } from '../services/speech'
+import { CoreGridDensity, getCoreGridDensity, getFixedLongPressGuardEnabled, setCoreGridDensity, setFixedLongPressGuardEnabled } from '../services/app-settings'
+import { fetchChildren, getActiveChildId, setActiveChildId } from '../services/child-context'
 
 interface SettingsScreenProps {
   onBack: () => void
 }
 
 const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack }) => {
+  const [children, setChildren] = useState<Array<{ id: string; name: string }>>([])
+  const [activeChild, setActiveChild] = useState<string>(getActiveChildId() || '')
   const [settings, setSettings] = useState({
     autoPlay: true,
     showWord: true,
@@ -16,13 +20,33 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack }) => {
     soundVolume: 80,
     speechRate: 0.8,
     speechPitch: 1.0,
-    speechLang: 'en-US'
+    speechLang: 'en-US',
+    fixedLongPressGuardEnabled: getFixedLongPressGuardEnabled(),
+    coreGridDensity: getCoreGridDensity() as CoreGridDensity
   })
 
   const [isTestingAudio, setIsTestingAudio] = useState(false)
 
+  useEffect(() => {
+    fetchChildren()
+      .then((list) => {
+        setChildren(list)
+        if (!activeChild && list.length > 0) {
+          setActiveChild(list[0].id)
+          setActiveChildId(list[0].id)
+        }
+      })
+      .catch(() => setChildren([]))
+  }, [])
+
   const handleSettingChange = (key: string, value: any) => {
     setSettings(prev => ({ ...prev, [key]: value }))
+    if (key === 'fixedLongPressGuardEnabled') {
+      setFixedLongPressGuardEnabled(Boolean(value))
+    }
+    if (key === 'coreGridDensity') {
+      setCoreGridDensity(value as CoreGridDensity)
+    }
   }
 
   const testAudio = async () => {
@@ -70,6 +94,27 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack }) => {
           <div className="space-y-6">
             <div className="flex items-center justify-between">
               <div>
+                <p className="text-gray-900 font-bold">当前孩子</p>
+                <p className="text-gray-400 text-sm font-medium">切换学习数据与内容</p>
+              </div>
+              <select
+                value={activeChild}
+                onChange={(e) => {
+                  const next = e.target.value
+                  setActiveChild(next)
+                  if (next) setActiveChildId(next)
+                }}
+                className="border rounded-xl px-3 py-2 text-sm font-semibold text-gray-700 bg-white min-w-[160px]"
+              >
+                {children.length === 0 ? <option value="">暂无孩子</option> : null}
+                {children.map((child) => (
+                  <option key={child.id} value={child.id}>{child.name}</option>
+                ))}
+              </select>
+            </div>
+
+            <div className="flex items-center justify-between">
+              <div>
                 <p className="text-gray-900 font-bold">Auto-play Audio</p>
                 <p className="text-gray-400 text-sm font-medium">Hear pronunciation on flip</p>
               </div>
@@ -98,6 +143,22 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack }) => {
                 />
                 <div className="w-12 h-7 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-6 after:w-6 after:shadow-sm after:transition-all peer-checked:bg-primary-500"></div>
               </label>
+            </div>
+
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-gray-900 font-bold">Core Words 网格密度</p>
+                <p className="text-gray-400 text-sm font-medium">4x4 / 6x6 / 8x8</p>
+              </div>
+              <select
+                value={settings.coreGridDensity}
+                onChange={(e) => handleSettingChange('coreGridDensity', e.target.value as CoreGridDensity)}
+                className="border rounded-xl px-3 py-2 text-sm font-semibold text-gray-700 bg-white"
+              >
+                <option value="4x4">4x4</option>
+                <option value="6x6">6x6</option>
+                <option value="8x8">8x8</option>
+              </select>
             </div>
           </div>
         </section>
@@ -156,6 +217,24 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack }) => {
               <p className="font-bold text-gray-900 group-hover:text-primary-900">Progress Report</p>
               <p className="text-sm text-gray-400 group-hover:text-primary-400/80">View learning stats</p>
             </button>
+          </div>
+
+          <div className="mt-6 pt-4 border-t border-gray-100">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-gray-900 font-bold">固定区长按防误触</p>
+                <p className="text-gray-400 text-sm font-medium">开启后，固定区长按不会触发选词</p>
+              </div>
+              <label className="relative inline-flex items-center cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={settings.fixedLongPressGuardEnabled}
+                  onChange={(e) => handleSettingChange('fixedLongPressGuardEnabled', e.target.checked)}
+                  className="sr-only peer"
+                />
+                <div className="w-12 h-7 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-6 after:w-6 after:shadow-sm after:transition-all peer-checked:bg-primary-500"></div>
+              </label>
+            </div>
           </div>
         </section>
 

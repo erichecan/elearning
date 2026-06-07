@@ -1,0 +1,1073 @@
+[
+  {
+    "id": "26",
+    "word_en": "each",
+    "word_zh": "每个",
+    "symbol_key": "all_5596.png",
+    "candidates": [
+      {
+        "filename": "all_5596.png",
+        "reason": "current",
+        "score": 100
+      },
+      {
+        "filename": "all_27091.png",
+        "reason": "term-match",
+        "score": 20
+      },
+      {
+        "filename": "all_32438.png",
+        "reason": "term-match",
+        "score": 20
+      },
+      {
+        "filename": "all_36081.png",
+        "reason": "term-match",
+        "score": 20
+      },
+      {
+        "filename": "ball_3241.png",
+        "reason": "term-match",
+        "score": 12
+      },
+      {
+        "filename": "ball-point_pen.png",
+        "reason": "term-match",
+        "score": 9
+      },
+      {
+        "filename": "ball_2269.png",
+        "reason": "term-match",
+        "score": 9
+      },
+      {
+        "filename": "balloon_2407.png",
+        "reason": "term-match",
+        "score": 9
+      },
+      {
+        "filename": "balloon_2408.png",
+        "reason": "term-match",
+        "score": 9
+      },
+      {
+        "filename": "teacher_2457.png",
+        "reason": "term-match",
+        "score": 9
+      },
+      {
+        "filename": "teacher_2456.png",
+        "reason": "term-match",
+        "score": 9
+      },
+      {
+        "filename": "peach.png",
+        "reason": "term-match",
+        "score": 9
+      }
+    ]
+  },
+  {
+    "id": "65",
+    "word_en": "wake",
+    "word_zh": "醒来",
+    "symbol_key": "wake_up_8988.png",
+    "candidates": [
+      {
+        "filename": "wake_up_8988.png",
+        "reason": "current",
+        "score": 100
+      },
+      {
+        "filename": "wake_up_8989.png",
+        "reason": "term-match",
+        "score": 37
+      },
+      {
+        "filename": "wake_up_28625.png",
+        "reason": "term-match",
+        "score": 37
+      },
+      {
+        "filename": "wake_up_31857.png",
+        "reason": "term-match",
+        "score": 37
+      },
+      {
+        "filename": "awake_11235.png",
+        "reason": "term-match",
+        "score": 26
+      },
+      {
+        "filename": "awake_28631.png",
+        "reason": "term-match",
+        "score": 26
+      },
+      {
+        "filename": "hold_a_wake_over_31873.png",
+        "reason": "term-match",
+        "score": 9
+      },
+      {
+        "filename": "hold_a_wake_over_31874.png",
+        "reason": "term-match",
+        "score": 9
+      }
+    ]
+  },
+  {
+    "id": "90",
+    "word_en": "pull",
+    "word_zh": "拉",
+    "symbol_key": "pull_out.png",
+    "candidates": [
+      {
+        "filename": "pull_out.png",
+        "reason": "current",
+        "score": 100
+      },
+      {
+        "filename": "tug_15481.png",
+        "reason": "term-match",
+        "score": 20
+      },
+      {
+        "filename": "tug_34121.png",
+        "reason": "term-match",
+        "score": 17
+      },
+      {
+        "filename": "tug_34123.png",
+        "reason": "term-match",
+        "score": 17
+      },
+      {
+        "filename": "tug_of_war.png",
+        "reason": "term-match",
+        "score": 12
+      },
+      {
+        "filename": "dragon.png",
+        "reason": "term-match",
+        "score": 9
+      },
+      {
+        "filename": "Portugal_8196.png",
+        "reason": "term-match",
+        "score": 9
+      },
+      {
+        "filename": "dragonfly.png",
+        "reason": "term-match",
+        "score": 9
+      },
+      {
+        "filename": "pull_hair_16903.png",
+        "reason": "term-match",
+        "score": 9
+      },
+      {
+        "filename": "pulley.png",
+        "reason": "term-match",
+        "score": 9
+      },
+      {
+        "filename": "pullboy.png",
+        "reason": "term-match",
+        "score": 9
+      },
+      {
+        "filename": "Portugal_28969.png",
+        "reason": "term-match",
+        "score": 9
+      }
+    ]
+  },
+  {
+    "id": "100",
+    "word_en": "cannot",
+    "word_zh": "不能",
+    "symbol_key": "no_5525.png",
+    "candidates": [
+      {
+        "filename": "no_5525.png",
+        "reason": "current",
+        "score": 100
+      },
+      {
+        "filename": "I_am_not_able_to_read.png",
+        "reason": "term-match",
+        "score": 21
+      },
+      {
+        "filename": "no_5526.png",
+        "reason": "term-match",
+        "score": 17
+      },
+      {
+        "filename": "no_5800.png",
+        "reason": "term-match",
+        "score": 17
+      },
+      {
+        "filename": "no_26941.png",
+        "reason": "term-match",
+        "score": 17
+      },
+      {
+        "filename": "no_31859.png",
+        "reason": "term-match",
+        "score": 17
+      },
+      {
+        "filename": "no_34341.png",
+        "reason": "term-match",
+        "score": 17
+      },
+      {
+        "filename": "no_39149.png",
+        "reason": "term-match",
+        "score": 17
+      },
+      {
+        "filename": "piano.png",
+        "reason": "term-match",
+        "score": 9
+      },
+      {
+        "filename": "rhinoceros.png",
+        "reason": "term-match",
+        "score": 9
+      },
+      {
+        "filename": "nought_2626.png",
+        "reason": "term-match",
+        "score": 9
+      },
+      {
+        "filename": "dinosaur_2738.png",
+        "reason": "term-match",
+        "score": 9
+      }
+    ]
+  },
+  {
+    "id": "102",
+    "word_en": "should",
+    "word_zh": "应该",
+    "symbol_key": "need.png",
+    "candidates": [
+      {
+        "filename": "need.png",
+        "reason": "current",
+        "score": 100
+      },
+      {
+        "filename": "needle_2639.png",
+        "reason": "term-match",
+        "score": 9
+      },
+      {
+        "filename": "shoulder.png",
+        "reason": "term-match",
+        "score": 9
+      },
+      {
+        "filename": "mustard_sauce.png",
+        "reason": "term-match",
+        "score": 9
+      },
+      {
+        "filename": "I_need_help.png",
+        "reason": "term-match",
+        "score": 9
+      },
+      {
+        "filename": "needle_11166.png",
+        "reason": "term-match",
+        "score": 9
+      },
+      {
+        "filename": "shoulder_blade.png",
+        "reason": "term-match",
+        "score": 9
+      },
+      {
+        "filename": "I_don't_need_help.png",
+        "reason": "term-match",
+        "score": 9
+      },
+      {
+        "filename": "Special_Needs_Education.png",
+        "reason": "term-match",
+        "score": 9
+      },
+      {
+        "filename": "needle_and_thread.png",
+        "reason": "term-match",
+        "score": 9
+      },
+      {
+        "filename": "needle_and_thread_roll.png",
+        "reason": "term-match",
+        "score": 9
+      },
+      {
+        "filename": "needles_34223.png",
+        "reason": "term-match",
+        "score": 9
+      }
+    ]
+  },
+  {
+    "id": "103",
+    "word_en": "need to",
+    "word_zh": "需要去",
+    "symbol_key": "need.png",
+    "candidates": [
+      {
+        "filename": "need.png",
+        "reason": "current",
+        "score": 100
+      },
+      {
+        "filename": "needle_2639.png",
+        "reason": "term-match",
+        "score": 9
+      },
+      {
+        "filename": "mustard_sauce.png",
+        "reason": "term-match",
+        "score": 9
+      },
+      {
+        "filename": "I_need_help.png",
+        "reason": "term-match",
+        "score": 9
+      },
+      {
+        "filename": "needle_11166.png",
+        "reason": "term-match",
+        "score": 9
+      },
+      {
+        "filename": "I_don't_need_help.png",
+        "reason": "term-match",
+        "score": 9
+      },
+      {
+        "filename": "Special_Needs_Education.png",
+        "reason": "term-match",
+        "score": 9
+      },
+      {
+        "filename": "needle_and_thread.png",
+        "reason": "term-match",
+        "score": 9
+      },
+      {
+        "filename": "needle_and_thread_roll.png",
+        "reason": "term-match",
+        "score": 9
+      },
+      {
+        "filename": "needles_34223.png",
+        "reason": "term-match",
+        "score": 9
+      },
+      {
+        "filename": "needles_34229.png",
+        "reason": "term-match",
+        "score": 9
+      },
+      {
+        "filename": "moustache.png",
+        "reason": "term-match",
+        "score": 3
+      }
+    ]
+  },
+  {
+    "id": "106",
+    "word_en": "not",
+    "word_zh": "不",
+    "symbol_key": "no_5526.png",
+    "candidates": [
+      {
+        "filename": "no_5526.png",
+        "reason": "current",
+        "score": 100
+      },
+      {
+        "filename": "knot_5391.png",
+        "reason": "term-match",
+        "score": 18
+      },
+      {
+        "filename": "I_do_not_want.png",
+        "reason": "term-match",
+        "score": 18
+      },
+      {
+        "filename": "noticeboard.png",
+        "reason": "term-match",
+        "score": 18
+      },
+      {
+        "filename": "communication_notebook.png",
+        "reason": "term-match",
+        "score": 18
+      },
+      {
+        "filename": "notebook.png",
+        "reason": "term-match",
+        "score": 18
+      },
+      {
+        "filename": "I_do_not_know.png",
+        "reason": "term-match",
+        "score": 18
+      },
+      {
+        "filename": "note_7187.png",
+        "reason": "term-match",
+        "score": 18
+      },
+      {
+        "filename": "notions_dealer_7780.png",
+        "reason": "term-match",
+        "score": 18
+      },
+      {
+        "filename": "notions_store_7781.png",
+        "reason": "term-match",
+        "score": 18
+      },
+      {
+        "filename": "notions_dealer_7779.png",
+        "reason": "term-match",
+        "score": 18
+      },
+      {
+        "filename": "notions_store_7782.png",
+        "reason": "term-match",
+        "score": 18
+      }
+    ]
+  },
+  {
+    "id": "107",
+    "word_en": "don't",
+    "word_zh": "不要",
+    "symbol_key": "I_do_not_want.png",
+    "candidates": [
+      {
+        "filename": "I_do_not_want.png",
+        "reason": "current",
+        "score": 100
+      },
+      {
+        "filename": "I_do_not_know.png",
+        "reason": "term-match",
+        "score": 12
+      },
+      {
+        "filename": "I_do_not_understand_27363.png",
+        "reason": "term-match",
+        "score": 12
+      },
+      {
+        "filename": "I_do_not_understand_37827.png",
+        "reason": "term-match",
+        "score": 12
+      },
+      {
+        "filename": "dislike_22005.png",
+        "reason": "term-match",
+        "score": 6
+      },
+      {
+        "filename": "I_don't_need_help.png",
+        "reason": "term-match",
+        "score": 6
+      },
+      {
+        "filename": "odontology_31829.png",
+        "reason": "term-match",
+        "score": 6
+      },
+      {
+        "filename": "odontology_32082.png",
+        "reason": "term-match",
+        "score": 6
+      },
+      {
+        "filename": "dislike_37825.png",
+        "reason": "term-match",
+        "score": 6
+      },
+      {
+        "filename": "dislike_38888.png",
+        "reason": "term-match",
+        "score": 6
+      },
+      {
+        "filename": "dislike_38890.png",
+        "reason": "term-match",
+        "score": 6
+      },
+      {
+        "filename": "dislike_6155.png",
+        "reason": "term-match",
+        "score": 3
+      }
+    ]
+  },
+  {
+    "id": "108",
+    "word_en": "can't",
+    "word_zh": "不能",
+    "symbol_key": "I_do_not_know.png",
+    "candidates": [
+      {
+        "filename": "I_do_not_know.png",
+        "reason": "current",
+        "score": 100
+      },
+      {
+        "filename": "canteen.png",
+        "reason": "term-match",
+        "score": 6
+      },
+      {
+        "filename": "Cantabria_8060.png",
+        "reason": "term-match",
+        "score": 6
+      },
+      {
+        "filename": "Cantabria_8527.png",
+        "reason": "term-match",
+        "score": 6
+      },
+      {
+        "filename": "Alicante.png",
+        "reason": "term-match",
+        "score": 6
+      },
+      {
+        "filename": "Cantabria_14836.png",
+        "reason": "term-match",
+        "score": 6
+      },
+      {
+        "filename": "staff_canteen.png",
+        "reason": "term-match",
+        "score": 6
+      },
+      {
+        "filename": "I_am_not_able_to_read.png",
+        "reason": "term-match",
+        "score": 3
+      }
+    ]
+  },
+  {
+    "id": "121",
+    "word_en": "loud",
+    "word_zh": "大声",
+    "symbol_key": "noisy_7157.png",
+    "candidates": [
+      {
+        "filename": "noisy_7157.png",
+        "reason": "current",
+        "score": 100
+      },
+      {
+        "filename": "noisy_36047.png",
+        "reason": "term-match",
+        "score": 17
+      },
+      {
+        "filename": "noisy_36091.png",
+        "reason": "term-match",
+        "score": 17
+      },
+      {
+        "filename": "noisy_36165.png",
+        "reason": "term-match",
+        "score": 17
+      },
+      {
+        "filename": "loudspeakers.png",
+        "reason": "term-match",
+        "score": 9
+      },
+      {
+        "filename": "cloud_2883.png",
+        "reason": "term-match",
+        "score": 9
+      },
+      {
+        "filename": "cloudy_2882.png",
+        "reason": "term-match",
+        "score": 9
+      },
+      {
+        "filename": "partially_cloudy.png",
+        "reason": "term-match",
+        "score": 9
+      },
+      {
+        "filename": "are_there_any_clouds.png",
+        "reason": "term-match",
+        "score": 9
+      },
+      {
+        "filename": "it's_cloudy!_10734.png",
+        "reason": "term-match",
+        "score": 9
+      },
+      {
+        "filename": "cloudy_25636.png",
+        "reason": "term-match",
+        "score": 9
+      },
+      {
+        "filename": "cloudy_34061.png",
+        "reason": "term-match",
+        "score": 9
+      }
+    ]
+  },
+  {
+    "id": "157",
+    "word_en": "down",
+    "word_zh": "向下",
+    "symbol_key": "descend_6053.png",
+    "candidates": [
+      {
+        "filename": "descend_6053.png",
+        "reason": "current",
+        "score": 100
+      },
+      {
+        "filename": "descend_8035.png",
+        "reason": "term-match",
+        "score": 20
+      },
+      {
+        "filename": "descend_24723.png",
+        "reason": "term-match",
+        "score": 20
+      },
+      {
+        "filename": "descend_34807.png",
+        "reason": "term-match",
+        "score": 20
+      },
+      {
+        "filename": "descend_37244.png",
+        "reason": "term-match",
+        "score": 20
+      },
+      {
+        "filename": "lower.png",
+        "reason": "term-match",
+        "score": 17
+      },
+      {
+        "filename": "turn_down_the_volume.png",
+        "reason": "term-match",
+        "score": 12
+      },
+      {
+        "filename": "go_down_escalator.png",
+        "reason": "term-match",
+        "score": 12
+      },
+      {
+        "filename": "descend_moving_ramp.png",
+        "reason": "term-match",
+        "score": 12
+      },
+      {
+        "filename": "go_down_the_stairs_2654.png",
+        "reason": "term-match",
+        "score": 9
+      },
+      {
+        "filename": "carnation_flower.png",
+        "reason": "term-match",
+        "score": 9
+      },
+      {
+        "filename": "flower_3102.png",
+        "reason": "term-match",
+        "score": 9
+      }
+    ]
+  },
+  {
+    "id": "159",
+    "word_en": "off",
+    "word_zh": "离开/关掉",
+    "symbol_key": "turn_off_21365.png",
+    "candidates": [
+      {
+        "filename": "turn_off_21365.png",
+        "reason": "current",
+        "score": 100
+      },
+      {
+        "filename": "turn_off_11739.png",
+        "reason": "term-match",
+        "score": 26
+      },
+      {
+        "filename": "switch_off.png",
+        "reason": "term-match",
+        "score": 26
+      },
+      {
+        "filename": "turn_off_37022.png",
+        "reason": "term-match",
+        "score": 26
+      },
+      {
+        "filename": "turn_off_the_monitor.png",
+        "reason": "term-match",
+        "score": 21
+      },
+      {
+        "filename": "turn_off_the_light.png",
+        "reason": "term-match",
+        "score": 18
+      },
+      {
+        "filename": "switch_off_the_air-conditioning.png",
+        "reason": "term-match",
+        "score": 18
+      },
+      {
+        "filename": "power_off_button.png",
+        "reason": "term-match",
+        "score": 12
+      },
+      {
+        "filename": "coffee_2296.png",
+        "reason": "term-match",
+        "score": 9
+      },
+      {
+        "filename": "coffee_maker_2297.png",
+        "reason": "term-match",
+        "score": 9
+      },
+      {
+        "filename": "coffee_cup.png",
+        "reason": "term-match",
+        "score": 9
+      },
+      {
+        "filename": "off-road_vehicle.png",
+        "reason": "term-match",
+        "score": 9
+      }
+    ]
+  },
+  {
+    "id": "160",
+    "word_en": "away",
+    "word_zh": "离开",
+    "symbol_key": "far_30385.png",
+    "candidates": [
+      {
+        "filename": "far_30385.png",
+        "reason": "current",
+        "score": 100
+      },
+      {
+        "filename": "far_36759.png",
+        "reason": "term-match",
+        "score": 17
+      },
+      {
+        "filename": "escape_from_31014.png",
+        "reason": "term-match",
+        "score": 14
+      },
+      {
+        "filename": "escape_from_31015.png",
+        "reason": "term-match",
+        "score": 14
+      },
+      {
+        "filename": "farmer_2982.png",
+        "reason": "term-match",
+        "score": 9
+      },
+      {
+        "filename": "farmer_3338.png",
+        "reason": "term-match",
+        "score": 9
+      },
+      {
+        "filename": "farm_3337.png",
+        "reason": "term-match",
+        "score": 9
+      },
+      {
+        "filename": "farmer_6035.png",
+        "reason": "term-match",
+        "score": 9
+      },
+      {
+        "filename": "farmer_6515.png",
+        "reason": "term-match",
+        "score": 9
+      },
+      {
+        "filename": "throw_away.png",
+        "reason": "term-match",
+        "score": 9
+      },
+      {
+        "filename": "farmer_11165.png",
+        "reason": "term-match",
+        "score": 9
+      },
+      {
+        "filename": "farmer_11276.png",
+        "reason": "term-match",
+        "score": 9
+      }
+    ]
+  },
+  {
+    "id": "166",
+    "word_en": "into",
+    "word_zh": "进到",
+    "symbol_key": "in.png",
+    "candidates": [
+      {
+        "filename": "in.png",
+        "reason": "current",
+        "score": 100
+      },
+      {
+        "filename": "inside.png",
+        "reason": "term-match",
+        "score": 26
+      },
+      {
+        "filename": "badminton_4969.png",
+        "reason": "term-match",
+        "score": 18
+      },
+      {
+        "filename": "badminton_player_9190.png",
+        "reason": "term-match",
+        "score": 18
+      },
+      {
+        "filename": "badminton_26658.png",
+        "reason": "term-match",
+        "score": 18
+      },
+      {
+        "filename": "badminton_player_34922.png",
+        "reason": "term-match",
+        "score": 18
+      },
+      {
+        "filename": "cough_into_the_face.png",
+        "reason": "term-match",
+        "score": 18
+      },
+      {
+        "filename": "cough_into_elbow.png",
+        "reason": "term-match",
+        "score": 18
+      },
+      {
+        "filename": "get_into_the_bus.png",
+        "reason": "term-match",
+        "score": 18
+      },
+      {
+        "filename": "get_into_the_car.png",
+        "reason": "term-match",
+        "score": 18
+      },
+      {
+        "filename": "cough_into_the_handkerchief.png",
+        "reason": "term-match",
+        "score": 18
+      },
+      {
+        "filename": "t-shirt_inside_out_37219.png",
+        "reason": "term-match",
+        "score": 18
+      }
+    ]
+  },
+  {
+    "id": "180",
+    "word_en": "which",
+    "word_zh": "哪一个",
+    "symbol_key": "which.png",
+    "candidates": [
+      {
+        "filename": "which.png",
+        "reason": "current",
+        "score": 100
+      },
+      {
+        "filename": "what_22620.png",
+        "reason": "term-match",
+        "score": 17
+      },
+      {
+        "filename": "what_22624.png",
+        "reason": "term-match",
+        "score": 17
+      },
+      {
+        "filename": "which_game_do_you_want.png",
+        "reason": "term-match",
+        "score": 12
+      },
+      {
+        "filename": "what_is_your_name_7061.png",
+        "reason": "term-match",
+        "score": 9
+      },
+      {
+        "filename": "what's_the_weather_like.png",
+        "reason": "term-match",
+        "score": 9
+      },
+      {
+        "filename": "What_are_you_reading.png",
+        "reason": "term-match",
+        "score": 9
+      },
+      {
+        "filename": "What_are_you_looking_at.png",
+        "reason": "term-match",
+        "score": 9
+      },
+      {
+        "filename": "What_do_you_have.png",
+        "reason": "term-match",
+        "score": 9
+      },
+      {
+        "filename": "What's_his_gender.png",
+        "reason": "term-match",
+        "score": 9
+      },
+      {
+        "filename": "what_is_that.png",
+        "reason": "term-match",
+        "score": 9
+      },
+      {
+        "filename": "what_program_do_you_want_to_watch.png",
+        "reason": "term-match",
+        "score": 9
+      }
+    ]
+  },
+  {
+    "id": "186",
+    "word_en": "excuse me",
+    "word_zh": "打扰了",
+    "symbol_key": "sorry_11625.png",
+    "candidates": [
+      {
+        "filename": "sorry_11625.png",
+        "reason": "current",
+        "score": 100
+      },
+      {
+        "filename": "sorry_38360.png",
+        "reason": "term-match",
+        "score": 17
+      },
+      {
+        "filename": "sorry_38361.png",
+        "reason": "term-match",
+        "score": 17
+      }
+    ]
+  },
+  {
+    "id": "199",
+    "word_en": "all done",
+    "word_zh": "完成",
+    "symbol_key": "finish_28429.png",
+    "candidates": [
+      {
+        "filename": "finish_28429.png",
+        "reason": "current",
+        "score": 100
+      },
+      {
+        "filename": "finish_5358.png",
+        "reason": "term-match",
+        "score": 17
+      },
+      {
+        "filename": "finish_15475.png",
+        "reason": "term-match",
+        "score": 17
+      },
+      {
+        "filename": "finish_32814.png",
+        "reason": "term-match",
+        "score": 17
+      },
+      {
+        "filename": "finish_34607.png",
+        "reason": "term-match",
+        "score": 17
+      },
+      {
+        "filename": "finish_39182.png",
+        "reason": "term-match",
+        "score": 17
+      },
+      {
+        "filename": "what_have_you_done_10367.png",
+        "reason": "term-match",
+        "score": 9
+      },
+      {
+        "filename": "finishing_line.png",
+        "reason": "term-match",
+        "score": 9
+      },
+      {
+        "filename": "Indonesia.png",
+        "reason": "term-match",
+        "score": 9
+      },
+      {
+        "filename": "well_done.png",
+        "reason": "term-match",
+        "score": 9
+      },
+      {
+        "filename": "abandoned.png",
+        "reason": "term-match",
+        "score": 9
+      },
+      {
+        "filename": "what_have_you_done_38482.png",
+        "reason": "term-match",
+        "score": 9
+      }
+    ]
+  }
+]

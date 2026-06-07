@@ -1,5 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { ArrowLeft, Hand, Timer } from 'lucide-react'
+import { apiFetch } from '../services/api-client'
+import { getActiveChildId } from '../services/child-context'
 
 interface ScheduleFocusScreenProps {
   onBack: () => void
@@ -17,13 +19,27 @@ const ScheduleFocusScreen: React.FC<ScheduleFocusScreenProps> = ({ onBack }) => 
   const [dragOver, setDragOver] = useState(false)
   const [task, setTask] = useState<FocusTask | null>(null)
   const [loading, setLoading] = useState(true)
-  const progress = useMemo(() => (completed ? 100 : 40), [completed])
+  const [rewardIssued, setRewardIssued] = useState(false)
+  const [remainingSeconds, setRemainingSeconds] = useState(0)
+  const activeChildId = getActiveChildId()
+
+  const totalSeconds = useMemo(() => {
+    if (!task) return 0
+    return Math.max(60, (task.estMinutes || 1) * 60)
+  }, [task])
+
+  const progress = useMemo(() => {
+    if (completed) return 100
+    if (!totalSeconds) return 0
+    const elapsed = totalSeconds - remainingSeconds
+    return Math.max(0, Math.min(100, Math.round((elapsed / totalSeconds) * 100)))
+  }, [completed, totalSeconds, remainingSeconds])
 
   useEffect(() => {
     const loadTask = async () => {
       try {
         setLoading(true)
-        const response = await fetch('http://localhost:3001/api/focus/current-task')
+        const response = await apiFetch(`/api/focus/current-task${activeChildId ? `?childId=${activeChildId}` : ''}`)
         const data = await response.json()
         setTask(data)
       } catch (error) {
@@ -35,6 +51,20 @@ const ScheduleFocusScreen: React.FC<ScheduleFocusScreenProps> = ({ onBack }) => 
     }
     loadTask()
   }, [])
+
+  useEffect(() => {
+    if (!task) return
+    setRemainingSeconds(totalSeconds)
+  }, [task, totalSeconds])
+
+  useEffect(() => {
+    if (completed) return
+    if (remainingSeconds <= 0) return
+    const timer = window.setInterval(() => {
+      setRemainingSeconds((prev) => Math.max(0, prev - 1))
+    }, 1000)
+    return () => window.clearInterval(timer)
+  }, [completed, remainingSeconds])
 
   if (loading) {
     return (
@@ -51,6 +81,40 @@ const ScheduleFocusScreen: React.FC<ScheduleFocusScreenProps> = ({ onBack }) => 
       </div>
     )
   }
+
+  const handleComplete = async () => {
+    if (completed || !task) return
+    setCompleted(true)
+    try {
+      const response = await apiFetch('/api/focus/complete-task', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ taskId: task.id, childId: activeChildId })
+      })
+      const data = await response.json()
+      setRewardIssued(Boolean(data?.rewardIssued))
+      await apiFetch('/api/analytics/event', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          child_id: activeChildId,
+          event_type: 'task_done',
+          event_payload: { taskId: task.id, title: task.title }
+        })
+      })
+    } catch (error) {
+      console.error('Failed to complete task', error)
+    }
+  }
+
+  const timerLabel = useMemo(() => {
+    const m = Math.floor(remainingSeconds / 60)
+    const s = remainingSeconds % 60
+    return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`
+  }, [remainingSeconds])
+
+  const timerPercent = totalSeconds ? remainingSeconds / totalSeconds : 0
+  const timerDegree = Math.round(timerPercent * 360)
 
   return (
     <div className="h-full w-full bg-[#f6f4ef] text-slate-900 relative overflow-hidden">
@@ -94,6 +158,18 @@ const ScheduleFocusScreen: React.FC<ScheduleFocusScreenProps> = ({ onBack }) => 
               <div className="h-3 bg-white rounded-full overflow-hidden">
                 <div className="h-full bg-[#10b981] transition-all" style={{ width: `${progress}%` }}></div>
               </div>
+              <div className="mt-4 flex items-center gap-3">
+                <div
+                  className="h-16 w-16 rounded-full border border-slate-300"
+                  style={{
+                    background: `conic-gradient(#ef4444 0deg ${timerDegree}deg, #e5e7eb ${timerDegree}deg 360deg)`
+                  }}
+                />
+                <div>
+                  <div className="text-xs font-semibold text-slate-500">Time Timer</div>
+                  <div className="text-xl font-extrabold text-slate-900">{timerLabel}</div>
+                </div>
+              </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -117,7 +193,7 @@ const ScheduleFocusScreen: React.FC<ScheduleFocusScreenProps> = ({ onBack }) => 
                 拖动任务卡
               </div>
               <button
-                onClick={() => setCompleted(true)}
+                onClick={handleComplete}
                 className="flex-1 bg-white border-2 border-[#10b981] text-[#047857] font-extrabold text-lg py-4 rounded-2xl"
               >
                 点击完成
@@ -137,14 +213,14 @@ const ScheduleFocusScreen: React.FC<ScheduleFocusScreenProps> = ({ onBack }) => 
               onDrop={(event) => {
                 event.preventDefault()
                 setDragOver(false)
-                setCompleted(true)
+                handleComplete()
               }}
               className={`flex-1 border-2 border-dashed rounded-3xl flex items-center justify-center font-semibold transition-all ${dragOver ? 'border-[#10b981] bg-[#dcfce7] text-[#166534]' : 'border-slate-300 text-slate-400'}`}
             >
               {completed ? '已完成' : '把任务卡拖到这里'}
             </div>
             <button className="w-full bg-[#f97316] text-white font-extrabold text-lg py-4 rounded-2xl shadow-lg">
-              +1 奖励
+              {rewardIssued ? '+1 奖励已到账' : '+1 奖励'}
             </button>
             <button className="w-full bg-[#f43f5e] text-white font-extrabold text-lg py-4 rounded-2xl shadow-lg flex items-center justify-center gap-2">
               <Hand size={20} />

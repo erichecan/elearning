@@ -6,7 +6,21 @@
     "scripts": {
         "start": "ts-node src/index.ts",
         "dev": "nodemon src/index.ts",
-        "build": "tsc"
+        "build": "tsc",
+        "migrate:phase1": "ts-node scripts/migrate-phase1.ts",
+        "seed:initial": "ts-node scripts/seed-initial-data.ts",
+        "prepare:coreword-images": "ts-node scripts/prepare-coreword-image-keywords.ts",
+        "seed:coreword-images": "ts-node scripts/seed-coreword-images.ts",
+        "symbols:download:arasaac": "python3 scripts/download_arasaac_symbols.py",
+        "symbols:index:arasaac": "python3 scripts/build_arasaac_index.py",
+        "seed:symbol-assets:arasaac": "ts-node scripts/seed-symbol-assets-arasaac.ts",
+        "bootstrap:coreword-symbol-mapping": "ts-node scripts/bootstrap-coreword-symbol-mapping.ts",
+        "prepare:coreword-manual-mapping": "ts-node scripts/prepare-coreword-manual-mapping.ts",
+        "apply:coreword-manual-mapping": "ts-node scripts/apply-coreword-manual-mapping.ts",
+        "prepare:coreword-review-17": "ts-node scripts/prepare-coreword-review-17.ts",
+        "build:symbol-pack": "ts-node scripts/build-symbol-pack.ts",
+        "build:symbol-pack:core200": "ts-node scripts/build-symbol-pack.ts --pack core-200 --type core --apply-usage-pack",
+        "build:symbol-pack:starter600": "ts-node scripts/build-symbol-pack.ts --pack starter-600 --limit 600"
     },
     "keywords": [],
     "author": "",

@@ -1,23 +1,31 @@
 // 语音服务 - 使用Web Speech API
+import { buildApiUrl } from './api-client'
+
 export class SpeechService {
   private synth: SpeechSynthesis;
-  private defaultVoice: SpeechSynthesisVoice | null = null;
 
   constructor() {
     this.synth = window.speechSynthesis;
     this.initVoices();
   }
 
+  private pickDefaultVoice() {
+    const voices = this.synth.getVoices();
+    return voices.find(voice =>
+      voice.lang.startsWith('en') && voice.name.includes('Microsoft') && voice.name.includes('Online')
+    ) || voices.find(voice =>
+      voice.lang.startsWith('en') && voice.name.includes('Microsoft')
+    ) || voices.find(voice =>
+      voice.lang.startsWith('en') && voice.name.includes('Natural')
+    ) || voices.find(voice =>
+      voice.lang.startsWith('en')
+    ) || voices[0] || null;
+  }
+
   private initVoices() {
     // 等待语音加载完成
     const loadVoices = () => {
-      const voices = this.synth.getVoices();
-      // 优先选择英语语音
-      this.defaultVoice = voices.find(voice =>
-        voice.lang.startsWith('en') && voice.name.includes('Natural')
-      ) || voices.find(voice =>
-        voice.lang.startsWith('en')
-      ) || voices[0] || null;
+      this.pickDefaultVoice();
     };
 
     // 某些浏览器需要等待onvoiceschanged事件
@@ -42,6 +50,35 @@ export class SpeechService {
       // 取消当前正在播放的语音
       this.synth.cancel();
 
+      const useEdgeTts = true;
+      if (useEdgeTts) {
+        fetch(buildApiUrl(`/api/tts?text=${encodeURIComponent(word)}`))
+          .then((res) => res.json())
+          .then((data) => {
+            if (data?.url) {
+              const audio = new Audio(buildApiUrl(data.url));
+              audio.onended = () => resolve();
+              audio.onerror = () => this.speakWithWebSpeech(word, options).then(resolve).catch(reject);
+              audio.play().catch(() => this.speakWithWebSpeech(word, options).then(resolve).catch(reject));
+            } else {
+              this.speakWithWebSpeech(word, options).then(resolve).catch(reject);
+            }
+          })
+          .catch(() => this.speakWithWebSpeech(word, options).then(resolve).catch(reject));
+        return;
+      }
+
+      this.speakWithWebSpeech(word, options).then(resolve).catch(reject);
+    });
+  }
+
+  private speakWithWebSpeech(word: string, options: {
+    rate?: number;
+    pitch?: number;
+    volume?: number;
+    lang?: string;
+  } = {}): Promise<void> {
+    return new Promise((resolve, reject) => {
       const utterance = new SpeechSynthesisUtterance(word);
 
       // 设置语音参数
@@ -50,9 +87,8 @@ export class SpeechService {
       utterance.volume = options.volume ?? 1.0;
       utterance.lang = options.lang ?? 'en-US';
 
-      if (this.defaultVoice) {
-        utterance.voice = this.defaultVoice;
-      }
+      const preferred = this.pickDefaultVoice();
+      if (preferred) utterance.voice = preferred;
 
       utterance.onend = () => resolve();
       utterance.onerror = (event) => reject(new Error(`Speech synthesis failed: ${event.error}`));

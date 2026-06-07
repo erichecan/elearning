@@ -112,7 +112,8 @@ export const imageGeneratorService = {
 
         // Return local URL
         // Assuming backend runs on port 3001
-        return `http://localhost:3001/generated/${fileName}`;
+        const baseUrl = process.env.API_BASE_URL || process.env.VITE_API_BASE_URL || 'http://localhost:3001';
+        return `${baseUrl.replace(/\/$/, '')}/generated/${fileName}`;
       }
 
       // If we got here, we don't know what it is. Log it.

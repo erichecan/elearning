@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { apiFetch } from '../../services/api-client'
 
 interface CoreWordItem {
   id: number
@@ -19,11 +20,13 @@ const CoreWordsManager: React.FC = () => {
   const [loading, setLoading] = useState(false)
   const [savingId, setSavingId] = useState<number | null>(null)
   const [form, setForm] = useState({ ...emptyForm })
+  const [grid, setGrid] = useState('6x6')
+  const [childId, setChildId] = useState('')
 
   const loadItems = async () => {
     setLoading(true)
     try {
-      const response = await fetch('http://localhost:3001/api/vocabulary-items?type=core')
+      const response = await apiFetch('/api/vocabulary-items?type=core')
       const data = await response.json()
       setItems(Array.isArray(data) ? data : [])
     } catch (error) {
@@ -40,7 +43,7 @@ const CoreWordsManager: React.FC = () => {
   const handleCreate = async () => {
     if (!form.word_en.trim()) return
     try {
-      const response = await fetch('http://localhost:3001/api/vocabulary-items', {
+      const response = await apiFetch('/api/vocabulary-items', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -62,7 +65,7 @@ const CoreWordsManager: React.FC = () => {
   const handleUpdate = async (item: CoreWordItem) => {
     setSavingId(item.id)
     try {
-      const response = await fetch(`http://localhost:3001/api/vocabulary-items/${item.id}`, {
+      const response = await apiFetch(`/api/vocabulary-items/${item.id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -83,7 +86,7 @@ const CoreWordsManager: React.FC = () => {
 
   const handleDelete = async (id: number) => {
     try {
-      await fetch(`http://localhost:3001/api/vocabulary-items/${id}`, { method: 'DELETE' })
+      await apiFetch(`/api/vocabulary-items/${id}`, { method: 'DELETE' })
       setItems(prev => prev.filter(row => row.id !== id))
     } catch (error) {
       console.error('Failed to delete core word', error)
@@ -118,6 +121,38 @@ const CoreWordsManager: React.FC = () => {
             className="bg-blue-500 text-white rounded-lg px-4 py-2 font-semibold"
           >
             新增
+          </button>
+        </div>
+        <div className="mt-4 grid grid-cols-1 md:grid-cols-4 gap-3">
+          <input
+            className="border rounded-lg px-3 py-2"
+            placeholder="Child ID"
+            value={childId}
+            onChange={(e) => setChildId(e.target.value)}
+          />
+          <input
+            className="border rounded-lg px-3 py-2"
+            placeholder="Grid (e.g. 6x6)"
+            value={grid}
+            onChange={(e) => setGrid(e.target.value)}
+          />
+          <button
+            onClick={async () => {
+              if (!childId) return
+              try {
+                await apiFetch('/api/core-word-positions/seed', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ childId, grid })
+                })
+                alert('已生成 Core Words 位置')
+              } catch (error) {
+                console.error('Failed to seed positions', error)
+              }
+            }}
+            className="bg-emerald-500 text-white rounded-lg px-4 py-2 font-semibold"
+          >
+            生成位置
           </button>
         </div>
       </div>

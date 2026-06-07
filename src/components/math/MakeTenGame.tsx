@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Star, RefreshCw, CheckCircle2 } from 'lucide-react';
+import { apiFetch } from '../../services/api-client';
 
 interface MakeTenGameProps {
     onBack: () => void;
@@ -33,6 +34,15 @@ const MakeTenGame: React.FC<MakeTenGameProps> = ({ onBack }) => {
     }, [userCount, initialCount]);
 
     const handleNext = () => {
+        apiFetch('/api/analytics/event', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                child_id: null,
+                event_type: 'math_make10_success',
+                event_payload: { level, initialCount }
+            })
+        }).catch(() => undefined);
         setLevel(prev => prev + 1);
     };
 

@@ -3,9 +3,16 @@ import { Settings, LogOut, RefreshCw } from 'lucide-react'
 import { Word, Category } from '../lib/database'
 import { wordService, categoryService } from '../services/api'
 import { adminApiService, adminStorageService } from '../services/admin-api'
+import { fetchChildren, getActiveChildId, setActiveChildId } from '../services/child-context'
 import { BulkImportWizard } from './admin/BulkImportWizard';
 import { ProductList } from './admin/ProductList';
 import CoreWordsManager from './admin/CoreWordsManager';
+import FlashcardsManager from './admin/FlashcardsManager';
+import MathExercisesManager from './admin/MathExercisesManager';
+import StorybooksManager from './admin/StorybooksManager';
+import VSDManager from './admin/VSDManager';
+import RewardsManager from './admin/RewardsManager';
+import AnalyticsManager from './admin/AnalyticsManager';
 
 interface AdminScreenProps {
   onBack: () => void
@@ -20,17 +27,48 @@ interface OptimizedWord extends Word {
 const AdminScreen: React.FC<AdminScreenProps> = ({ onBack }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [password, setPassword] = useState('')
-  const [currentTab, setCurrentTab] = useState<'products' | 'bulk-import' | 'sync' | 'core-words'>('products')
+  const [currentTab, setCurrentTab] = useState<'products' | 'bulk-import' | 'sync' | 'core-words' | 'flashcards' | 'math' | 'storybooks' | 'vsd' | 'rewards' | 'analytics'>('products')
   const [words, setWords] = useState<OptimizedWord[]>([])
   const [loading, setLoading] = useState(false)
   const [selectedCategory, setSelectedCategory] = useState<string>('')
+  const [children, setChildren] = useState<Array<{ id: string; name: string }>>([])
+  const [activeChildId, setActiveChildIdState] = useState<string | undefined>(() => getActiveChildId() || undefined)
+  const [appRole, setAppRole] = useState<'parent' | 'therapist' | 'admin'>('admin')
 
-  const handleLogin = (e: React.FormEvent) => {
+  const canAccessTab = (tabId: string) => {
+    if (appRole === 'admin') return true
+    if (appRole === 'parent') return true
+    if (appRole === 'therapist') {
+      return ['flashcards', 'math', 'analytics', 'storybooks'].includes(tabId)
+    }
+    return false
+  }
+
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (password === 'admin123') {
+    const token = password.trim()
+    if (!token) return
+    try {
+      const baseUrl = (import.meta as any).env?.VITE_API_BASE_URL || 'http://localhost:3001'
+      const response = await fetch(`${baseUrl.replace(/\/$/, '')}/api/admin/ping`, {
+        headers: { 'x-admin-token': token }
+      })
+      if (!response.ok) throw new Error('Unauthorized')
+      localStorage.setItem('adminToken', token)
       setIsAuthenticated(true)
-    } else {
-      alert('密码错误')
+      const savedRole = localStorage.getItem('appRole')
+      if (savedRole === 'parent' || savedRole === 'therapist' || savedRole === 'admin') {
+        setAppRole(savedRole)
+      }
+      const list = await fetchChildren().catch(() => [])
+      setChildren(list)
+      if (!activeChildId && list.length > 0) {
+        setActiveChildId(list[0].id)
+        setActiveChildIdState(list[0].id)
+      }
+    } catch (error) {
+      localStorage.removeItem('adminToken')
+      alert('管理员 Token 无效')
     }
   }
 
@@ -104,20 +142,20 @@ const AdminScreen: React.FC<AdminScreenProps> = ({ onBack }) => {
           <div className="text-center mb-8">
             <Settings className="mx-auto mb-4 text-blue-500" size={48} />
             <h1 className="text-2xl font-bold text-gray-800">Admin 后台管理</h1>
-            <p className="text-gray-600 mt-2">内容管理系统</p>
+            <p className="text-gray-600 mt-2">请输入管理员 Token</p>
           </div>
 
           <form onSubmit={handleLogin}>
             <div className="mb-6">
               <label className="block text-gray-700 text-sm font-bold mb-2">
-                管理员密码
+                管理员 Token
               </label>
               <input
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
-                placeholder="请输入管理员密码"
+                placeholder="请输入管理员 Token"
                 required
               />
             </div>
@@ -156,7 +194,10 @@ const AdminScreen: React.FC<AdminScreenProps> = ({ onBack }) => {
             </div>
 
             <button
-              onClick={() => setIsAuthenticated(false)}
+              onClick={() => {
+                localStorage.removeItem('adminToken')
+                setIsAuthenticated(false)
+              }}
               className="flex items-center space-x-2 text-gray-500 hover:text-gray-700"
             >
               <LogOut size={20} />
@@ -173,9 +214,15 @@ const AdminScreen: React.FC<AdminScreenProps> = ({ onBack }) => {
             {[
               { id: 'products', name: '内容管理' },
               { id: 'core-words', name: 'Core Words' },
+              { id: 'flashcards', name: 'Flashcards' },
+              { id: 'math', name: 'Math 题库' },
+              { id: 'storybooks', name: '绘本' },
+              { id: 'vsd', name: 'VSD 场景' },
+              { id: 'rewards', name: '奖励规则' },
+              { id: 'analytics', name: '行为分析' },
               { id: 'bulk-import', name: '批量导入' },
               { id: 'sync', name: '数据同步' }
-            ].map(tab => (
+            ].filter(tab => canAccessTab(tab.id)).map(tab => (
               <button
                 key={tab.id}
                 onClick={() => setCurrentTab(tab.id as any)}
@@ -187,6 +234,37 @@ const AdminScreen: React.FC<AdminScreenProps> = ({ onBack }) => {
                 {tab.name}
               </button>
             ))}
+          </div>
+          <div className="pb-3 flex items-center gap-4">
+            <label className="text-xs text-gray-500 mr-2">当前孩子</label>
+            <select
+              value={activeChildId || ''}
+              onChange={(e) => {
+                const id = e.target.value
+                setActiveChildIdState(id || undefined)
+                if (id) setActiveChildId(id)
+              }}
+              className="border rounded px-2 py-1 text-sm"
+            >
+              {children.length === 0 && <option value="">无孩子数据</option>}
+              {children.map((child) => (
+                <option key={child.id} value={child.id}>{child.name}</option>
+              ))}
+            </select>
+            <label className="text-xs text-gray-500">角色视图</label>
+            <select
+              value={appRole}
+              onChange={(e) => {
+                const next = e.target.value as 'parent' | 'therapist' | 'admin'
+                setAppRole(next)
+                localStorage.setItem('appRole', next)
+              }}
+              className="border rounded px-2 py-1 text-sm"
+            >
+              <option value="admin">admin</option>
+              <option value="parent">parent</option>
+              <option value="therapist">therapist</option>
+            </select>
           </div>
         </div>
       </div>
@@ -203,6 +281,30 @@ const AdminScreen: React.FC<AdminScreenProps> = ({ onBack }) => {
 
         {currentTab === 'core-words' && (
           <CoreWordsManager />
+        )}
+
+        {currentTab === 'flashcards' && (
+          <FlashcardsManager childId={activeChildId || undefined} />
+        )}
+
+        {currentTab === 'math' && (
+          <MathExercisesManager childId={activeChildId || undefined} />
+        )}
+
+        {currentTab === 'storybooks' && (
+          <StorybooksManager childId={activeChildId || undefined} />
+        )}
+
+        {currentTab === 'vsd' && (
+          <VSDManager childId={activeChildId || undefined} />
+        )}
+
+        {currentTab === 'rewards' && (
+          <RewardsManager childId={activeChildId || undefined} />
+        )}
+
+        {currentTab === 'analytics' && (
+          <AnalyticsManager childId={activeChildId || undefined} />
         )}
 
         {currentTab === 'sync' && (

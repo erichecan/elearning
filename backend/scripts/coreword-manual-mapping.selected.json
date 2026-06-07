@@ -1,0 +1,19 @@
+[
+  { "id": 26, "word_en": "each", "symbol_key": "all_5596.png" },
+  { "id": 65, "word_en": "wake", "symbol_key": "wake_up_8988.png" },
+  { "id": 90, "word_en": "pull", "symbol_key": "pull_out.png" },
+  { "id": 100, "word_en": "cannot", "symbol_key": "no_5525.png" },
+  { "id": 102, "word_en": "should", "symbol_key": "need.png" },
+  { "id": 103, "word_en": "need to", "symbol_key": "need.png" },
+  { "id": 106, "word_en": "not", "symbol_key": "no_5526.png" },
+  { "id": 107, "word_en": "don't", "symbol_key": "I_do_not_want.png" },
+  { "id": 108, "word_en": "can't", "symbol_key": "I_do_not_know.png" },
+  { "id": 121, "word_en": "loud", "symbol_key": "noisy_7157.png" },
+  { "id": 157, "word_en": "down", "symbol_key": "descend_6053.png" },
+  { "id": 159, "word_en": "off", "symbol_key": "turn_off_21365.png" },
+  { "id": 160, "word_en": "away", "symbol_key": "far_30385.png" },
+  { "id": 166, "word_en": "into", "symbol_key": "in.png" },
+  { "id": 180, "word_en": "which", "symbol_key": "which.png" },
+  { "id": 186, "word_en": "excuse me", "symbol_key": "sorry_11625.png" },
+  { "id": 199, "word_en": "all done", "symbol_key": "finish_28429.png" }
+]

@@ -1,0 +1,1205 @@
+{
+  "generatedAt": "2026-02-15T02:02:00.991Z",
+  "items": [
+    {
+      "id": 1,
+      "word_en": "I",
+      "word_zh": "我",
+      "query": "I"
+    },
+    {
+      "id": 2,
+      "word_en": "you",
+      "word_zh": "你/你们",
+      "query": "you"
+    },
+    {
+      "id": 3,
+      "word_en": "me",
+      "word_zh": "我(宾格)",
+      "query": "me"
+    },
+    {
+      "id": 4,
+      "word_en": "my",
+      "word_zh": "我的",
+      "query": "my"
+    },
+    {
+      "id": 5,
+      "word_en": "mine",
+      "word_zh": "我的(东西)",
+      "query": "mine"
+    },
+    {
+      "id": 6,
+      "word_en": "we",
+      "word_zh": "我们",
+      "query": "we"
+    },
+    {
+      "id": 7,
+      "word_en": "us",
+      "word_zh": "我们(宾格)",
+      "query": "us"
+    },
+    {
+      "id": 8,
+      "word_en": "our",
+      "word_zh": "我们的",
+      "query": "our"
+    },
+    {
+      "id": 9,
+      "word_en": "he",
+      "word_zh": "他",
+      "query": "he"
+    },
+    {
+      "id": 10,
+      "word_en": "him",
+      "word_zh": "他(宾格)",
+      "query": "him"
+    },
+    {
+      "id": 11,
+      "word_en": "his",
+      "word_zh": "他的",
+      "query": "his"
+    },
+    {
+      "id": 12,
+      "word_en": "she",
+      "word_zh": "她",
+      "query": "she"
+    },
+    {
+      "id": 13,
+      "word_en": "her",
+      "word_zh": "她(宾格)",
+      "query": "her"
+    },
+    {
+      "id": 14,
+      "word_en": "it",
+      "word_zh": "它",
+      "query": "it"
+    },
+    {
+      "id": 15,
+      "word_en": "they",
+      "word_zh": "他们/她们/它们",
+      "query": "they"
+    },
+    {
+      "id": 16,
+      "word_en": "them",
+      "word_zh": "他们(宾格)",
+      "query": "them"
+    },
+    {
+      "id": 17,
+      "word_en": "this",
+      "word_zh": "这个",
+      "query": "this"
+    },
+    {
+      "id": 18,
+      "word_en": "that",
+      "word_zh": "那个",
+      "query": "that"
+    },
+    {
+      "id": 19,
+      "word_en": "these",
+      "word_zh": "这些",
+      "query": "these"
+    },
+    {
+      "id": 20,
+      "word_en": "those",
+      "word_zh": "那些",
+      "query": "those"
+    },
+    {
+      "id": 21,
+      "word_en": "a",
+      "word_zh": "一个",
+      "query": "a"
+    },
+    {
+      "id": 22,
+      "word_en": "the",
+      "word_zh": "这个/那个",
+      "query": "the"
+    },
+    {
+      "id": 23,
+      "word_en": "some",
+      "word_zh": "一些",
+      "query": "some"
+    },
+    {
+      "id": 24,
+      "word_en": "any",
+      "word_zh": "任何",
+      "query": "any"
+    },
+    {
+      "id": 25,
+      "word_en": "all",
+      "word_zh": "全部",
+      "query": "all"
+    },
+    {
+      "id": 26,
+      "word_en": "each",
+      "word_zh": "每个",
+      "query": "each"
+    },
+    {
+      "id": 27,
+      "word_en": "other",
+      "word_zh": "其他",
+      "query": "other"
+    },
+    {
+      "id": 28,
+      "word_en": "another",
+      "word_zh": "另一个",
+      "query": "another"
+    },
+    {
+      "id": 29,
+      "word_en": "same",
+      "word_zh": "相同",
+      "query": "same"
+    },
+    {
+      "id": 30,
+      "word_en": "different",
+      "word_zh": "不同",
+      "query": "different"
+    },
+    {
+      "id": 31,
+      "word_en": "want",
+      "word_zh": "想要",
+      "query": "want"
+    },
+    {
+      "id": 32,
+      "word_en": "need",
+      "word_zh": "需要",
+      "query": "need"
+    },
+    {
+      "id": 33,
+      "word_en": "like",
+      "word_zh": "喜欢",
+      "query": "like"
+    },
+    {
+      "id": 34,
+      "word_en": "love",
+      "word_zh": "喜欢/爱",
+      "query": "love"
+    },
+    {
+      "id": 35,
+      "word_en": "go",
+      "word_zh": "去",
+      "query": "go"
+    },
+    {
+      "id": 36,
+      "word_en": "come",
+      "word_zh": "来",
+      "query": "come"
+    },
+    {
+      "id": 37,
+      "word_en": "get",
+      "word_zh": "得到/拿到",
+      "query": "get"
+    },
+    {
+      "id": 38,
+      "word_en": "give",
+      "word_zh": "给",
+      "query": "give"
+    },
+    {
+      "id": 39,
+      "word_en": "take",
+      "word_zh": "拿/带",
+      "query": "take"
+    },
+    {
+      "id": 40,
+      "word_en": "put",
+      "word_zh": "放",
+      "query": "put"
+    },
+    {
+      "id": 41,
+      "word_en": "make",
+      "word_zh": "做/制作",
+      "query": "make"
+    },
+    {
+      "id": 42,
+      "word_en": "do",
+      "word_zh": "做",
+      "query": "do"
+    },
+    {
+      "id": 43,
+      "word_en": "have",
+      "word_zh": "有",
+      "query": "have"
+    },
+    {
+      "id": 44,
+      "word_en": "be",
+      "word_zh": "是/在",
+      "query": "be"
+    },
+    {
+      "id": 45,
+      "word_en": "see",
+      "word_zh": "看见",
+      "query": "see"
+    },
+    {
+      "id": 46,
+      "word_en": "look",
+      "word_zh": "看",
+      "query": "look"
+    },
+    {
+      "id": 47,
+      "word_en": "hear",
+      "word_zh": "听见",
+      "query": "hear"
+    },
+    {
+      "id": 48,
+      "word_en": "listen",
+      "word_zh": "听",
+      "query": "listen"
+    },
+    {
+      "id": 49,
+      "word_en": "feel",
+      "word_zh": "感觉",
+      "query": "feel"
+    },
+    {
+      "id": 50,
+      "word_en": "think",
+      "word_zh": "想/认为",
+      "query": "think"
+    },
+    {
+      "id": 51,
+      "word_en": "know",
+      "word_zh": "知道",
+      "query": "know"
+    },
+    {
+      "id": 52,
+      "word_en": "say",
+      "word_zh": "说",
+      "query": "say"
+    },
+    {
+      "id": 53,
+      "word_en": "tell",
+      "word_zh": "告诉",
+      "query": "tell"
+    },
+    {
+      "id": 54,
+      "word_en": "ask",
+      "word_zh": "问",
+      "query": "ask"
+    },
+    {
+      "id": 55,
+      "word_en": "help",
+      "word_zh": "帮助",
+      "query": "help"
+    },
+    {
+      "id": 56,
+      "word_en": "stop",
+      "word_zh": "停止",
+      "query": "stop"
+    },
+    {
+      "id": 57,
+      "word_en": "start",
+      "word_zh": "开始",
+      "query": "start"
+    },
+    {
+      "id": 58,
+      "word_en": "finish",
+      "word_zh": "完成",
+      "query": "finish"
+    },
+    {
+      "id": 59,
+      "word_en": "wait",
+      "word_zh": "等待",
+      "query": "wait"
+    },
+    {
+      "id": 60,
+      "word_en": "play",
+      "word_zh": "玩",
+      "query": "play"
+    },
+    {
+      "id": 61,
+      "word_en": "work",
+      "word_zh": "工作/做作业",
+      "query": "work"
+    },
+    {
+      "id": 62,
+      "word_en": "eat",
+      "word_zh": "吃",
+      "query": "eat"
+    },
+    {
+      "id": 63,
+      "word_en": "drink",
+      "word_zh": "喝",
+      "query": "drink"
+    },
+    {
+      "id": 64,
+      "word_en": "sleep",
+      "word_zh": "睡觉",
+      "query": "sleep"
+    },
+    {
+      "id": 65,
+      "word_en": "wake",
+      "word_zh": "醒来",
+      "query": "wake"
+    },
+    {
+      "id": 66,
+      "word_en": "wash",
+      "word_zh": "洗",
+      "query": "wash"
+    },
+    {
+      "id": 67,
+      "word_en": "clean",
+      "word_zh": "清洁",
+      "query": "clean"
+    },
+    {
+      "id": 68,
+      "word_en": "open",
+      "word_zh": "打开",
+      "query": "open"
+    },
+    {
+      "id": 69,
+      "word_en": "close",
+      "word_zh": "关闭",
+      "query": "close"
+    },
+    {
+      "id": 70,
+      "word_en": "turn",
+      "word_zh": "转/翻",
+      "query": "turn"
+    },
+    {
+      "id": 71,
+      "word_en": "move",
+      "word_zh": "移动",
+      "query": "move"
+    },
+    {
+      "id": 72,
+      "word_en": "sit",
+      "word_zh": "坐",
+      "query": "sit"
+    },
+    {
+      "id": 73,
+      "word_en": "stand",
+      "word_zh": "站",
+      "query": "stand"
+    },
+    {
+      "id": 74,
+      "word_en": "walk",
+      "word_zh": "走",
+      "query": "walk"
+    },
+    {
+      "id": 75,
+      "word_en": "run",
+      "word_zh": "跑",
+      "query": "run"
+    },
+    {
+      "id": 76,
+      "word_en": "jump",
+      "word_zh": "跳",
+      "query": "jump"
+    },
+    {
+      "id": 77,
+      "word_en": "hold",
+      "word_zh": "拿着",
+      "query": "hold"
+    },
+    {
+      "id": 78,
+      "word_en": "use",
+      "word_zh": "使用",
+      "query": "use"
+    },
+    {
+      "id": 79,
+      "word_en": "try",
+      "word_zh": "尝试",
+      "query": "try"
+    },
+    {
+      "id": 80,
+      "word_en": "build",
+      "word_zh": "搭/建",
+      "query": "build"
+    },
+    {
+      "id": 81,
+      "word_en": "draw",
+      "word_zh": "画",
+      "query": "draw"
+    },
+    {
+      "id": 82,
+      "word_en": "read",
+      "word_zh": "读",
+      "query": "read"
+    },
+    {
+      "id": 83,
+      "word_en": "write",
+      "word_zh": "写",
+      "query": "write"
+    },
+    {
+      "id": 84,
+      "word_en": "watch",
+      "word_zh": "看(节目)",
+      "query": "watch"
+    },
+    {
+      "id": 85,
+      "word_en": "show",
+      "word_zh": "展示",
+      "query": "show"
+    },
+    {
+      "id": 86,
+      "word_en": "share",
+      "word_zh": "分享",
+      "query": "share"
+    },
+    {
+      "id": 87,
+      "word_en": "choose",
+      "word_zh": "选择",
+      "query": "choose"
+    },
+    {
+      "id": 88,
+      "word_en": "change",
+      "word_zh": "改变",
+      "query": "change"
+    },
+    {
+      "id": 89,
+      "word_en": "push",
+      "word_zh": "推",
+      "query": "push"
+    },
+    {
+      "id": 90,
+      "word_en": "pull",
+      "word_zh": "拉",
+      "query": "pull"
+    },
+    {
+      "id": 91,
+      "word_en": "carry",
+      "word_zh": "拿/搬",
+      "query": "carry"
+    },
+    {
+      "id": 92,
+      "word_en": "cut",
+      "word_zh": "剪/切",
+      "query": "cut"
+    },
+    {
+      "id": 93,
+      "word_en": "cook",
+      "word_zh": "做饭",
+      "query": "cook"
+    },
+    {
+      "id": 94,
+      "word_en": "ride",
+      "word_zh": "骑/乘",
+      "query": "ride"
+    },
+    {
+      "id": 95,
+      "word_en": "learn",
+      "word_zh": "学习",
+      "query": "learn"
+    },
+    {
+      "id": 96,
+      "word_en": "remember",
+      "word_zh": "记得",
+      "query": "remember"
+    },
+    {
+      "id": 97,
+      "word_en": "forget",
+      "word_zh": "忘记",
+      "query": "forget"
+    },
+    {
+      "id": 98,
+      "word_en": "touch",
+      "word_zh": "触摸",
+      "query": "touch"
+    },
+    {
+      "id": 99,
+      "word_en": "can",
+      "word_zh": "可以/会",
+      "query": "can"
+    },
+    {
+      "id": 100,
+      "word_en": "cannot",
+      "word_zh": "不能",
+      "query": "cannot"
+    },
+    {
+      "id": 101,
+      "word_en": "will",
+      "word_zh": "会/将",
+      "query": "will"
+    },
+    {
+      "id": 102,
+      "word_en": "should",
+      "word_zh": "应该",
+      "query": "should"
+    },
+    {
+      "id": 103,
+      "word_en": "need to",
+      "word_zh": "需要去",
+      "query": "need to"
+    },
+    {
+      "id": 104,
+      "word_en": "yes",
+      "word_zh": "是/好",
+      "query": "yes"
+    },
+    {
+      "id": 105,
+      "word_en": "no",
+      "word_zh": "不/不是",
+      "query": "no"
+    },
+    {
+      "id": 106,
+      "word_en": "not",
+      "word_zh": "不",
+      "query": "not"
+    },
+    {
+      "id": 107,
+      "word_en": "don't",
+      "word_zh": "不要",
+      "query": "don't"
+    },
+    {
+      "id": 108,
+      "word_en": "can't",
+      "word_zh": "不能",
+      "query": "can't"
+    },
+    {
+      "id": 109,
+      "word_en": "never",
+      "word_zh": "从不",
+      "query": "never"
+    },
+    {
+      "id": 110,
+      "word_en": "good",
+      "word_zh": "好",
+      "query": "good"
+    },
+    {
+      "id": 111,
+      "word_en": "bad",
+      "word_zh": "不好/坏",
+      "query": "bad"
+    },
+    {
+      "id": 112,
+      "word_en": "more",
+      "word_zh": "更多",
+      "query": "more"
+    },
+    {
+      "id": 113,
+      "word_en": "less",
+      "word_zh": "更少",
+      "query": "less"
+    },
+    {
+      "id": 114,
+      "word_en": "big",
+      "word_zh": "大",
+      "query": "big"
+    },
+    {
+      "id": 115,
+      "word_en": "small",
+      "word_zh": "小",
+      "query": "small"
+    },
+    {
+      "id": 116,
+      "word_en": "little",
+      "word_zh": "小/少",
+      "query": "little"
+    },
+    {
+      "id": 117,
+      "word_en": "hot",
+      "word_zh": "热",
+      "query": "hot"
+    },
+    {
+      "id": 118,
+      "word_en": "cold",
+      "word_zh": "冷",
+      "query": "cold"
+    },
+    {
+      "id": 119,
+      "word_en": "fast",
+      "word_zh": "快",
+      "query": "fast"
+    },
+    {
+      "id": 120,
+      "word_en": "slow",
+      "word_zh": "慢",
+      "query": "slow"
+    },
+    {
+      "id": 121,
+      "word_en": "loud",
+      "word_zh": "大声",
+      "query": "loud"
+    },
+    {
+      "id": 122,
+      "word_en": "quiet",
+      "word_zh": "安静",
+      "query": "quiet"
+    },
+    {
+      "id": 123,
+      "word_en": "new",
+      "word_zh": "新的",
+      "query": "new"
+    },
+    {
+      "id": 124,
+      "word_en": "old",
+      "word_zh": "旧的/老的",
+      "query": "old"
+    },
+    {
+      "id": 125,
+      "word_en": "easy",
+      "word_zh": "容易",
+      "query": "easy"
+    },
+    {
+      "id": 126,
+      "word_en": "hard",
+      "word_zh": "困难",
+      "query": "hard"
+    },
+    {
+      "id": 127,
+      "word_en": "right",
+      "word_zh": "对/右",
+      "query": "right"
+    },
+    {
+      "id": 128,
+      "word_en": "left",
+      "word_zh": "左",
+      "query": "left"
+    },
+    {
+      "id": 129,
+      "word_en": "dirty",
+      "word_zh": "脏",
+      "query": "dirty"
+    },
+    {
+      "id": 130,
+      "word_en": "hungry",
+      "word_zh": "饿",
+      "query": "hungry"
+    },
+    {
+      "id": 131,
+      "word_en": "thirsty",
+      "word_zh": "渴",
+      "query": "thirsty"
+    },
+    {
+      "id": 132,
+      "word_en": "tired",
+      "word_zh": "累",
+      "query": "tired"
+    },
+    {
+      "id": 133,
+      "word_en": "sick",
+      "word_zh": "不舒服",
+      "query": "sick"
+    },
+    {
+      "id": 134,
+      "word_en": "hurt",
+      "word_zh": "疼",
+      "query": "hurt"
+    },
+    {
+      "id": 135,
+      "word_en": "safe",
+      "word_zh": "安全",
+      "query": "safe"
+    },
+    {
+      "id": 136,
+      "word_en": "happy",
+      "word_zh": "开心",
+      "query": "happy"
+    },
+    {
+      "id": 137,
+      "word_en": "sad",
+      "word_zh": "难过",
+      "query": "sad"
+    },
+    {
+      "id": 138,
+      "word_en": "angry",
+      "word_zh": "生气",
+      "query": "angry"
+    },
+    {
+      "id": 139,
+      "word_en": "scared",
+      "word_zh": "害怕",
+      "query": "scared"
+    },
+    {
+      "id": 140,
+      "word_en": "excited",
+      "word_zh": "兴奋",
+      "query": "excited"
+    },
+    {
+      "id": 141,
+      "word_en": "bored",
+      "word_zh": "无聊",
+      "query": "bored"
+    },
+    {
+      "id": 142,
+      "word_en": "calm",
+      "word_zh": "平静",
+      "query": "calm"
+    },
+    {
+      "id": 143,
+      "word_en": "now",
+      "word_zh": "现在",
+      "query": "now"
+    },
+    {
+      "id": 144,
+      "word_en": "later",
+      "word_zh": "等会",
+      "query": "later"
+    },
+    {
+      "id": 145,
+      "word_en": "before",
+      "word_zh": "之前",
+      "query": "before"
+    },
+    {
+      "id": 146,
+      "word_en": "after",
+      "word_zh": "之后",
+      "query": "after"
+    },
+    {
+      "id": 147,
+      "word_en": "today",
+      "word_zh": "今天",
+      "query": "today"
+    },
+    {
+      "id": 148,
+      "word_en": "tomorrow",
+      "word_zh": "明天",
+      "query": "tomorrow"
+    },
+    {
+      "id": 149,
+      "word_en": "yesterday",
+      "word_zh": "昨天",
+      "query": "yesterday"
+    },
+    {
+      "id": 150,
+      "word_en": "morning",
+      "word_zh": "早上",
+      "query": "morning"
+    },
+    {
+      "id": 151,
+      "word_en": "night",
+      "word_zh": "晚上",
+      "query": "night"
+    },
+    {
+      "id": 152,
+      "word_en": "in",
+      "word_zh": "在…里",
+      "query": "in"
+    },
+    {
+      "id": 153,
+      "word_en": "on",
+      "word_zh": "在…上",
+      "query": "on"
+    },
+    {
+      "id": 154,
+      "word_en": "under",
+      "word_zh": "在…下",
+      "query": "under"
+    },
+    {
+      "id": 155,
+      "word_en": "over",
+      "word_zh": "在…上方",
+      "query": "over"
+    },
+    {
+      "id": 156,
+      "word_en": "up",
+      "word_zh": "向上",
+      "query": "up"
+    },
+    {
+      "id": 157,
+      "word_en": "down",
+      "word_zh": "向下",
+      "query": "down"
+    },
+    {
+      "id": 158,
+      "word_en": "out",
+      "word_zh": "出去",
+      "query": "out"
+    },
+    {
+      "id": 159,
+      "word_en": "off",
+      "word_zh": "离开/关掉",
+      "query": "off"
+    },
+    {
+      "id": 160,
+      "word_en": "away",
+      "word_zh": "离开",
+      "query": "away"
+    },
+    {
+      "id": 161,
+      "word_en": "with",
+      "word_zh": "和/带着",
+      "query": "with"
+    },
+    {
+      "id": 162,
+      "word_en": "without",
+      "word_zh": "没有",
+      "query": "without"
+    },
+    {
+      "id": 163,
+      "word_en": "to",
+      "word_zh": "到/去",
+      "query": "to"
+    },
+    {
+      "id": 164,
+      "word_en": "from",
+      "word_zh": "从",
+      "query": "from"
+    },
+    {
+      "id": 165,
+      "word_en": "for",
+      "word_zh": "给/为了",
+      "query": "for"
+    },
+    {
+      "id": 166,
+      "word_en": "into",
+      "word_zh": "进到",
+      "query": "into"
+    },
+    {
+      "id": 167,
+      "word_en": "between",
+      "word_zh": "之间",
+      "query": "between"
+    },
+    {
+      "id": 168,
+      "word_en": "behind",
+      "word_zh": "后面",
+      "query": "behind"
+    },
+    {
+      "id": 169,
+      "word_en": "in front",
+      "word_zh": "前面",
+      "query": "in front"
+    },
+    {
+      "id": 170,
+      "word_en": "next to",
+      "word_zh": "旁边",
+      "query": "next to"
+    },
+    {
+      "id": 171,
+      "word_en": "around",
+      "word_zh": "周围",
+      "query": "around"
+    },
+    {
+      "id": 172,
+      "word_en": "here",
+      "word_zh": "这里",
+      "query": "here"
+    },
+    {
+      "id": 173,
+      "word_en": "there",
+      "word_zh": "那里",
+      "query": "there"
+    },
+    {
+      "id": 174,
+      "word_en": "what",
+      "word_zh": "什么",
+      "query": "what"
+    },
+    {
+      "id": 175,
+      "word_en": "where",
+      "word_zh": "哪里",
+      "query": "where"
+    },
+    {
+      "id": 176,
+      "word_en": "who",
+      "word_zh": "谁",
+      "query": "who"
+    },
+    {
+      "id": 177,
+      "word_en": "when",
+      "word_zh": "什么时候",
+      "query": "when"
+    },
+    {
+      "id": 178,
+      "word_en": "why",
+      "word_zh": "为什么",
+      "query": "why"
+    },
+    {
+      "id": 179,
+      "word_en": "how",
+      "word_zh": "怎么/如何",
+      "query": "how"
+    },
+    {
+      "id": 180,
+      "word_en": "which",
+      "word_zh": "哪一个",
+      "query": "which"
+    },
+    {
+      "id": 181,
+      "word_en": "hello",
+      "word_zh": "你好",
+      "query": "hello"
+    },
+    {
+      "id": 182,
+      "word_en": "bye",
+      "word_zh": "再见",
+      "query": "bye"
+    },
+    {
+      "id": 183,
+      "word_en": "please",
+      "word_zh": "请",
+      "query": "please"
+    },
+    {
+      "id": 184,
+      "word_en": "thank you",
+      "word_zh": "谢谢",
+      "query": "thank you"
+    },
+    {
+      "id": 185,
+      "word_en": "sorry",
+      "word_zh": "对不起",
+      "query": "sorry"
+    },
+    {
+      "id": 186,
+      "word_en": "excuse me",
+      "word_zh": "打扰了",
+      "query": "excuse me"
+    },
+    {
+      "id": 187,
+      "word_en": "and",
+      "word_zh": "和",
+      "query": "and"
+    },
+    {
+      "id": 188,
+      "word_en": "or",
+      "word_zh": "或者",
+      "query": "or"
+    },
+    {
+      "id": 189,
+      "word_en": "but",
+      "word_zh": "但是",
+      "query": "but"
+    },
+    {
+      "id": 190,
+      "word_en": "because",
+      "word_zh": "因为",
+      "query": "because"
+    },
+    {
+      "id": 191,
+      "word_en": "if",
+      "word_zh": "如果",
+      "query": "if"
+    },
+    {
+      "id": 192,
+      "word_en": "then",
+      "word_zh": "然后",
+      "query": "then"
+    },
+    {
+      "id": 193,
+      "word_en": "so",
+      "word_zh": "所以",
+      "query": "so"
+    },
+    {
+      "id": 194,
+      "word_en": "one",
+      "word_zh": "一",
+      "query": "one"
+    },
+    {
+      "id": 195,
+      "word_en": "two",
+      "word_zh": "二",
+      "query": "two"
+    },
+    {
+      "id": 196,
+      "word_en": "three",
+      "word_zh": "三",
+      "query": "three"
+    },
+    {
+      "id": 197,
+      "word_en": "many",
+      "word_zh": "很多",
+      "query": "many"
+    },
+    {
+      "id": 198,
+      "word_en": "few",
+      "word_zh": "很少",
+      "query": "few"
+    },
+    {
+      "id": 199,
+      "word_en": "all done",
+      "word_zh": "完成",
+      "query": "all done"
+    },
+    {
+      "id": 200,
+      "word_en": "again",
+      "word_zh": "再一次",
+      "query": "again"
+    }
+  ]
+}

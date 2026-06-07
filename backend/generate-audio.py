@@ -15,7 +15,7 @@ import urllib.request
 OUTPUT_DIR = "public/audio"
 VOICE_EN = "en-US-AriaNeural"  # Female, natural sounding
 VOICE_EN_ALT = "en-US-GuyNeural"  # Male alternative
-API_URL = "http://localhost:3001/api/words"
+API_URL = os.environ.get("API_BASE_URL", "http://localhost:3001") + "/api/words"
 
 async def generate_audio(word: str, output_path: str, voice: str = VOICE_EN):
     """Generate MP3 for a single word."""

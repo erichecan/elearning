@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { Volume2, Heart, ArrowLeft } from 'lucide-react'
-import { wordService, favoriteService } from '../services/api'
+import { wordService, favoriteService, progressService } from '../services/api'
 import { Word } from '../lib/database'
 import { speechService } from '../services/speech'
 
@@ -15,6 +15,7 @@ const CategoryScreen: React.FC<CategoryScreenProps> = ({ category, onBack }) => 
   const [error, setError] = useState<string | null>(null)
   const [flippedCard, setFlippedCard] = useState<number | null>(null)
   const timerRef = useRef<number | null>(null)
+  const trackedRef = useRef<Set<number>>(new Set())
 
   useEffect(() => {
     const loadWords = async () => {
@@ -44,6 +45,10 @@ const CategoryScreen: React.FC<CategoryScreenProps> = ({ category, onBack }) => 
       setFlippedCard(null)
     } else {
       setFlippedCard(wordId)
+      if (!trackedRef.current.has(wordId)) {
+        trackedRef.current.add(wordId)
+        progressService.updateProgress(wordId, true).catch(() => undefined)
+      }
       timerRef.current = window.setTimeout(() => {
         setFlippedCard(null)
         timerRef.current = null

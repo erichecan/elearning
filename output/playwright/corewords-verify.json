@@ -1,0 +1,8 @@
+{
+  "totalImages": 63,
+  "loadedImages": 63,
+  "symbolImages": 63,
+  "symbolLoadedImages": 63,
+  "firstSymbolSrc": "http://127.0.0.1:3001/symbols/arasaac/raw/I_6632.png",
+  "location": "http://localhost:3000/"
+}

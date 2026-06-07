@@ -1,4 +1,5 @@
 import { supabase, Category, Word } from '../lib/database';
+import { apiFetch } from './api-client';
 
 // 生成设备唯一ID
 function getDeviceId(): string {
@@ -15,7 +16,7 @@ export const categoryService = {
   // 获取所有分类
   async getAll(): Promise<Category[]> {
     try {
-      const response = await fetch('http://localhost:3001/api/categories');
+      const response = await apiFetch('/api/categories');
       if (!response.ok) {
         throw new Error('Failed to fetch categories');
       }
@@ -49,7 +50,7 @@ export const wordService = {
   // 根据分类获取单词列表
   async getByCategory(categoryName: string): Promise<Word[]> {
     try {
-      const response = await fetch(`http://localhost:3001/api/words?category=${encodeURIComponent(categoryName)}`);
+      const response = await apiFetch(`/api/words?category=${encodeURIComponent(categoryName)}`);
       if (!response.ok) {
         throw new Error('Failed to fetch words');
       }
@@ -72,32 +73,12 @@ export const wordService = {
   async getById(id: number): Promise<Word | null> {
     try {
       const deviceId = getDeviceId();
-
-      const { data, error } = await supabase
-        .from('words')
-        .select(`
-          *,
-          categories(display_name, icon, color),
-          favorites!left(id)
-        `)
-        .eq('id', id)
-        .eq('is_active', true)
-        .eq('favorites.user_id', deviceId)
-        .single();
-
-      if (error && error.code !== 'PGRST116') throw error;
-
-      if (data) {
-        return {
-          ...data,
-          category_display_name: (data as any).categories?.display_name,
-          category_icon: (data as any).categories?.icon,
-          category_color: (data as any).categories?.color,
-          is_favorite: (data as any).favorites && (data as any).favorites.length > 0
-        } as Word;
+      const response = await apiFetch(`/api/words/${id}?userId=${encodeURIComponent(deviceId)}`);
+      if (!response.ok) {
+        if (response.status === 404) return null;
+        throw new Error('Failed to fetch word');
       }
-
-      return null;
+      return await response.json();
     } catch (error) {
       console.error('获取单词详情失败:', error);
       throw new Error('获取单词详情失败');
@@ -108,31 +89,9 @@ export const wordService = {
   async search(query: string): Promise<Word[]> {
     try {
       const deviceId = getDeviceId();
-
-      const { data, error } = await supabase
-        .from('words')
-        .select(`
-          *,
-          categories(display_name, icon, color),
-          favorites!left(id)
-        `)
-        .or(`word.ilike.%${query}%,chinese.ilike.%${query}%`)
-        .eq('is_active', true)
-        .eq('favorites.user_id', deviceId)
-        .order('id', { ascending: true })
-        .limit(50);
-
-      if (error) throw error;
-
-      const words = (data || []).map((word: any) => ({
-        ...word,
-        category_display_name: word.categories?.display_name,
-        category_icon: word.categories?.icon,
-        category_color: word.categories?.color,
-        is_favorite: word.favorites && word.favorites.length > 0
-      })) as Word[];
-
-      return words;
+      const response = await apiFetch(`/api/words/search?q=${encodeURIComponent(query)}&userId=${encodeURIComponent(deviceId)}`);
+      if (!response.ok) throw new Error('Failed to search words');
+      return await response.json();
     } catch (error) {
       console.error('搜索单词失败:', error);
       throw new Error('搜索单词失败');
@@ -143,7 +102,7 @@ export const wordService = {
   async create(word: Partial<Word>): Promise<Word> {
     try {
       // Use Backend API Proxy to avoid browser TCP issues with Neon
-      const response = await fetch('http://localhost:3001/api/words', {
+      const response = await apiFetch('/api/words', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -166,73 +125,42 @@ export const wordService = {
 
 // 收藏相关API
 export const favoriteService = {
-  // 添加收藏
   async add(wordId: number): Promise<void> {
     try {
       const deviceId = getDeviceId();
-
-      const { error } = await supabase
-        .from('favorites')
-        .insert({
-          user_id: deviceId,
-          word_id: wordId
-        });
-
-      if (error && error.code !== '23505') throw error; // 忽略重复插入错误
+      const response = await apiFetch('/api/favorites', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId: deviceId, wordId })
+      });
+      if (!response.ok) throw new Error('Failed to add favorite');
     } catch (error) {
       console.error('添加收藏失败:', error);
       throw new Error('添加收藏失败');
     }
   },
 
-  // 取消收藏
   async remove(wordId: number): Promise<void> {
     try {
       const deviceId = getDeviceId();
-
-      const { error } = await supabase
-        .from('favorites')
-        .delete()
-        .eq('user_id', deviceId)
-        .eq('word_id', wordId);
-
-      if (error) throw error;
+      const response = await apiFetch('/api/favorites', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId: deviceId, wordId })
+      });
+      if (!response.ok) throw new Error('Failed to remove favorite');
     } catch (error) {
       console.error('取消收藏失败:', error);
       throw new Error('取消收藏失败');
     }
   },
 
-  // 获取收藏列表
   async getAll(): Promise<Word[]> {
     try {
       const deviceId = getDeviceId();
-
-      const { data, error } = await supabase
-        .from('favorites')
-        .select(`
-          word_id,
-          created_at,
-          words!inner(
-            *,
-            categories(display_name, icon, color)
-          )
-        `)
-        .eq('user_id', deviceId)
-        .eq('words.is_active', true)
-        .order('created_at', { ascending: false });
-
-      if (error) throw error;
-
-      const words = (data || []).map((favorite: any) => ({
-        ...favorite.words,
-        category_display_name: favorite.words.categories?.display_name,
-        category_icon: favorite.words.categories?.icon,
-        category_color: favorite.words.categories?.color,
-        is_favorite: true
-      })) as Word[];
-
-      return words;
+      const response = await apiFetch(`/api/favorites?userId=${encodeURIComponent(deviceId)}`);
+      if (!response.ok) throw new Error('Failed to fetch favorites');
+      return await response.json();
     } catch (error) {
       console.error('获取收藏列表失败:', error);
       throw new Error('获取收藏列表失败');
@@ -242,35 +170,21 @@ export const favoriteService = {
 
 // 学习进度相关API
 export const progressService = {
-  // 更新学习进度
   async updateProgress(wordId: number, isCorrect: boolean): Promise<void> {
     try {
       const deviceId = getDeviceId();
-
-      if (isCorrect) {
-        const { error } = await supabase
-          .rpc('update_correct_progress', {
-            p_user_id: deviceId,
-            p_word_id: wordId
-          });
-
-        if (error) throw error;
-      } else {
-        const { error } = await supabase
-          .rpc('update_wrong_progress', {
-            p_user_id: deviceId,
-            p_word_id: wordId
-          });
-
-        if (error) throw error;
-      }
+      const response = await apiFetch('/api/progress', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId: deviceId, wordId, isCorrect })
+      });
+      if (!response.ok) throw new Error('Failed to update progress');
     } catch (error) {
       console.error('更新学习进度失败:', error);
       throw new Error('更新学习进度失败');
     }
   },
 
-  // 获取学习统计
   async getStats(): Promise<{
     totalWords: number;
     learnedWords: number;
@@ -279,20 +193,9 @@ export const progressService = {
   }> {
     try {
       const deviceId = getDeviceId();
-
-      const [totalResult, learnedResult, masteredResult, favoriteResult] = await Promise.all([
-        supabase.from('words').select('id', { count: 'exact' }).eq('is_active', true),
-        supabase.from('learning_progress').select('id', { count: 'exact' }).eq('user_id', deviceId).or('correct_count.gt.0,wrong_count.gt.0'),
-        supabase.from('learning_progress').select('id', { count: 'exact' }).eq('user_id', deviceId).gte('mastery_level', 4),
-        supabase.from('favorites').select('id', { count: 'exact' }).eq('user_id', deviceId)
-      ]);
-
-      return {
-        totalWords: totalResult.count || 0,
-        learnedWords: learnedResult.count || 0,
-        masteredWords: masteredResult.count || 0,
-        favoriteWords: favoriteResult.count || 0
-      };
+      const response = await apiFetch(`/api/progress/stats?userId=${encodeURIComponent(deviceId)}`);
+      if (!response.ok) throw new Error('Failed to fetch stats');
+      return await response.json();
     } catch (error) {
       console.error('获取学习统计失败:', error);
       throw new Error('获取学习统计失败');

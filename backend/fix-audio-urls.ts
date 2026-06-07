@@ -6,7 +6,7 @@ dotenv.config({ path: path.join(__dirname, '.env') });
 
 const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 
-const BACKEND_URL = 'http://localhost:3001';
+const BACKEND_URL = process.env.API_BASE_URL || process.env.VITE_API_BASE_URL || 'http://localhost:3001';
 
 async function fixAudioUrls() {
     const client = await pool.connect();

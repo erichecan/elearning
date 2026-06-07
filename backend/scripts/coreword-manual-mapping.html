@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Core Word Manual Mapping</title>
+<style>
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; margin: 20px; background: #f8fafc; color: #111827; }
+h1 { margin: 0 0 8px; }
+.desc { color: #4b5563; margin-bottom: 16px; }
+.card { background: #fff; border: 1px solid #e5e7eb; border-radius: 10px; padding: 14px; margin-bottom: 14px; }
+.word { font-size: 20px; font-weight: 700; margin-bottom: 10px; }
+.word small { font-size: 14px; color: #6b7280; margin-left: 8px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+.opt { border: 1px solid #d1d5db; border-radius: 8px; padding: 8px; background: #fff; }
+.opt img { width: 100%; height: 110px; object-fit: contain; background: #f9fafb; border-radius: 6px; border: 1px solid #e5e7eb; }
+.opt .meta { font-size: 11px; color: #4b5563; margin-top: 6px; word-break: break-word; }
+.actions { position: sticky; top: 0; background: #f8fafc; padding: 12px 0; margin-bottom: 14px; }
+button { background: #0f766e; color: white; border: 0; border-radius: 8px; padding: 10px 14px; font-weight: 600; cursor: pointer; }
+pre { background: #111827; color: #f9fafb; padding: 12px; border-radius: 8px; overflow: auto; max-height: 260px; }
+</style>
+</head>
+<body>
+  <h1>Core Words Manual Symbol Mapping</h1>
+  <p class="desc">Select one symbol per word. Then export JSON and run apply script.</p>
+  <div class="actions">
+    <button id="export">Export Selected JSON</button>
+  </div>
+  <div id="list"></div>
+  <h3>Export Preview</h3>
+  <pre id="out">[]</pre>
+<script>
+const data = [{"id":"26","word_en":"each","word_zh":"每个","candidates":[]},{"id":"65","word_en":"wake","word_zh":"醒来","candidates":[]},{"id":"90","word_en":"pull","word_zh":"拉","candidates":[]},{"id":"100","word_en":"cannot","word_zh":"不能","candidates":[]},{"id":"102","word_en":"should","word_zh":"应该","candidates":[]},{"id":"103","word_en":"need to","word_zh":"需要去","candidates":[{"filename":"need.png","arasaac_id":37160,"score":23,"categories":["usual verbs","human response","core vocabulary-communication","core vocabulary-knowledge"],"keywords":["need"]},{"filename":"to.png","arasaac_id":7041,"score":0,"categories":["preposition"],"keywords":["to","at"]},{"filename":"towards.png","arasaac_id":7125,"score":0,"categories":["preposition"],"keywords":["towards","around","to"]},{"filename":"until.png","arasaac_id":7771,"score":0,"categories":["preposition"],"keywords":["until","to","up to"]}]},{"id":"106","word_en":"not","word_zh":"不","candidates":[]},{"id":"107","word_en":"don't","word_zh":"不要","candidates":[]},{"id":"108","word_en":"can't","word_zh":"不能","candidates":[]},{"id":"121","word_en":"loud","word_zh":"大声","candidates":[]},{"id":"157","word_en":"down","word_zh":"向下","candidates":[]},{"id":"159","word_en":"off","word_zh":"离开/关掉","candidates":[]},{"id":"160","word_en":"away","word_zh":"离开","candidates":[]},{"id":"166","word_en":"into","word_zh":"进到","candidates":[]},{"id":"180","word_en":"which","word_zh":"哪一个","candidates":[]},{"id":"186","word_en":"excuse me","word_zh":"打扰了","candidates":[{"filename":"I_6632.png","arasaac_id":6632,"score":15,"categories":["pronoun","personal pronoun","core vocabulary-communication"],"keywords":["I","me","for me"]},{"filename":"I_2617.png","arasaac_id":2617,"score":0,"categories":["pronoun","personal pronoun"],"keywords":["I","me","for me"]},{"filename":"I_7309.png","arasaac_id":7309,"score":0,"categories":["pronoun","personal pronoun"],"keywords":["I","me","for me"]},{"filename":"I_7310.png","arasaac_id":7310,"score":0,"categories":["pronoun","personal pronoun"],"keywords":["I","me","for me"]},{"filename":"I_31807.png","arasaac_id":31807,"score":0,"categories":["pronoun","personal pronoun"],"keywords":["I","me","for me"]}]},{"id":"199","word_en":"all done","word_zh":"完成","candidates":[{"filename":"all_5596.png","arasaac_id":5596,"score":15,"categories":["indefinite pronoun","core vocabulary-communication"],"keywords":["all","everything","whole","totally"]},{"filename":"all_27091.png","arasaac_id":27091,"score":0,"categories":["indefinite pronoun"],"keywords":["all","everything","altogether","whole"]},{"filename":"all_32438.png","arasaac_id":32438,"score":0,"categories":["indefinite pronoun"],"keywords":["all","everything","all","everything"]},{"filename":"all_36081.png","arasaac_id":36081,"score":0,"categories":["indefinite adjective","indefinite pronoun","basic concepts"],"keywords":["everybody","all","everyone"]}]}];
+const base = "http://127.0.0.1:3001";
+const selected = new Map();
+const list = document.getElementById('list');
+const out = document.getElementById('out');
+
+function refreshOut() {
+  const rows = data
+    .map(item => ({ id: item.id, word_en: item.word_en, symbol_key: selected.get(item.id) || null }))
+    .filter(x => x.symbol_key);
+  out.textContent = JSON.stringify(rows, null, 2);
+}
+
+for (const item of data) {
+  const card = document.createElement('div');
+  card.className = 'card';
+
+  const title = document.createElement('div');
+  title.className = 'word';
+  title.innerHTML = item.word_en + (item.word_zh ? '<small>' + item.word_zh + '</small>' : '');
+  card.appendChild(title);
+
+  const grid = document.createElement('div');
+  grid.className = 'grid';
+
+  for (const cand of item.candidates) {
+    const box = document.createElement('label');
+    box.className = 'opt';
+
+    const input = document.createElement('input');
+    input.type = 'radio';
+    input.name = 'w_' + item.id;
+    input.value = cand.filename;
+    input.onchange = () => {
+      selected.set(item.id, cand.filename);
+      refreshOut();
+    };
+
+    const img = document.createElement('img');
+    img.src = base + '/symbols/arasaac/raw/' + encodeURIComponent(cand.filename);
+
+    const meta = document.createElement('div');
+    meta.className = 'meta';
+    meta.textContent = cand.filename + ' | score=' + cand.score;
+
+    box.appendChild(input);
+    box.appendChild(img);
+    box.appendChild(meta);
+    grid.appendChild(box);
+  }
+
+  card.appendChild(grid);
+  list.appendChild(card);
+}
+
+document.getElementById('export').onclick = () => {
+  const rows = data
+    .map(item => ({ id: item.id, word_en: item.word_en, symbol_key: selected.get(item.id) || null }))
+    .filter(x => x.symbol_key);
+  const blob = new Blob([JSON.stringify(rows, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'coreword-manual-mapping.selected.json';
+  a.click();
+};
+
+refreshOut();
+</script>
+</body>
+</html>

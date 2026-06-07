@@ -1,4 +1,5 @@
-import { supabase, Word } from '../lib/database'
+import { Word } from '../lib/database'
+import { apiFetch } from './api-client'
 
 export interface ImageOptimizationResult {
   success: boolean
@@ -69,7 +70,7 @@ export const adminApiService = {
   // 调用本地Backend生成内容
   async generateContent(topic: string, count: number): Promise<any[]> {
     try {
-      const response = await fetch('http://localhost:3001/api/generate-content', {
+      const response = await apiFetch('/api/generate-content', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -92,7 +93,7 @@ export const adminApiService = {
   // 调用本地Backend抓取图片
   async scrapeImage(query: string): Promise<string> {
     try {
-      const response = await fetch('http://localhost:3001/api/scrape-image', {
+      const response = await apiFetch('/api/scrape-image', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -115,7 +116,7 @@ export const adminApiService = {
   // 调用本地Backend生成AI图片 (Replicate)
   async generateImage(prompt: string, model: 'schnell' | 'pro' = 'schnell'): Promise<string> {
     try {
-      const response = await fetch('http://localhost:3001/api/generate-image', {
+      const response = await apiFetch('/api/generate-image', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -138,7 +139,7 @@ export const adminApiService = {
   // 调用本地Backend搜索图片 (Tavily)
   async searchImage(query: string): Promise<string> {
     try {
-      const response = await fetch('http://localhost:3001/api/search-image', {
+      const response = await apiFetch('/api/search-image', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -168,13 +169,12 @@ export const adminApiService = {
 
     for (const update of imageUpdates) {
       try {
-        const { error } = await supabase
-          .from('words')
-          .update({ image_url: update.imageUrl })
-          .eq('id', update.wordId)
-          .select()
-
-        if (error) throw error
+        const response = await apiFetch(`/api/words/${update.wordId}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ image_url: update.imageUrl })
+        })
+        if (!response.ok) throw new Error('Failed to update image')
         result.updated++
         console.log(`✅ 同步成功: ${update.word} -> ${update.imageUrl}`)
 

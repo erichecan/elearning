@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="960" viewBox="0 0 1280 960">
+  <defs>
+    <linearGradient id="bg2" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#e6eefb"/>
+      <stop offset="100%" stop-color="#f3efe9"/>
+    </linearGradient>
+  </defs>
+  <rect width="1280" height="960" fill="url(#bg2)"/>
+  <rect x="90" y="160" width="1100" height="720" rx="36" fill="#ffffff" opacity="0.86"/>
+  <rect x="180" y="310" width="900" height="360" rx="28" fill="#d9e4f5"/>
+  <rect x="230" y="360" width="380" height="230" rx="18" fill="#b7d7a8"/>
+  <rect x="690" y="340" width="320" height="250" rx="18" fill="#f8cbad"/>
+  <rect x="880" y="610" width="170" height="90" rx="12" fill="#cfe2f3"/>
+  <text x="120" y="118" font-family="Arial, sans-serif" font-size="42" fill="#334155">School Scene (Default)</text>
+  <text x="120" y="910" font-family="Arial, sans-serif" font-size="28" fill="#475569">Seeded VSD background for local verification</text>
+</svg>

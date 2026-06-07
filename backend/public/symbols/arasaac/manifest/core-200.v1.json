@@ -1,0 +1,1414 @@
+{
+  "provider": "arasaac",
+  "version": "v1",
+  "pack": "core-200",
+  "type_filter": "core",
+  "limit": null,
+  "apply_usage_pack": true,
+  "generated_at": "2026-02-21T04:01:29.044Z",
+  "total_items": 200,
+  "copied_files": 200,
+  "missing_files": [],
+  "items": [
+    {
+      "vocab_id": 1,
+      "vocab_type": "core",
+      "word_en": "I",
+      "symbol_key": "I_6632.png",
+      "url": "/symbols/arasaac/v1/core-200/I_6632.png"
+    },
+    {
+      "vocab_id": 2,
+      "vocab_type": "core",
+      "word_en": "you",
+      "symbol_key": "you_6625.png",
+      "url": "/symbols/arasaac/v1/core-200/you_6625.png"
+    },
+    {
+      "vocab_id": 3,
+      "vocab_type": "core",
+      "word_en": "me",
+      "symbol_key": "I_6632.png",
+      "url": "/symbols/arasaac/v1/core-200/I_6632.png"
+    },
+    {
+      "vocab_id": 4,
+      "vocab_type": "core",
+      "word_en": "my",
+      "symbol_key": "my_12264.png",
+      "url": "/symbols/arasaac/v1/core-200/my_12264.png"
+    },
+    {
+      "vocab_id": 5,
+      "vocab_type": "core",
+      "word_en": "mine",
+      "symbol_key": "my_12264.png",
+      "url": "/symbols/arasaac/v1/core-200/my_12264.png"
+    },
+    {
+      "vocab_id": 6,
+      "vocab_type": "core",
+      "word_en": "we",
+      "symbol_key": "us_7185.png",
+      "url": "/symbols/arasaac/v1/core-200/us_7185.png"
+    },
+    {
+      "vocab_id": 7,
+      "vocab_type": "core",
+      "word_en": "us",
+      "symbol_key": "us_7185.png",
+      "url": "/symbols/arasaac/v1/core-200/us_7185.png"
+    },
+    {
+      "vocab_id": 8,
+      "vocab_type": "core",
+      "word_en": "our",
+      "symbol_key": "our.png",
+      "url": "/symbols/arasaac/v1/core-200/our.png"
+    },
+    {
+      "vocab_id": 9,
+      "vocab_type": "core",
+      "word_en": "he",
+      "symbol_key": "he_6480.png",
+      "url": "/symbols/arasaac/v1/core-200/he_6480.png"
+    },
+    {
+      "vocab_id": 10,
+      "vocab_type": "core",
+      "word_en": "him",
+      "symbol_key": "he_6481.png",
+      "url": "/symbols/arasaac/v1/core-200/he_6481.png"
+    },
+    {
+      "vocab_id": 11,
+      "vocab_type": "core",
+      "word_en": "his",
+      "symbol_key": "his_12272.png",
+      "url": "/symbols/arasaac/v1/core-200/his_12272.png"
+    },
+    {
+      "vocab_id": 12,
+      "vocab_type": "core",
+      "word_en": "she",
+      "symbol_key": "she_7028.png",
+      "url": "/symbols/arasaac/v1/core-200/she_7028.png"
+    },
+    {
+      "vocab_id": 13,
+      "vocab_type": "core",
+      "word_en": "her",
+      "symbol_key": "she_7029.png",
+      "url": "/symbols/arasaac/v1/core-200/she_7029.png"
+    },
+    {
+      "vocab_id": 14,
+      "vocab_type": "core",
+      "word_en": "it",
+      "symbol_key": "It.png",
+      "url": "/symbols/arasaac/v1/core-200/It.png"
+    },
+    {
+      "vocab_id": 15,
+      "vocab_type": "core",
+      "word_en": "they",
+      "symbol_key": "they_7032.png",
+      "url": "/symbols/arasaac/v1/core-200/they_7032.png"
+    },
+    {
+      "vocab_id": 16,
+      "vocab_type": "core",
+      "word_en": "them",
+      "symbol_key": "they_7032.png",
+      "url": "/symbols/arasaac/v1/core-200/they_7032.png"
+    },
+    {
+      "vocab_id": 17,
+      "vocab_type": "core",
+      "word_en": "this",
+      "symbol_key": "this.png",
+      "url": "/symbols/arasaac/v1/core-200/this.png"
+    },
+    {
+      "vocab_id": 18,
+      "vocab_type": "core",
+      "word_en": "that",
+      "symbol_key": "that_one.png",
+      "url": "/symbols/arasaac/v1/core-200/that_one.png"
+    },
+    {
+      "vocab_id": 19,
+      "vocab_type": "core",
+      "word_en": "these",
+      "symbol_key": "these.png",
+      "url": "/symbols/arasaac/v1/core-200/these.png"
+    },
+    {
+      "vocab_id": 20,
+      "vocab_type": "core",
+      "word_en": "those",
+      "symbol_key": "those_6907.png",
+      "url": "/symbols/arasaac/v1/core-200/those_6907.png"
+    },
+    {
+      "vocab_id": 21,
+      "vocab_type": "core",
+      "word_en": "a",
+      "symbol_key": "a_3021.png",
+      "url": "/symbols/arasaac/v1/core-200/a_3021.png"
+    },
+    {
+      "vocab_id": 22,
+      "vocab_type": "core",
+      "word_en": "the",
+      "symbol_key": "the_8477.png",
+      "url": "/symbols/arasaac/v1/core-200/the_8477.png"
+    },
+    {
+      "vocab_id": 23,
+      "vocab_type": "core",
+      "word_en": "some",
+      "symbol_key": "some_5374.png",
+      "url": "/symbols/arasaac/v1/core-200/some_5374.png"
+    },
+    {
+      "vocab_id": 24,
+      "vocab_type": "core",
+      "word_en": "any",
+      "symbol_key": "some_5374.png",
+      "url": "/symbols/arasaac/v1/core-200/some_5374.png"
+    },
+    {
+      "vocab_id": 25,
+      "vocab_type": "core",
+      "word_en": "all",
+      "symbol_key": "all_5596.png",
+      "url": "/symbols/arasaac/v1/core-200/all_5596.png"
+    },
+    {
+      "vocab_id": 26,
+      "vocab_type": "core",
+      "word_en": "each",
+      "symbol_key": "all_5596.png",
+      "url": "/symbols/arasaac/v1/core-200/all_5596.png"
+    },
+    {
+      "vocab_id": 27,
+      "vocab_type": "core",
+      "word_en": "other",
+      "symbol_key": "other_17056.png",
+      "url": "/symbols/arasaac/v1/core-200/other_17056.png"
+    },
+    {
+      "vocab_id": 28,
+      "vocab_type": "core",
+      "word_en": "another",
+      "symbol_key": "other_17056.png",
+      "url": "/symbols/arasaac/v1/core-200/other_17056.png"
+    },
+    {
+      "vocab_id": 29,
+      "vocab_type": "core",
+      "word_en": "same",
+      "symbol_key": "equal_4667.png",
+      "url": "/symbols/arasaac/v1/core-200/equal_4667.png"
+    },
+    {
+      "vocab_id": 30,
+      "vocab_type": "core",
+      "word_en": "different",
+      "symbol_key": "uneven_4628.png",
+      "url": "/symbols/arasaac/v1/core-200/uneven_4628.png"
+    },
+    {
+      "vocab_id": 31,
+      "vocab_type": "core",
+      "word_en": "want",
+      "symbol_key": "want_5441.png",
+      "url": "/symbols/arasaac/v1/core-200/want_5441.png"
+    },
+    {
+      "vocab_id": 32,
+      "vocab_type": "core",
+      "word_en": "need",
+      "symbol_key": "need.png",
+      "url": "/symbols/arasaac/v1/core-200/need.png"
+    },
+    {
+      "vocab_id": 33,
+      "vocab_type": "core",
+      "word_en": "like",
+      "symbol_key": "like_37721.png",
+      "url": "/symbols/arasaac/v1/core-200/like_37721.png"
+    },
+    {
+      "vocab_id": 34,
+      "vocab_type": "core",
+      "word_en": "love",
+      "symbol_key": "like_37721.png",
+      "url": "/symbols/arasaac/v1/core-200/like_37721.png"
+    },
+    {
+      "vocab_id": 35,
+      "vocab_type": "core",
+      "word_en": "go",
+      "symbol_key": "go_8142.png",
+      "url": "/symbols/arasaac/v1/core-200/go_8142.png"
+    },
+    {
+      "vocab_id": 36,
+      "vocab_type": "core",
+      "word_en": "come",
+      "symbol_key": "come_32669.png",
+      "url": "/symbols/arasaac/v1/core-200/come_32669.png"
+    },
+    {
+      "vocab_id": 37,
+      "vocab_type": "core",
+      "word_en": "get",
+      "symbol_key": "get.png",
+      "url": "/symbols/arasaac/v1/core-200/get.png"
+    },
+    {
+      "vocab_id": 38,
+      "vocab_type": "core",
+      "word_en": "give",
+      "symbol_key": "give_28431.png",
+      "url": "/symbols/arasaac/v1/core-200/give_28431.png"
+    },
+    {
+      "vocab_id": 39,
+      "vocab_type": "core",
+      "word_en": "take",
+      "symbol_key": "take_32773.png",
+      "url": "/symbols/arasaac/v1/core-200/take_32773.png"
+    },
+    {
+      "vocab_id": 40,
+      "vocab_type": "core",
+      "word_en": "put",
+      "symbol_key": "drop_5447.png",
+      "url": "/symbols/arasaac/v1/core-200/drop_5447.png"
+    },
+    {
+      "vocab_id": 41,
+      "vocab_type": "core",
+      "word_en": "make",
+      "symbol_key": "make_11749.png",
+      "url": "/symbols/arasaac/v1/core-200/make_11749.png"
+    },
+    {
+      "vocab_id": 42,
+      "vocab_type": "core",
+      "word_en": "do",
+      "symbol_key": "make_11749.png",
+      "url": "/symbols/arasaac/v1/core-200/make_11749.png"
+    },
+    {
+      "vocab_id": 43,
+      "vocab_type": "core",
+      "word_en": "have",
+      "symbol_key": "hold_7271.png",
+      "url": "/symbols/arasaac/v1/core-200/hold_7271.png"
+    },
+    {
+      "vocab_id": 44,
+      "vocab_type": "core",
+      "word_en": "be",
+      "symbol_key": "be_5465.png",
+      "url": "/symbols/arasaac/v1/core-200/be_5465.png"
+    },
+    {
+      "vocab_id": 45,
+      "vocab_type": "core",
+      "word_en": "see",
+      "symbol_key": "see_6564.png",
+      "url": "/symbols/arasaac/v1/core-200/see_6564.png"
+    },
+    {
+      "vocab_id": 46,
+      "vocab_type": "core",
+      "word_en": "look",
+      "symbol_key": "see_6564.png",
+      "url": "/symbols/arasaac/v1/core-200/see_6564.png"
+    },
+    {
+      "vocab_id": 47,
+      "vocab_type": "core",
+      "word_en": "hear",
+      "symbol_key": "hear_6572.png",
+      "url": "/symbols/arasaac/v1/core-200/hear_6572.png"
+    },
+    {
+      "vocab_id": 48,
+      "vocab_type": "core",
+      "word_en": "listen",
+      "symbol_key": "hear_6572.png",
+      "url": "/symbols/arasaac/v1/core-200/hear_6572.png"
+    },
+    {
+      "vocab_id": 49,
+      "vocab_type": "core",
+      "word_en": "feel",
+      "symbol_key": "touch_3293.png",
+      "url": "/symbols/arasaac/v1/core-200/touch_3293.png"
+    },
+    {
+      "vocab_id": 50,
+      "vocab_type": "core",
+      "word_en": "think",
+      "symbol_key": "think_8661.png",
+      "url": "/symbols/arasaac/v1/core-200/think_8661.png"
+    },
+    {
+      "vocab_id": 51,
+      "vocab_type": "core",
+      "word_en": "know",
+      "symbol_key": "know_16885.png",
+      "url": "/symbols/arasaac/v1/core-200/know_16885.png"
+    },
+    {
+      "vocab_id": 52,
+      "vocab_type": "core",
+      "word_en": "say",
+      "symbol_key": "tell_9693.png",
+      "url": "/symbols/arasaac/v1/core-200/tell_9693.png"
+    },
+    {
+      "vocab_id": 53,
+      "vocab_type": "core",
+      "word_en": "tell",
+      "symbol_key": "tell_9693.png",
+      "url": "/symbols/arasaac/v1/core-200/tell_9693.png"
+    },
+    {
+      "vocab_id": 54,
+      "vocab_type": "core",
+      "word_en": "ask",
+      "symbol_key": "ask_9840.png",
+      "url": "/symbols/arasaac/v1/core-200/ask_9840.png"
+    },
+    {
+      "vocab_id": 55,
+      "vocab_type": "core",
+      "word_en": "help",
+      "symbol_key": "help_32648.png",
+      "url": "/symbols/arasaac/v1/core-200/help_32648.png"
+    },
+    {
+      "vocab_id": 56,
+      "vocab_type": "core",
+      "word_en": "stop",
+      "symbol_key": "stop_7196.png",
+      "url": "/symbols/arasaac/v1/core-200/stop_7196.png"
+    },
+    {
+      "vocab_id": 57,
+      "vocab_type": "core",
+      "word_en": "start",
+      "symbol_key": "begin.png",
+      "url": "/symbols/arasaac/v1/core-200/begin.png"
+    },
+    {
+      "vocab_id": 58,
+      "vocab_type": "core",
+      "word_en": "finish",
+      "symbol_key": "finish_5358.png",
+      "url": "/symbols/arasaac/v1/core-200/finish_5358.png"
+    },
+    {
+      "vocab_id": 59,
+      "vocab_type": "core",
+      "word_en": "wait",
+      "symbol_key": "wait_16697.png",
+      "url": "/symbols/arasaac/v1/core-200/wait_16697.png"
+    },
+    {
+      "vocab_id": 60,
+      "vocab_type": "core",
+      "word_en": "play",
+      "symbol_key": "play_6537.png",
+      "url": "/symbols/arasaac/v1/core-200/play_6537.png"
+    },
+    {
+      "vocab_id": 61,
+      "vocab_type": "core",
+      "word_en": "work",
+      "symbol_key": "work_6624.png",
+      "url": "/symbols/arasaac/v1/core-200/work_6624.png"
+    },
+    {
+      "vocab_id": 62,
+      "vocab_type": "core",
+      "word_en": "eat",
+      "symbol_key": "eat_6456.png",
+      "url": "/symbols/arasaac/v1/core-200/eat_6456.png"
+    },
+    {
+      "vocab_id": 63,
+      "vocab_type": "core",
+      "word_en": "drink",
+      "symbol_key": "drink_6061.png",
+      "url": "/symbols/arasaac/v1/core-200/drink_6061.png"
+    },
+    {
+      "vocab_id": 64,
+      "vocab_type": "core",
+      "word_en": "sleep",
+      "symbol_key": "sleep_6479.png",
+      "url": "/symbols/arasaac/v1/core-200/sleep_6479.png"
+    },
+    {
+      "vocab_id": 65,
+      "vocab_type": "core",
+      "word_en": "wake",
+      "symbol_key": "wake_up_8988.png",
+      "url": "/symbols/arasaac/v1/core-200/wake_up_8988.png"
+    },
+    {
+      "vocab_id": 66,
+      "vocab_type": "core",
+      "word_en": "wash",
+      "symbol_key": "wash_8977.png",
+      "url": "/symbols/arasaac/v1/core-200/wash_8977.png"
+    },
+    {
+      "vocab_id": 67,
+      "vocab_type": "core",
+      "word_en": "clean",
+      "symbol_key": "clean_3351.png",
+      "url": "/symbols/arasaac/v1/core-200/clean_3351.png"
+    },
+    {
+      "vocab_id": 68,
+      "vocab_type": "core",
+      "word_en": "open",
+      "symbol_key": "open_24825.png",
+      "url": "/symbols/arasaac/v1/core-200/open_24825.png"
+    },
+    {
+      "vocab_id": 69,
+      "vocab_type": "core",
+      "word_en": "close",
+      "symbol_key": "close_24976.png",
+      "url": "/symbols/arasaac/v1/core-200/close_24976.png"
+    },
+    {
+      "vocab_id": 70,
+      "vocab_type": "core",
+      "word_en": "turn",
+      "symbol_key": "return_6630.png",
+      "url": "/symbols/arasaac/v1/core-200/return_6630.png"
+    },
+    {
+      "vocab_id": 71,
+      "vocab_type": "core",
+      "word_en": "move",
+      "symbol_key": "shift.png",
+      "url": "/symbols/arasaac/v1/core-200/shift.png"
+    },
+    {
+      "vocab_id": 72,
+      "vocab_type": "core",
+      "word_en": "sit",
+      "symbol_key": "sit_6611.png",
+      "url": "/symbols/arasaac/v1/core-200/sit_6611.png"
+    },
+    {
+      "vocab_id": 73,
+      "vocab_type": "core",
+      "word_en": "stand",
+      "symbol_key": "stand_13370.png",
+      "url": "/symbols/arasaac/v1/core-200/stand_13370.png"
+    },
+    {
+      "vocab_id": 74,
+      "vocab_type": "core",
+      "word_en": "walk",
+      "symbol_key": "walk_6044.png",
+      "url": "/symbols/arasaac/v1/core-200/walk_6044.png"
+    },
+    {
+      "vocab_id": 75,
+      "vocab_type": "core",
+      "word_en": "run",
+      "symbol_key": "run_6465.png",
+      "url": "/symbols/arasaac/v1/core-200/run_6465.png"
+    },
+    {
+      "vocab_id": 76,
+      "vocab_type": "core",
+      "word_en": "jump",
+      "symbol_key": "jump_6607.png",
+      "url": "/symbols/arasaac/v1/core-200/jump_6607.png"
+    },
+    {
+      "vocab_id": 77,
+      "vocab_type": "core",
+      "word_en": "hold",
+      "symbol_key": "grip.png",
+      "url": "/symbols/arasaac/v1/core-200/grip.png"
+    },
+    {
+      "vocab_id": 78,
+      "vocab_type": "core",
+      "word_en": "use",
+      "symbol_key": "use_15485.png",
+      "url": "/symbols/arasaac/v1/core-200/use_15485.png"
+    },
+    {
+      "vocab_id": 79,
+      "vocab_type": "core",
+      "word_en": "try",
+      "symbol_key": "judge_8148.png",
+      "url": "/symbols/arasaac/v1/core-200/judge_8148.png"
+    },
+    {
+      "vocab_id": 80,
+      "vocab_type": "core",
+      "word_en": "build",
+      "symbol_key": "build_2713.png",
+      "url": "/symbols/arasaac/v1/core-200/build_2713.png"
+    },
+    {
+      "vocab_id": 81,
+      "vocab_type": "core",
+      "word_en": "draw",
+      "symbol_key": "draw.png",
+      "url": "/symbols/arasaac/v1/core-200/draw.png"
+    },
+    {
+      "vocab_id": 82,
+      "vocab_type": "core",
+      "word_en": "read",
+      "symbol_key": "read_7141.png",
+      "url": "/symbols/arasaac/v1/core-200/read_7141.png"
+    },
+    {
+      "vocab_id": 83,
+      "vocab_type": "core",
+      "word_en": "write",
+      "symbol_key": "write_2380.png",
+      "url": "/symbols/arasaac/v1/core-200/write_2380.png"
+    },
+    {
+      "vocab_id": 84,
+      "vocab_type": "core",
+      "word_en": "watch",
+      "symbol_key": "see_6564.png",
+      "url": "/symbols/arasaac/v1/core-200/see_6564.png"
+    },
+    {
+      "vocab_id": 85,
+      "vocab_type": "core",
+      "word_en": "show",
+      "symbol_key": "show_16823.png",
+      "url": "/symbols/arasaac/v1/core-200/show_16823.png"
+    },
+    {
+      "vocab_id": 86,
+      "vocab_type": "core",
+      "word_en": "share",
+      "symbol_key": "share_16623.png",
+      "url": "/symbols/arasaac/v1/core-200/share_16623.png"
+    },
+    {
+      "vocab_id": 87,
+      "vocab_type": "core",
+      "word_en": "choose",
+      "symbol_key": "choose_11694.png",
+      "url": "/symbols/arasaac/v1/core-200/choose_11694.png"
+    },
+    {
+      "vocab_id": 88,
+      "vocab_type": "core",
+      "word_en": "change",
+      "symbol_key": "change_37360.png",
+      "url": "/symbols/arasaac/v1/core-200/change_37360.png"
+    },
+    {
+      "vocab_id": 89,
+      "vocab_type": "core",
+      "word_en": "push",
+      "symbol_key": "push_6485.png",
+      "url": "/symbols/arasaac/v1/core-200/push_6485.png"
+    },
+    {
+      "vocab_id": 90,
+      "vocab_type": "core",
+      "word_en": "pull",
+      "symbol_key": "pull_out.png",
+      "url": "/symbols/arasaac/v1/core-200/pull_out.png"
+    },
+    {
+      "vocab_id": 91,
+      "vocab_type": "core",
+      "word_en": "carry",
+      "symbol_key": "take_6553.png",
+      "url": "/symbols/arasaac/v1/core-200/take_6553.png"
+    },
+    {
+      "vocab_id": 92,
+      "vocab_type": "core",
+      "word_en": "cut",
+      "symbol_key": "cut_5975.png",
+      "url": "/symbols/arasaac/v1/core-200/cut_5975.png"
+    },
+    {
+      "vocab_id": 93,
+      "vocab_type": "core",
+      "word_en": "cook",
+      "symbol_key": "cook_2342.png",
+      "url": "/symbols/arasaac/v1/core-200/cook_2342.png"
+    },
+    {
+      "vocab_id": 94,
+      "vocab_type": "core",
+      "word_en": "ride",
+      "symbol_key": "ride_a_bike_6045.png",
+      "url": "/symbols/arasaac/v1/core-200/ride_a_bike_6045.png"
+    },
+    {
+      "vocab_id": 95,
+      "vocab_type": "core",
+      "word_en": "learn",
+      "symbol_key": "learn_37810.png",
+      "url": "/symbols/arasaac/v1/core-200/learn_37810.png"
+    },
+    {
+      "vocab_id": 96,
+      "vocab_type": "core",
+      "word_en": "remember",
+      "symbol_key": "remember.png",
+      "url": "/symbols/arasaac/v1/core-200/remember.png"
+    },
+    {
+      "vocab_id": 97,
+      "vocab_type": "core",
+      "word_en": "forget",
+      "symbol_key": "forget.png",
+      "url": "/symbols/arasaac/v1/core-200/forget.png"
+    },
+    {
+      "vocab_id": 98,
+      "vocab_type": "core",
+      "word_en": "touch",
+      "symbol_key": "touch_3293.png",
+      "url": "/symbols/arasaac/v1/core-200/touch_3293.png"
+    },
+    {
+      "vocab_id": 99,
+      "vocab_type": "core",
+      "word_en": "can",
+      "symbol_key": "can_11750.png",
+      "url": "/symbols/arasaac/v1/core-200/can_11750.png"
+    },
+    {
+      "vocab_id": 100,
+      "vocab_type": "core",
+      "word_en": "cannot",
+      "symbol_key": "no_5525.png",
+      "url": "/symbols/arasaac/v1/core-200/no_5525.png"
+    },
+    {
+      "vocab_id": 101,
+      "vocab_type": "core",
+      "word_en": "will",
+      "symbol_key": "will.png",
+      "url": "/symbols/arasaac/v1/core-200/will.png"
+    },
+    {
+      "vocab_id": 102,
+      "vocab_type": "core",
+      "word_en": "should",
+      "symbol_key": "need.png",
+      "url": "/symbols/arasaac/v1/core-200/need.png"
+    },
+    {
+      "vocab_id": 103,
+      "vocab_type": "core",
+      "word_en": "need to",
+      "symbol_key": "need.png",
+      "url": "/symbols/arasaac/v1/core-200/need.png"
+    },
+    {
+      "vocab_id": 104,
+      "vocab_type": "core",
+      "word_en": "yes",
+      "symbol_key": "yes_5584.png",
+      "url": "/symbols/arasaac/v1/core-200/yes_5584.png"
+    },
+    {
+      "vocab_id": 105,
+      "vocab_type": "core",
+      "word_en": "no",
+      "symbol_key": "no_5526.png",
+      "url": "/symbols/arasaac/v1/core-200/no_5526.png"
+    },
+    {
+      "vocab_id": 106,
+      "vocab_type": "core",
+      "word_en": "not",
+      "symbol_key": "no_5526.png",
+      "url": "/symbols/arasaac/v1/core-200/no_5526.png"
+    },
+    {
+      "vocab_id": 107,
+      "vocab_type": "core",
+      "word_en": "don't",
+      "symbol_key": "I_do_not_want.png",
+      "url": "/symbols/arasaac/v1/core-200/I_do_not_want.png"
+    },
+    {
+      "vocab_id": 108,
+      "vocab_type": "core",
+      "word_en": "can't",
+      "symbol_key": "I_do_not_know.png",
+      "url": "/symbols/arasaac/v1/core-200/I_do_not_know.png"
+    },
+    {
+      "vocab_id": 109,
+      "vocab_type": "core",
+      "word_en": "never",
+      "symbol_key": "never.png",
+      "url": "/symbols/arasaac/v1/core-200/never.png"
+    },
+    {
+      "vocab_id": 110,
+      "vocab_type": "core",
+      "word_en": "good",
+      "symbol_key": "good_4581.png",
+      "url": "/symbols/arasaac/v1/core-200/good_4581.png"
+    },
+    {
+      "vocab_id": 111,
+      "vocab_type": "core",
+      "word_en": "bad",
+      "symbol_key": "bad_5504.png",
+      "url": "/symbols/arasaac/v1/core-200/bad_5504.png"
+    },
+    {
+      "vocab_id": 112,
+      "vocab_type": "core",
+      "word_en": "more",
+      "symbol_key": "more_5508.png",
+      "url": "/symbols/arasaac/v1/core-200/more_5508.png"
+    },
+    {
+      "vocab_id": 113,
+      "vocab_type": "core",
+      "word_en": "less",
+      "symbol_key": "less_5512.png",
+      "url": "/symbols/arasaac/v1/core-200/less_5512.png"
+    },
+    {
+      "vocab_id": 114,
+      "vocab_type": "core",
+      "word_en": "big",
+      "symbol_key": "large.png",
+      "url": "/symbols/arasaac/v1/core-200/large.png"
+    },
+    {
+      "vocab_id": 115,
+      "vocab_type": "core",
+      "word_en": "small",
+      "symbol_key": "small.png",
+      "url": "/symbols/arasaac/v1/core-200/small.png"
+    },
+    {
+      "vocab_id": 116,
+      "vocab_type": "core",
+      "word_en": "little",
+      "symbol_key": "small.png",
+      "url": "/symbols/arasaac/v1/core-200/small.png"
+    },
+    {
+      "vocab_id": 117,
+      "vocab_type": "core",
+      "word_en": "hot",
+      "symbol_key": "hot_2300.png",
+      "url": "/symbols/arasaac/v1/core-200/hot_2300.png"
+    },
+    {
+      "vocab_id": 118,
+      "vocab_type": "core",
+      "word_en": "cold",
+      "symbol_key": "cold_4652.png",
+      "url": "/symbols/arasaac/v1/core-200/cold_4652.png"
+    },
+    {
+      "vocab_id": 119,
+      "vocab_type": "core",
+      "word_en": "fast",
+      "symbol_key": "fast_32166.png",
+      "url": "/symbols/arasaac/v1/core-200/fast_32166.png"
+    },
+    {
+      "vocab_id": 120,
+      "vocab_type": "core",
+      "word_en": "slow",
+      "symbol_key": "slow.png",
+      "url": "/symbols/arasaac/v1/core-200/slow.png"
+    },
+    {
+      "vocab_id": 121,
+      "vocab_type": "core",
+      "word_en": "loud",
+      "symbol_key": "noisy_7157.png",
+      "url": "/symbols/arasaac/v1/core-200/noisy_7157.png"
+    },
+    {
+      "vocab_id": 122,
+      "vocab_type": "core",
+      "word_en": "quiet",
+      "symbol_key": "quiet.png",
+      "url": "/symbols/arasaac/v1/core-200/quiet.png"
+    },
+    {
+      "vocab_id": 123,
+      "vocab_type": "core",
+      "word_en": "new",
+      "symbol_key": "new_11316.png",
+      "url": "/symbols/arasaac/v1/core-200/new_11316.png"
+    },
+    {
+      "vocab_id": 124,
+      "vocab_type": "core",
+      "word_en": "old",
+      "symbol_key": "old_11394.png",
+      "url": "/symbols/arasaac/v1/core-200/old_11394.png"
+    },
+    {
+      "vocab_id": 125,
+      "vocab_type": "core",
+      "word_en": "easy",
+      "symbol_key": "simple_4645.png",
+      "url": "/symbols/arasaac/v1/core-200/simple_4645.png"
+    },
+    {
+      "vocab_id": 126,
+      "vocab_type": "core",
+      "word_en": "hard",
+      "symbol_key": "hard_4637.png",
+      "url": "/symbols/arasaac/v1/core-200/hard_4637.png"
+    },
+    {
+      "vocab_id": 127,
+      "vocab_type": "core",
+      "word_en": "right",
+      "symbol_key": "well_5397.png",
+      "url": "/symbols/arasaac/v1/core-200/well_5397.png"
+    },
+    {
+      "vocab_id": 128,
+      "vocab_type": "core",
+      "word_en": "left",
+      "symbol_key": "left_9203.png",
+      "url": "/symbols/arasaac/v1/core-200/left_9203.png"
+    },
+    {
+      "vocab_id": 129,
+      "vocab_type": "core",
+      "word_en": "dirty",
+      "symbol_key": "dirty_4750.png",
+      "url": "/symbols/arasaac/v1/core-200/dirty_4750.png"
+    },
+    {
+      "vocab_id": 130,
+      "vocab_type": "core",
+      "word_en": "hungry",
+      "symbol_key": "hungry_4962.png",
+      "url": "/symbols/arasaac/v1/core-200/hungry_4962.png"
+    },
+    {
+      "vocab_id": 131,
+      "vocab_type": "core",
+      "word_en": "thirsty",
+      "symbol_key": "thirsty_7273.png",
+      "url": "/symbols/arasaac/v1/core-200/thirsty_7273.png"
+    },
+    {
+      "vocab_id": 132,
+      "vocab_type": "core",
+      "word_en": "tired",
+      "symbol_key": "tired_35537.png",
+      "url": "/symbols/arasaac/v1/core-200/tired_35537.png"
+    },
+    {
+      "vocab_id": 133,
+      "vocab_type": "core",
+      "word_en": "sick",
+      "symbol_key": "ill_7040.png",
+      "url": "/symbols/arasaac/v1/core-200/ill_7040.png"
+    },
+    {
+      "vocab_id": 134,
+      "vocab_type": "core",
+      "word_en": "hurt",
+      "symbol_key": "hurt_30620.png",
+      "url": "/symbols/arasaac/v1/core-200/hurt_30620.png"
+    },
+    {
+      "vocab_id": 135,
+      "vocab_type": "core",
+      "word_en": "safe",
+      "symbol_key": "safe.png",
+      "url": "/symbols/arasaac/v1/core-200/safe.png"
+    },
+    {
+      "vocab_id": 136,
+      "vocab_type": "core",
+      "word_en": "happy",
+      "symbol_key": "content_35547.png",
+      "url": "/symbols/arasaac/v1/core-200/content_35547.png"
+    },
+    {
+      "vocab_id": 137,
+      "vocab_type": "core",
+      "word_en": "sad",
+      "symbol_key": "sad_35545.png",
+      "url": "/symbols/arasaac/v1/core-200/sad_35545.png"
+    },
+    {
+      "vocab_id": 138,
+      "vocab_type": "core",
+      "word_en": "angry",
+      "symbol_key": "angry_35539.png",
+      "url": "/symbols/arasaac/v1/core-200/angry_35539.png"
+    },
+    {
+      "vocab_id": 139,
+      "vocab_type": "core",
+      "word_en": "scared",
+      "symbol_key": "scared_35535.png",
+      "url": "/symbols/arasaac/v1/core-200/scared_35535.png"
+    },
+    {
+      "vocab_id": 140,
+      "vocab_type": "core",
+      "word_en": "excited",
+      "symbol_key": "excited.png",
+      "url": "/symbols/arasaac/v1/core-200/excited.png"
+    },
+    {
+      "vocab_id": 141,
+      "vocab_type": "core",
+      "word_en": "bored",
+      "symbol_key": "bored.png",
+      "url": "/symbols/arasaac/v1/core-200/bored.png"
+    },
+    {
+      "vocab_id": 142,
+      "vocab_type": "core",
+      "word_en": "calm",
+      "symbol_key": "calm_down_32780.png",
+      "url": "/symbols/arasaac/v1/core-200/calm_down_32780.png"
+    },
+    {
+      "vocab_id": 143,
+      "vocab_type": "core",
+      "word_en": "now",
+      "symbol_key": "now_32747.png",
+      "url": "/symbols/arasaac/v1/core-200/now_32747.png"
+    },
+    {
+      "vocab_id": 144,
+      "vocab_type": "core",
+      "word_en": "later",
+      "symbol_key": "after_32749.png",
+      "url": "/symbols/arasaac/v1/core-200/after_32749.png"
+    },
+    {
+      "vocab_id": 145,
+      "vocab_type": "core",
+      "word_en": "before",
+      "symbol_key": "before_7044.png",
+      "url": "/symbols/arasaac/v1/core-200/before_7044.png"
+    },
+    {
+      "vocab_id": 146,
+      "vocab_type": "core",
+      "word_en": "after",
+      "symbol_key": "after_32749.png",
+      "url": "/symbols/arasaac/v1/core-200/after_32749.png"
+    },
+    {
+      "vocab_id": 147,
+      "vocab_type": "core",
+      "word_en": "today",
+      "symbol_key": "today_7131.png",
+      "url": "/symbols/arasaac/v1/core-200/today_7131.png"
+    },
+    {
+      "vocab_id": 148,
+      "vocab_type": "core",
+      "word_en": "tomorrow",
+      "symbol_key": "tomorrow_7152.png",
+      "url": "/symbols/arasaac/v1/core-200/tomorrow_7152.png"
+    },
+    {
+      "vocab_id": 149,
+      "vocab_type": "core",
+      "word_en": "yesterday",
+      "symbol_key": "yesterday_6926.png",
+      "url": "/symbols/arasaac/v1/core-200/yesterday_6926.png"
+    },
+    {
+      "vocab_id": 150,
+      "vocab_type": "core",
+      "word_en": "morning",
+      "symbol_key": "morning.png",
+      "url": "/symbols/arasaac/v1/core-200/morning.png"
+    },
+    {
+      "vocab_id": 151,
+      "vocab_type": "core",
+      "word_en": "night",
+      "symbol_key": "night_7181.png",
+      "url": "/symbols/arasaac/v1/core-200/night_7181.png"
+    },
+    {
+      "vocab_id": 152,
+      "vocab_type": "core",
+      "word_en": "in",
+      "symbol_key": "in.png",
+      "url": "/symbols/arasaac/v1/core-200/in.png"
+    },
+    {
+      "vocab_id": 153,
+      "vocab_type": "core",
+      "word_en": "on",
+      "symbol_key": "over.png",
+      "url": "/symbols/arasaac/v1/core-200/over.png"
+    },
+    {
+      "vocab_id": 154,
+      "vocab_type": "core",
+      "word_en": "under",
+      "symbol_key": "under_7047.png",
+      "url": "/symbols/arasaac/v1/core-200/under_7047.png"
+    },
+    {
+      "vocab_id": 155,
+      "vocab_type": "core",
+      "word_en": "over",
+      "symbol_key": "over.png",
+      "url": "/symbols/arasaac/v1/core-200/over.png"
+    },
+    {
+      "vocab_id": 156,
+      "vocab_type": "core",
+      "word_en": "up",
+      "symbol_key": "up.png",
+      "url": "/symbols/arasaac/v1/core-200/up.png"
+    },
+    {
+      "vocab_id": 157,
+      "vocab_type": "core",
+      "word_en": "down",
+      "symbol_key": "descend_6053.png",
+      "url": "/symbols/arasaac/v1/core-200/descend_6053.png"
+    },
+    {
+      "vocab_id": 158,
+      "vocab_type": "core",
+      "word_en": "out",
+      "symbol_key": "extinct.png",
+      "url": "/symbols/arasaac/v1/core-200/extinct.png"
+    },
+    {
+      "vocab_id": 159,
+      "vocab_type": "core",
+      "word_en": "off",
+      "symbol_key": "turn_off_21365.png",
+      "url": "/symbols/arasaac/v1/core-200/turn_off_21365.png"
+    },
+    {
+      "vocab_id": 160,
+      "vocab_type": "core",
+      "word_en": "away",
+      "symbol_key": "far_30385.png",
+      "url": "/symbols/arasaac/v1/core-200/far_30385.png"
+    },
+    {
+      "vocab_id": 161,
+      "vocab_type": "core",
+      "word_en": "with",
+      "symbol_key": "with.png",
+      "url": "/symbols/arasaac/v1/core-200/with.png"
+    },
+    {
+      "vocab_id": 162,
+      "vocab_type": "core",
+      "word_en": "without",
+      "symbol_key": "without.png",
+      "url": "/symbols/arasaac/v1/core-200/without.png"
+    },
+    {
+      "vocab_id": 163,
+      "vocab_type": "core",
+      "word_en": "to",
+      "symbol_key": "to.png",
+      "url": "/symbols/arasaac/v1/core-200/to.png"
+    },
+    {
+      "vocab_id": 164,
+      "vocab_type": "core",
+      "word_en": "from",
+      "symbol_key": "from.png",
+      "url": "/symbols/arasaac/v1/core-200/from.png"
+    },
+    {
+      "vocab_id": 165,
+      "vocab_type": "core",
+      "word_en": "for",
+      "symbol_key": "during_7081.png",
+      "url": "/symbols/arasaac/v1/core-200/during_7081.png"
+    },
+    {
+      "vocab_id": 166,
+      "vocab_type": "core",
+      "word_en": "into",
+      "symbol_key": "in.png",
+      "url": "/symbols/arasaac/v1/core-200/in.png"
+    },
+    {
+      "vocab_id": 167,
+      "vocab_type": "core",
+      "word_en": "between",
+      "symbol_key": "between_7765.png",
+      "url": "/symbols/arasaac/v1/core-200/between_7765.png"
+    },
+    {
+      "vocab_id": 168,
+      "vocab_type": "core",
+      "word_en": "behind",
+      "symbol_key": "behind.png",
+      "url": "/symbols/arasaac/v1/core-200/behind.png"
+    },
+    {
+      "vocab_id": 169,
+      "vocab_type": "core",
+      "word_en": "in front",
+      "symbol_key": "in_front.png",
+      "url": "/symbols/arasaac/v1/core-200/in_front.png"
+    },
+    {
+      "vocab_id": 170,
+      "vocab_type": "core",
+      "word_en": "next to",
+      "symbol_key": "next_to.png",
+      "url": "/symbols/arasaac/v1/core-200/next_to.png"
+    },
+    {
+      "vocab_id": 171,
+      "vocab_type": "core",
+      "word_en": "around",
+      "symbol_key": "around.png",
+      "url": "/symbols/arasaac/v1/core-200/around.png"
+    },
+    {
+      "vocab_id": 172,
+      "vocab_type": "core",
+      "word_en": "here",
+      "symbol_key": "here.png",
+      "url": "/symbols/arasaac/v1/core-200/here.png"
+    },
+    {
+      "vocab_id": 173,
+      "vocab_type": "core",
+      "word_en": "there",
+      "symbol_key": "there.png",
+      "url": "/symbols/arasaac/v1/core-200/there.png"
+    },
+    {
+      "vocab_id": 174,
+      "vocab_type": "core",
+      "word_en": "what",
+      "symbol_key": "what_22620.png",
+      "url": "/symbols/arasaac/v1/core-200/what_22620.png"
+    },
+    {
+      "vocab_id": 175,
+      "vocab_type": "core",
+      "word_en": "where",
+      "symbol_key": "where.png",
+      "url": "/symbols/arasaac/v1/core-200/where.png"
+    },
+    {
+      "vocab_id": 176,
+      "vocab_type": "core",
+      "word_en": "who",
+      "symbol_key": "who_9853.png",
+      "url": "/symbols/arasaac/v1/core-200/who_9853.png"
+    },
+    {
+      "vocab_id": 177,
+      "vocab_type": "core",
+      "word_en": "when",
+      "symbol_key": "when_32874.png",
+      "url": "/symbols/arasaac/v1/core-200/when_32874.png"
+    },
+    {
+      "vocab_id": 178,
+      "vocab_type": "core",
+      "word_en": "why",
+      "symbol_key": "why_36719.png",
+      "url": "/symbols/arasaac/v1/core-200/why_36719.png"
+    },
+    {
+      "vocab_id": 179,
+      "vocab_type": "core",
+      "word_en": "how",
+      "symbol_key": "how_22619.png",
+      "url": "/symbols/arasaac/v1/core-200/how_22619.png"
+    },
+    {
+      "vocab_id": 180,
+      "vocab_type": "core",
+      "word_en": "which",
+      "symbol_key": "which.png",
+      "url": "/symbols/arasaac/v1/core-200/which.png"
+    },
+    {
+      "vocab_id": 181,
+      "vocab_type": "core",
+      "word_en": "hello",
+      "symbol_key": "hello_6522.png",
+      "url": "/symbols/arasaac/v1/core-200/hello_6522.png"
+    },
+    {
+      "vocab_id": 182,
+      "vocab_type": "core",
+      "word_en": "bye",
+      "symbol_key": "goodbye_6028.png",
+      "url": "/symbols/arasaac/v1/core-200/goodbye_6028.png"
+    },
+    {
+      "vocab_id": 183,
+      "vocab_type": "core",
+      "word_en": "please",
+      "symbol_key": "please_8195.png",
+      "url": "/symbols/arasaac/v1/core-200/please_8195.png"
+    },
+    {
+      "vocab_id": 184,
+      "vocab_type": "core",
+      "word_en": "thank you",
+      "symbol_key": "thanks_8129.png",
+      "url": "/symbols/arasaac/v1/core-200/thanks_8129.png"
+    },
+    {
+      "vocab_id": 185,
+      "vocab_type": "core",
+      "word_en": "sorry",
+      "symbol_key": "sorry_11625.png",
+      "url": "/symbols/arasaac/v1/core-200/sorry_11625.png"
+    },
+    {
+      "vocab_id": 186,
+      "vocab_type": "core",
+      "word_en": "excuse me",
+      "symbol_key": "sorry_11625.png",
+      "url": "/symbols/arasaac/v1/core-200/sorry_11625.png"
+    },
+    {
+      "vocab_id": 187,
+      "vocab_type": "core",
+      "word_en": "and",
+      "symbol_key": "and.png",
+      "url": "/symbols/arasaac/v1/core-200/and.png"
+    },
+    {
+      "vocab_id": 188,
+      "vocab_type": "core",
+      "word_en": "or",
+      "symbol_key": "or.png",
+      "url": "/symbols/arasaac/v1/core-200/or.png"
+    },
+    {
+      "vocab_id": 189,
+      "vocab_type": "core",
+      "word_en": "but",
+      "symbol_key": "but.png",
+      "url": "/symbols/arasaac/v1/core-200/but.png"
+    },
+    {
+      "vocab_id": 190,
+      "vocab_type": "core",
+      "word_en": "because",
+      "symbol_key": "because.png",
+      "url": "/symbols/arasaac/v1/core-200/because.png"
+    },
+    {
+      "vocab_id": 191,
+      "vocab_type": "core",
+      "word_en": "if",
+      "symbol_key": "if.png",
+      "url": "/symbols/arasaac/v1/core-200/if.png"
+    },
+    {
+      "vocab_id": 192,
+      "vocab_type": "core",
+      "word_en": "then",
+      "symbol_key": "after_32749.png",
+      "url": "/symbols/arasaac/v1/core-200/after_32749.png"
+    },
+    {
+      "vocab_id": 193,
+      "vocab_type": "core",
+      "word_en": "so",
+      "symbol_key": "after_13080.png",
+      "url": "/symbols/arasaac/v1/core-200/after_13080.png"
+    },
+    {
+      "vocab_id": 194,
+      "vocab_type": "core",
+      "word_en": "one",
+      "symbol_key": "one_2627.png",
+      "url": "/symbols/arasaac/v1/core-200/one_2627.png"
+    },
+    {
+      "vocab_id": 195,
+      "vocab_type": "core",
+      "word_en": "two",
+      "symbol_key": "2_2628.png",
+      "url": "/symbols/arasaac/v1/core-200/2_2628.png"
+    },
+    {
+      "vocab_id": 196,
+      "vocab_type": "core",
+      "word_en": "three",
+      "symbol_key": "3_2629.png",
+      "url": "/symbols/arasaac/v1/core-200/3_2629.png"
+    },
+    {
+      "vocab_id": 197,
+      "vocab_type": "core",
+      "word_en": "many",
+      "symbol_key": "many_7168.png",
+      "url": "/symbols/arasaac/v1/core-200/many_7168.png"
+    },
+    {
+      "vocab_id": 198,
+      "vocab_type": "core",
+      "word_en": "few",
+      "symbol_key": "few_7209.png",
+      "url": "/symbols/arasaac/v1/core-200/few_7209.png"
+    },
+    {
+      "vocab_id": 199,
+      "vocab_type": "core",
+      "word_en": "all done",
+      "symbol_key": "finish_28429.png",
+      "url": "/symbols/arasaac/v1/core-200/finish_28429.png"
+    },
+    {
+      "vocab_id": 200,
+      "vocab_type": "core",
+      "word_en": "again",
+      "symbol_key": "again.png",
+      "url": "/symbols/arasaac/v1/core-200/again.png"
+    }
+  ]
+}

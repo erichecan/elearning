@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowRight, Box, ArrowDown } from 'lucide-react';
+import { ArrowRight, ArrowDown } from 'lucide-react';
+import { apiFetch } from '../../services/api-client';
 
 interface CarryingGameProps {
     onBack: () => void;
@@ -141,7 +142,18 @@ const CarryingGame: React.FC<CarryingGameProps> = ({ onBack }) => {
 
                 {step === 2 && (
                     <button
-                        onClick={() => setStep(3)}
+                        onClick={() => {
+                            apiFetch('/api/analytics/event', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({
+                                    child_id: null,
+                                    event_type: 'math_carry_success',
+                                    event_payload: { num1, num2, answer: num1 + num2 }
+                                })
+                            }).catch(() => undefined);
+                            setStep(3);
+                        }}
                         className="w-full py-4 bg-blue-500 text-white rounded-2xl font-bold text-xl shadow-float hover:bg-blue-600 transition-all"
                     >
                         Check Answer

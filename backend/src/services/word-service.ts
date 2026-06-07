@@ -1,18 +1,6 @@
+import { requireDbPool } from '../lib/db-pool'
 
-import { Pool } from '@neondatabase/serverless';
-import dotenv from 'dotenv';
-import path from 'path';
-
-// Ensure .env is loaded from the backend root
-dotenv.config({ path: path.join(__dirname, '../../.env') });
-
-const connectionString = process.env.DATABASE_URL;
-
-if (!connectionString) {
-    console.error('DATABASE_URL is not set. Please check your .env file.');
-}
-
-const pool = new Pool({ connectionString });
+const pool = requireDbPool();
 
 export const wordService = {
     async create(wordData: any) {
@@ -78,7 +66,7 @@ export const wordService = {
         }
     },
 
-    async update(id: number, updates: { category_id?: number; is_approved?: boolean }) {
+    async update(id: number, updates: { category_id?: number; is_approved?: boolean; image_url?: string | null; audio_url?: string | null; word?: string; chinese?: string | null; phonetic?: string | null }) {
         const client = await pool.connect();
         try {
             const setClauses: string[] = [];
@@ -93,6 +81,31 @@ export const wordService = {
             if (updates.is_approved !== undefined) {
                 setClauses.push(`is_approved = $${paramIndex++}`);
                 values.push(updates.is_approved);
+            }
+
+            if (updates.image_url !== undefined) {
+                setClauses.push(`image_url = $${paramIndex++}`);
+                values.push(updates.image_url);
+            }
+
+            if (updates.audio_url !== undefined) {
+                setClauses.push(`audio_url = $${paramIndex++}`);
+                values.push(updates.audio_url);
+            }
+
+            if (updates.word !== undefined) {
+                setClauses.push(`word = $${paramIndex++}`);
+                values.push(updates.word);
+            }
+
+            if (updates.chinese !== undefined) {
+                setClauses.push(`chinese = $${paramIndex++}`);
+                values.push(updates.chinese);
+            }
+
+            if (updates.phonetic !== undefined) {
+                setClauses.push(`phonetic = $${paramIndex++}`);
+                values.push(updates.phonetic);
             }
 
             if (setClauses.length === 0) {

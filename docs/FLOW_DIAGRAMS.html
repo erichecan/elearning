@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Audrey 2.0 — 运行逻辑 & 用户行为流程</title>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<style>
+  :root{
+    --sage:#7C9885;        /* 鼠尾草绿 */
+    --sage-soft:#E7EEE8;
+    --german-blue:#274472;  /* 德国蓝 */
+    --german-soft:#E4EAF2;
+    --ink:#2B3A33;
+    --muted:#6B7C72;
+    --paper:#FBFCFB;
+    --line:#D6DED8;
+    --amber:#C08A2E;
+    --amber-soft:#F6ECD8;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;background:var(--paper);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+    line-height:1.7;-webkit-font-smoothing:antialiased;
+  }
+  header{
+    background:linear-gradient(135deg,var(--german-blue),var(--sage));
+    color:#fff;padding:42px 32px 36px;
+  }
+  header h1{margin:0 0 8px;font-size:26px;letter-spacing:.5px;}
+  header p{margin:0;opacity:.92;font-size:15px;max-width:860px;}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 24px 80px;}
+  .tabs{display:flex;gap:8px;margin:28px 0 0;flex-wrap:wrap;}
+  .tab{
+    border:1px solid var(--line);background:#fff;color:var(--muted);
+    padding:10px 20px;border-radius:999px;cursor:pointer;font-size:14px;font-weight:600;
+    transition:all .18s;
+  }
+  .tab.active{background:var(--german-blue);color:#fff;border-color:var(--german-blue);}
+  .tab:hover:not(.active){border-color:var(--sage);color:var(--sage);}
+  section.panel{display:none;animation:fade .3s ease;}
+  section.panel.active{display:block;}
+  @keyframes fade{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
+  h2{font-size:20px;color:var(--german-blue);margin:34px 0 6px;}
+  .lead{color:var(--muted);font-size:14.5px;margin:0 0 18px;max-width:880px;}
+  .card{
+    background:#fff;border:1px solid var(--line);border-radius:16px;
+    padding:22px 18px;box-shadow:0 1px 3px rgba(39,68,114,.05);overflow-x:auto;
+  }
+  .mermaid{display:flex;justify-content:center;min-width:680px;}
+  .legend{display:flex;gap:18px;flex-wrap:wrap;margin:16px 0 4px;font-size:13px;}
+  .legend span{display:inline-flex;align-items:center;gap:7px;color:var(--muted);}
+  .dot{width:13px;height:13px;border-radius:4px;display:inline-block;border:1px solid rgba(0,0,0,.08);}
+  .narr{
+    background:var(--sage-soft);border-left:4px solid var(--sage);
+    border-radius:0 12px 12px 0;padding:16px 20px;margin:18px 0;font-size:14.5px;
+  }
+  .narr ol{margin:8px 0 0;padding-left:20px;}
+  .narr li{margin:5px 0;}
+  .evi{color:var(--german-blue);font-weight:600;}
+  footer{color:var(--muted);font-size:12.5px;text-align:center;padding:24px;border-top:1px solid var(--line);}
+  code{background:var(--german-soft);padding:1px 6px;border-radius:5px;font-size:.9em;}
+</style>
+</head>
+<body>
+<header>
+  <h1>Audrey 2.0 · 整体运行逻辑 &amp; 用户行为流程</h1>
+  <p>面向自闭症儿童的 AAC 沟通与生活辅助 App。本图把循证研究（见 <code>AAC_RESEARCH_EVIDENCE_2026-06.md</code>）的关键约束直接标注在流程节点上，作为反向落 PRD 的依据。绿色描边节点 = 有强循证约束、不可妥协的设计点。</p>
+</header>
+
+<div class="wrap">
+  <div class="tabs">
+    <button class="tab active" data-tab="logic">① 整体运行逻辑（系统视角）</button>
+    <button class="tab" data-tab="behavior">② 用户行为（用户旅程视角）</button>
+  </div>
+
+  <!-- ============ 流程图 1 ============ -->
+  <section class="panel active" id="logic">
+    <h2>① 整体运行逻辑</h2>
+    <p class="lead">三端（家长 / 儿童 / 治疗师）围绕一个以儿童为中心的数据层运转，形成「配置 → 运行 → 埋点 → 分析 → 个体化回调」的闭环。</p>
+
+    <div class="narr">
+      <strong>运行逻辑文字版：</strong>
+      <ol>
+        <li><strong>配置（家长端 Mobile）</strong>：建立儿童档案与能力/偏好，上传 at&nbsp;home / at&nbsp;school 场景照片并设 VSD 热区，维护词库（core / context / custom），创建日程任务、奖励规则，审核 AI 生成的 flashcard / 绘本 / 数学题。</li>
+        <li><strong>落库</strong>：全部写入 Neon Postgres，作为儿童端运行时的唯一数据源。</li>
+        <li><strong>运行（儿童端 Tablet）</strong>：首页加载<span class="evi">固定位置</span>的核心词网格 + 句子条 + 场景入口 + 任务提醒 + 代币。孩子逐词造句 → TTS&nbsp;发声；AI 仅<span class="evi">高亮推荐、绝不挪动词的位置</span>；切换场景只换 fringe 词与 VSD 背景，<span class="evi">核心网格保持不变</span>；flashcard 与 AAC <span class="evi">共用同一套词条</span>，学完即可在句子条用出来；完成任务/正确沟通触发代币。</li>
+        <li><strong>埋点</strong>：所有交互写入 analytics_events / abc_logs。</li>
+        <li><strong>分析与回调（治疗师端 Web）</strong>：看 AAC 使用频率、独立沟通率、任务完成率与 ABC 报表，据此<span class="evi">个体化</span>调整词库与日程，回写数据层，闭环。</li>
+      </ol>
+    </div>
+
+    <div class="legend">
+      <span><i class="dot" style="background:#E4EAF2;border-color:#274472"></i>家长端</span>
+      <span><i class="dot" style="background:#E7EEE8;border-color:#7C9885"></i>儿童端</span>
+      <span><i class="dot" style="background:#F6ECD8;border-color:#C08A2E"></i>治疗师端</span>
+      <span><i class="dot" style="background:#fff;border:2px solid #2E8B57"></i>🟢 强循证约束节点</span>
+      <span><i class="dot" style="background:#EFEFEF;border-color:#999"></i>数据层</span>
+    </div>
+
+    <div class="card">
+      <pre class="mermaid">
+flowchart TD
+  classDef parent fill:#E4EAF2,stroke:#274472,color:#274472,rx:8,ry:8;
+  classDef child fill:#E7EEE8,stroke:#7C9885,color:#2B3A33,rx:8,ry:8;
+  classDef ther fill:#F6ECD8,stroke:#C08A2E,color:#7a5a18,rx:8,ry:8;
+  classDef data fill:#EFEFEF,stroke:#999,color:#444,rx:6,ry:6;
+  classDef evi fill:#E7EEE8,stroke:#2E8B57,stroke-width:3px,color:#1f5c3a,rx:8,ry:8;
+
+  subgraph PA["👪 家长端 · Mobile（配置）"]
+    direction TB
+    P1["建立儿童档案<br/>能力 / 偏好"]
+    P2["上传场景照片<br/>at home / at school<br/>设 VSD 热区"]
+    P3["维护词库<br/>core / context / custom"]
+    P4["创建日程 / 任务 / 步骤"]
+    P5["设置奖励规则"]
+    P6["审核 AI 生成内容<br/>flashcard / 绘本 / math"]
+  end
+
+  DB[("🗄️ Neon Postgres<br/>以儿童为中心")]
+
+  subgraph CH["🧒 儿童端 · Tablet（运行）"]
+    direction TB
+    C0["打开首页"]
+    C2["固定核心词网格<br/>位置永久锁定"]:::evi
+    C3["句子条逐词拼句<br/>（主路径）"]
+    C4["TTS 发声"]
+    C5["AI 推荐：只高亮<br/>不改变位置"]:::evi
+    C6["场景切换 → 换 fringe + VSD<br/>核心网格不变"]:::evi
+    C7["flashcard 学词<br/>与 AAC 同一套词条"]:::evi
+    C8["Focus 模式<br/>完成任务"]
+    C9["获得代币 → 兑换"]
+  end
+
+  subgraph TH["🩺 治疗师端 · Web（分析）"]
+    direction TB
+    T1["数据看板<br/>AAC 频率 / 独立沟通率 / 完成率"]
+    T2["ABC 行为报表"]
+    T3["个体化调整<br/>词库 / 日程"]
+  end
+
+  AN["📊 埋点 analytics_events / abc_logs"]
+
+  P1 --> DB
+  P2 --> DB
+  P3 --> DB
+  P4 --> DB
+  P5 --> DB
+  P6 --> DB
+
+  DB --> C0
+  C0 --> C2 --> C3 --> C4
+  C0 --> C5 --> C3
+  C0 --> C6 --> C3
+  C0 --> C7 -.学完即用.-> C3
+  C0 --> C8 --> C9
+
+  C3 --> AN
+  C4 --> AN
+  C8 --> AN
+  C9 --> AN
+  AN --> DB
+
+  DB --> T1 --> T2 --> T3
+  T3 -. 回写个体化配置 .-> DB
+
+  class P1,P2,P3,P4,P5,P6 parent;
+  class C0,C8,C9 child;
+  class T1,T2,T3 ther;
+  class DB,AN data;
+      </pre>
+    </div>
+  </section>
+
+  <!-- ============ 流程图 2 ============ -->
+  <section class="panel" id="behavior">
+    <h2>② 用户行为（用户旅程）</h2>
+    <p class="lead">以孩子的一天为主线，叠加家长（夜间配置/审核）与治疗师（周期性复盘）两条支线。重点呈现「想表达 → 用固定网格找词 → 拼句发声 → 大人回应示范」这条核心沟通回路。</p>
+
+    <div class="narr">
+      <strong>用户行为文字版：</strong>
+      <ol>
+        <li><strong>孩子·沟通回路</strong>：产生表达意图 → 在<span class="evi">熟悉的固定位置</span>凭运动记忆找词 → 点选进句子条 → 朗读 → 沟通伙伴（家长/老师）<span class="evi">辅助语言示范</span>（边说边点）回应 → 强化。</li>
+        <li><strong>孩子·场景</strong>：去学校/在家切换场景 → 相关情境词与场景图浮现（核心词位置不变）。</li>
+        <li><strong>孩子·任务</strong>：收到任务提醒 → 进入 Focus 模式（视觉计时 + 步骤）→ 完成 → 获代币 → 兑换。</li>
+        <li><strong>孩子·学习</strong>：进入 flashcard/数学 → 学新词 → <span class="evi">回到沟通场景用出来</span>（学用一体，非孤立刷卡）。</li>
+        <li><strong>家长·支线</strong>：夜间上传场景照片、调词库、审核 AI 内容、看孩子当天表现。</li>
+        <li><strong>治疗师·支线</strong>：每周看数据看板与 ABC 报表 → 个体化调整目标词与日程。</li>
+      </ol>
+    </div>
+
+    <div class="legend">
+      <span><i class="dot" style="background:#E7EEE8;border-color:#7C9885"></i>孩子行为</span>
+      <span><i class="dot" style="background:#E4EAF2;border-color:#274472"></i>家长行为</span>
+      <span><i class="dot" style="background:#F6ECD8;border-color:#C08A2E"></i>治疗师行为</span>
+      <span><i class="dot" style="background:#fff;border:2px solid #2E8B57"></i>🟢 强循证约束</span>
+    </div>
+
+    <div class="card">
+      <pre class="mermaid">
+flowchart LR
+  classDef child fill:#E7EEE8,stroke:#7C9885,color:#2B3A33,rx:8,ry:8;
+  classDef parent fill:#E4EAF2,stroke:#274472,color:#274472,rx:8,ry:8;
+  classDef ther fill:#F6ECD8,stroke:#C08A2E,color:#7a5a18,rx:8,ry:8;
+  classDef evi fill:#E7EEE8,stroke:#2E8B57,stroke-width:3px,color:#1f5c3a,rx:8,ry:8;
+  classDef start fill:#274472,stroke:#274472,color:#fff,rx:20,ry:20;
+
+  START(["🧒 孩子打开 App"]):::start
+
+  subgraph LOOP["💬 核心沟通回路（每天反复发生）"]
+    direction TB
+    B1["产生表达意图"]
+    B2["在固定位置<br/>凭运动记忆找词"]:::evi
+    B3["点词 → 句子条拼句"]
+    B4["TTS 朗读"]
+    B5["伙伴辅助语言示范<br/>边说边点回应"]:::evi
+    B6["被理解 → 强化沟通动机"]
+    B1 --> B2 --> B3 --> B4 --> B5 --> B6
+    B6 -. 下一次表达 .-> B1
+  end
+
+  subgraph SCENE["🏫 场景切换"]
+    S1["去学校 / 在家"]
+    S2["情境词 + 场景图浮现<br/>核心词位置不变"]:::evi
+    S1 --> S2
+  end
+
+  subgraph TASK["✅ 任务与奖励"]
+    K1["收到任务提醒"]
+    K2["Focus 模式<br/>视觉计时 + 步骤"]
+    K3["完成"]
+    K4["获代币 → 兑换"]
+    K1 --> K2 --> K3 --> K4
+  end
+
+  subgraph LEARN["🎴 学习"]
+    L1["进入 flashcard / 数学"]
+    L2["学新词"]
+    L3["回沟通场景用出来"]:::evi
+    L1 --> L2 --> L3
+  end
+
+  START --> B1
+  START --> S1
+  START --> K1
+  START --> L1
+  S2 -.切换语境.-> B2
+  L3 -.学用一体.-> B1
+  K4 -.正向激励.-> B1
+
+  subgraph PARENT["👪 家长（夜间支线）"]
+    direction TB
+    PB1["上传场景照片 / 调词库"]
+    PB2["审核 AI 内容"]
+    PB3["看当天表现"]
+    PB1 --> PB2 --> PB3
+  end
+
+  subgraph THER["🩺 治疗师（每周支线）"]
+    direction TB
+    TB1["看数据看板 + ABC"]
+    TB2["个体化调整目标词 / 日程"]
+    TB1 --> TB2
+  end
+
+  PB1 -. 影响次日 .-> START
+  TB2 -. 影响词库 .-> B2
+
+  class START start;
+  class PB1,PB2,PB3 parent;
+  class TB1,TB2 ther;
+      </pre>
+    </div>
+  </section>
+</div>
+
+<footer>
+  Audrey 2.0 · 循证流程图 · 2026-06-06 ｜ 绿色描边节点为不可妥协的循证约束，将在反向落 PRD 时逐条对应修订。
+</footer>
+
+<script>
+  mermaid.initialize({
+    startOnLoad:false,
+    theme:'base',
+    flowchart:{ htmlLabels:true, curve:'basis', nodeSpacing:42, rankSpacing:52, padding:10 },
+    themeVariables:{
+      fontFamily:'-apple-system,"PingFang SC","Microsoft YaHei",sans-serif',
+      fontSize:'13px',
+      lineColor:'#9FB0A6',
+      primaryColor:'#E7EEE8',
+      primaryBorderColor:'#7C9885',
+      primaryTextColor:'#2B3A33',
+      clusterBkg:'#FBFCFB',
+      clusterBorder:'#D6DED8'
+    }
+  });
+  const tabs=document.querySelectorAll('.tab');
+  const panels=document.querySelectorAll('.panel');
+
+  // Mermaid 在 display:none 容器里会渲染出 NaN 尺寸。
+  // 解决：渲染期间强制所有 panel 可见，渲染完成后再恢复 tab 显隐。
+  (async function renderAll(){
+    panels.forEach(p=>{ p.style.display='block'; });
+    await mermaid.run({ querySelector:'.mermaid' });
+    panels.forEach(p=>{ p.style.display=''; }); // 交回 CSS class 控制
+  })();
+
+  tabs.forEach(t=>t.addEventListener('click',()=>{
+    tabs.forEach(x=>x.classList.remove('active'));
+    panels.forEach(p=>p.classList.remove('active'));
+    t.classList.add('active');
+    document.getElementById(t.dataset.tab).classList.add('active');
+  }));
+</script>
+</body>
+</html>

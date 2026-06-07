@@ -1,0 +1,38 @@
+{
+  "timestamp": "2026-03-01T05:41:37.696Z",
+  "frontend": "http://127.0.0.1:5174",
+  "backend": "http://127.0.0.1:3001",
+  "api": {
+    "healthOk": true,
+    "coreCount": 64,
+    "ttsUrl": "/tts/ddeb73339a_hello.mp3",
+    "recCount": 6
+  },
+  "ui": {
+    "home": {
+      "coreButtons": 36,
+      "hasFixed": true,
+      "hasDynamic": true,
+      "hasScrollbar": false,
+      "hint": "Core Words先选主语（如 I），再选动作词",
+      "hasSpeakSentence": false,
+      "hasUndoSentence": false
+    },
+    "afterI": {
+      "hint": "奖励系统1 金币情绪控制室今天情绪at school学校场景at home家庭场景任务提醒刷牙pending场景互动选中 Core Words 形成一句话朗读整句撤销清空ICore Words已选 \"I\"，下一步推荐动作词固定区（运动记忆）I我固定pronounwant想要固定verbAIneed需要固定verbhelp帮助固定verbAIstop停止固定verbAIgo去固定verbAIeat吃固定verbAIdrink喝固定verbAIplay玩固定verblike喜欢固定verblove喜欢/爱固定verbcome来固定verbget得到/拿到固定verbgive给固定verbtake拿/带固定verbput放固定verbmake做/制作固定verbdo做固定verb动态区（成句引导）have有verbbe是/在verbsee看见verblook看verbhear听见verblisten听verbfeel感觉verbthink想/认为verbknow知道verbsay说verbtell告诉verbask问verbstart开始verbfinish完成verbwait等待verbwork工作/做作业verbsleep睡觉verbthis这个objectmath数学flashcards闪卡绘本阅读settings设置",
+      "dynamicWords": [
+        "have",
+        "be",
+        "see",
+        "look",
+        "hear",
+        "listen"
+      ]
+    },
+    "persisted": {
+      "ok": true,
+      "before": true,
+      "stored": "false"
+    }
+  }
+}

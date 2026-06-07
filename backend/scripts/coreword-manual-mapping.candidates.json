@@ -1,0 +1,288 @@
+[
+  {
+    "id": "26",
+    "word_en": "each",
+    "word_zh": "每个",
+    "candidates": []
+  },
+  {
+    "id": "65",
+    "word_en": "wake",
+    "word_zh": "醒来",
+    "candidates": []
+  },
+  {
+    "id": "90",
+    "word_en": "pull",
+    "word_zh": "拉",
+    "candidates": []
+  },
+  {
+    "id": "100",
+    "word_en": "cannot",
+    "word_zh": "不能",
+    "candidates": []
+  },
+  {
+    "id": "102",
+    "word_en": "should",
+    "word_zh": "应该",
+    "candidates": []
+  },
+  {
+    "id": "103",
+    "word_en": "need to",
+    "word_zh": "需要去",
+    "candidates": [
+      {
+        "filename": "need.png",
+        "arasaac_id": 37160,
+        "score": 23,
+        "categories": [
+          "usual verbs",
+          "human response",
+          "core vocabulary-communication",
+          "core vocabulary-knowledge"
+        ],
+        "keywords": [
+          "need"
+        ]
+      },
+      {
+        "filename": "to.png",
+        "arasaac_id": 7041,
+        "score": 0,
+        "categories": [
+          "preposition"
+        ],
+        "keywords": [
+          "to",
+          "at"
+        ]
+      },
+      {
+        "filename": "towards.png",
+        "arasaac_id": 7125,
+        "score": 0,
+        "categories": [
+          "preposition"
+        ],
+        "keywords": [
+          "towards",
+          "around",
+          "to"
+        ]
+      },
+      {
+        "filename": "until.png",
+        "arasaac_id": 7771,
+        "score": 0,
+        "categories": [
+          "preposition"
+        ],
+        "keywords": [
+          "until",
+          "to",
+          "up to"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "106",
+    "word_en": "not",
+    "word_zh": "不",
+    "candidates": []
+  },
+  {
+    "id": "107",
+    "word_en": "don't",
+    "word_zh": "不要",
+    "candidates": []
+  },
+  {
+    "id": "108",
+    "word_en": "can't",
+    "word_zh": "不能",
+    "candidates": []
+  },
+  {
+    "id": "121",
+    "word_en": "loud",
+    "word_zh": "大声",
+    "candidates": []
+  },
+  {
+    "id": "157",
+    "word_en": "down",
+    "word_zh": "向下",
+    "candidates": []
+  },
+  {
+    "id": "159",
+    "word_en": "off",
+    "word_zh": "离开/关掉",
+    "candidates": []
+  },
+  {
+    "id": "160",
+    "word_en": "away",
+    "word_zh": "离开",
+    "candidates": []
+  },
+  {
+    "id": "166",
+    "word_en": "into",
+    "word_zh": "进到",
+    "candidates": []
+  },
+  {
+    "id": "180",
+    "word_en": "which",
+    "word_zh": "哪一个",
+    "candidates": []
+  },
+  {
+    "id": "186",
+    "word_en": "excuse me",
+    "word_zh": "打扰了",
+    "candidates": [
+      {
+        "filename": "I_6632.png",
+        "arasaac_id": 6632,
+        "score": 15,
+        "categories": [
+          "pronoun",
+          "personal pronoun",
+          "core vocabulary-communication"
+        ],
+        "keywords": [
+          "I",
+          "me",
+          "for me"
+        ]
+      },
+      {
+        "filename": "I_2617.png",
+        "arasaac_id": 2617,
+        "score": 0,
+        "categories": [
+          "pronoun",
+          "personal pronoun"
+        ],
+        "keywords": [
+          "I",
+          "me",
+          "for me"
+        ]
+      },
+      {
+        "filename": "I_7309.png",
+        "arasaac_id": 7309,
+        "score": 0,
+        "categories": [
+          "pronoun",
+          "personal pronoun"
+        ],
+        "keywords": [
+          "I",
+          "me",
+          "for me"
+        ]
+      },
+      {
+        "filename": "I_7310.png",
+        "arasaac_id": 7310,
+        "score": 0,
+        "categories": [
+          "pronoun",
+          "personal pronoun"
+        ],
+        "keywords": [
+          "I",
+          "me",
+          "for me"
+        ]
+      },
+      {
+        "filename": "I_31807.png",
+        "arasaac_id": 31807,
+        "score": 0,
+        "categories": [
+          "pronoun",
+          "personal pronoun"
+        ],
+        "keywords": [
+          "I",
+          "me",
+          "for me"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "199",
+    "word_en": "all done",
+    "word_zh": "完成",
+    "candidates": [
+      {
+        "filename": "all_5596.png",
+        "arasaac_id": 5596,
+        "score": 15,
+        "categories": [
+          "indefinite pronoun",
+          "core vocabulary-communication"
+        ],
+        "keywords": [
+          "all",
+          "everything",
+          "whole",
+          "totally"
+        ]
+      },
+      {
+        "filename": "all_27091.png",
+        "arasaac_id": 27091,
+        "score": 0,
+        "categories": [
+          "indefinite pronoun"
+        ],
+        "keywords": [
+          "all",
+          "everything",
+          "altogether",
+          "whole"
+        ]
+      },
+      {
+        "filename": "all_32438.png",
+        "arasaac_id": 32438,
+        "score": 0,
+        "categories": [
+          "indefinite pronoun"
+        ],
+        "keywords": [
+          "all",
+          "everything",
+          "all",
+          "everything"
+        ]
+      },
+      {
+        "filename": "all_36081.png",
+        "arasaac_id": 36081,
+        "score": 0,
+        "categories": [
+          "indefinite adjective",
+          "indefinite pronoun",
+          "basic concepts"
+        ],
+        "keywords": [
+          "everybody",
+          "all",
+          "everyone"
+        ]
+      }
+    ]
+  }
+]
