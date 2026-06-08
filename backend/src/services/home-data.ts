@@ -61,7 +61,7 @@ async function queryCoreWordsFromDb(childId?: string): Promise<CoreWordItem[] | 
            ON s.provider = COALESCE(v.symbol_provider, 'arasaac')
           AND s.symbol_key = v.symbol_key
           AND s.is_active = true
-         WHERE p.child_id = $1 AND v.type = 'core' AND v.is_active = true
+         WHERE p.child_id = $1 AND v.type IN ('core', 'custom') AND v.is_active = true
          ORDER BY p.position_index ASC
          LIMIT 64`,
         [childId]

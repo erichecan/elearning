@@ -50,6 +50,9 @@ const FlashcardsScreen: React.FC<FlashcardsScreenProps> = ({ onBack, onOpenCateg
   const [error, setError] = useState<string | null>(null)
   const [mode, setMode] = useState<'categories' | 'study'>('study')
   const [index, setIndex] = useState(0)
+  const [addedVocab, setAddedVocab] = useState<Set<string>>(new Set())
+  const [adding, setAdding] = useState(false)
+  const [addMsg, setAddMsg] = useState<string | null>(null)
 
   useEffect(() => {
     const loadCategories = async () => {
@@ -71,6 +74,34 @@ const FlashcardsScreen: React.FC<FlashcardsScreenProps> = ({ onBack, onOpenCateg
     }
     loadCategories()
   }, [])
+
+  // A3: 学完即用 —— 把当前闪卡加到首页 AAC 词板（与 AAC 同源）
+  const handleAddToBoard = async () => {
+    const card = cards[index]
+    if (!card) return
+    const childId = getActiveChildId()
+    if (!childId) { setAddMsg('请先在设置里选择一个孩子'); return }
+    if (addedVocab.has(card.word_en)) { setAddMsg('已经在词板里了'); return }
+    try {
+      setAdding(true); setAddMsg(null)
+      const res = await apiFetch('/api/flashcards/add-to-board', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ flashcardId: card.id, childId })
+      })
+      if (!res.ok) {
+        const e = await res.json().catch(() => ({}))
+        throw new Error((e as any).error || '加入失败')
+      }
+      setAddedVocab(prev => new Set(prev).add(card.word_en))
+      setAddMsg(`已把 "${card.word_en}" 加到首页词板，回首页就能用`)
+    } catch (err) {
+      console.error('[add-to-board]', err)
+      setAddMsg(err instanceof Error ? err.message : '加入失败')
+    } finally {
+      setAdding(false)
+    }
+  }
 
   if (loading) {
     return (
@@ -169,6 +200,14 @@ const FlashcardsScreen: React.FC<FlashcardsScreenProps> = ({ onBack, onOpenCateg
                   </button>
                   <button onClick={() => setIndex((prev) => (prev + 1) % cards.length)} className="px-3 py-2 rounded-xl bg-slate-100 text-slate-700">下一张</button>
                 </div>
+                <button
+                  onClick={handleAddToBoard}
+                  disabled={adding || addedVocab.has(cards[index]?.word_en || '')}
+                  className={`mt-3 w-full px-3 py-3 rounded-xl font-bold transition-colors disabled:opacity-60 ${addedVocab.has(cards[index]?.word_en || '') ? 'bg-emerald-100 text-emerald-700' : 'bg-blue-500 text-white hover:bg-blue-600'}`}
+                >
+                  {addedVocab.has(cards[index]?.word_en || '') ? '✓ 已加到词板' : adding ? '加入中…' : '➕ 加到我的词板'}
+                </button>
+                {addMsg && <div className="mt-2 text-center text-sm text-slate-600">{addMsg}</div>}
               </div>
             )}
           </div>

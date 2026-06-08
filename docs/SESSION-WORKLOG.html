@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Audrey 2.0 · 工作文档与复盘</title>
+<style>
+  :root{
+    --bg:#EFEBE2; --paper:#FBF9F4; --surface:#FFFFFF;
+    --sage:#7C9885; --sage-deep:#5E7A6A; --sage-soft:#E8EFE8;
+    --blue:#274472; --blue-soft:#E2E8F1;
+    --ink:#2B3A33; --muted:#7A867E; --line:#E2DDD2;
+    --amber:#C08A2E; --amber-soft:#F6ECD8;
+    --rose:#B5544F; --rose-soft:#F5E1DF;
+    --radius:16px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+    background:radial-gradient(1200px 600px at 12% -8%, #F3EEE3, transparent), var(--bg);
+    color:var(--ink);line-height:1.75;-webkit-font-smoothing:antialiased;
+  }
+  header.hero{
+    background:linear-gradient(135deg,var(--blue),var(--sage));color:#fff;padding:46px 32px 40px;
+  }
+  header.hero h1{font-size:27px;letter-spacing:.4px;margin-bottom:8px;}
+  header.hero p{opacity:.94;font-size:15px;max-width:880px;}
+  header.hero .meta{margin-top:14px;font-size:13px;opacity:.85;display:flex;gap:20px;flex-wrap:wrap;}
+  .layout{max-width:1080px;margin:0 auto;padding:0 24px 90px;}
+  nav.toc{
+    position:sticky;top:0;z-index:10;background:rgba(251,249,244,.92);backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);padding:12px 0;margin-bottom:30px;display:flex;gap:8px;flex-wrap:wrap;
+  }
+  nav.toc a{font-size:12.5px;color:var(--muted);text-decoration:none;padding:5px 11px;border-radius:999px;border:1px solid var(--line);background:#fff;transition:all .15s;}
+  nav.toc a:hover{color:var(--blue);border-color:var(--sage);}
+  section{margin:34px 0;}
+  h2{font-size:21px;color:var(--blue);margin-bottom:6px;display:flex;align-items:center;gap:10px;}
+  h2 .n{background:var(--blue);color:#fff;width:28px;height:28px;border-radius:9px;display:inline-grid;place-items:center;font-size:14px;flex:none;}
+  h3{font-size:16px;color:var(--sage-deep);margin:18px 0 6px;}
+  p.lead{color:var(--muted);font-size:14.5px;margin-bottom:14px;}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:20px 22px;box-shadow:0 1px 3px rgba(39,68,114,.05);margin:14px 0;}
+  table{width:100%;border-collapse:collapse;font-size:13.5px;margin:10px 0;}
+  th,td{text-align:left;padding:9px 11px;border-bottom:1px solid var(--line);vertical-align:top;}
+  th{color:var(--blue);font-weight:700;background:var(--blue-soft);}
+  td code,p code,li code{background:var(--blue-soft);color:var(--blue);padding:1px 6px;border-radius:5px;font-size:.88em;}
+  .badge{display:inline-block;font-size:11px;font-weight:700;padding:2px 9px;border-radius:999px;}
+  .ok{background:var(--sage-soft);color:var(--sage-deep);}
+  .wip{background:var(--amber-soft);color:#8a6313;}
+  .block{background:var(--rose-soft);color:var(--rose);}
+  /* timeline */
+  .tl{border-left:3px solid var(--sage);margin-left:8px;padding-left:22px;}
+  .tl .step{position:relative;margin-bottom:18px;}
+  .tl .step::before{content:"";position:absolute;left:-30px;top:4px;width:13px;height:13px;border-radius:50%;background:var(--sage);border:3px solid var(--paper);}
+  .tl .step h4{font-size:15px;color:var(--ink);}
+  .tl .step .when{font-size:11.5px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.4px;}
+  .tl .step p{font-size:13.5px;color:var(--muted);margin-top:2px;}
+  /* retro three columns */
+  .retro{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+  .retro .col{border-radius:14px;padding:16px;font-size:13.5px;}
+  .retro .good{background:var(--sage-soft);border:1px solid #cfe0cf;}
+  .retro .pit{background:var(--rose-soft);border:1px solid #ecd0ce;}
+  .retro .learn{background:var(--blue-soft);border:1px solid #cdd9ea;}
+  .retro h4{font-size:14px;margin-bottom:8px;}
+  .retro ul{padding-left:17px;} .retro li{margin:5px 0;}
+  ul.clean{padding-left:18px;} ul.clean li{margin:6px 0;font-size:14px;}
+  .callout{border-left:4px solid var(--amber);background:var(--amber-soft);border-radius:0 12px 12px 0;padding:14px 18px;font-size:14px;margin:14px 0;}
+  .callout.block{border-color:var(--rose);background:var(--rose-soft);}
+  .pill-row{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0;}
+  .ev{font-size:11px;font-weight:700;padding:2px 8px;border-radius:6px;}
+  .ev-strong{background:#dff0e4;color:#1f6b40;} .ev-limited{background:#fbf0d6;color:#8a6313;}
+  .ev-consensus{background:#e2e8f1;color:#274472;} .ev-biz{background:#eee;color:#555;}
+  footer{text-align:center;color:var(--muted);font-size:12.5px;padding:26px;border-top:1px solid var(--line);}
+  a.flink{color:var(--blue);text-decoration:none;border-bottom:1px dotted var(--blue);}
+  @media(max-width:720px){.retro{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<header class="hero">
+  <h1>Audrey 2.0 · 工作文档与复盘</h1>
+  <p>面向自闭症儿童的 AAC 沟通与生活辅助 App。本文档记录本次会话从「找回项目」到「循证对齐改造」的完整工作历程、关键产出、差距分析与复盘，可用于存档与团队交接。</p>
+  <div class="meta">
+    <span>📅 2026-06-06 ~ 06-07</span>
+    <span>📦 secondme/projects/Audrey2.0</span>
+    <span>🌿 分支 codex/Audrey2.0</span>
+    <span>🔗 github.com/erichecan/elearning</span>
+  </div>
+</header>
+
+<div class="layout">
+  <nav class="toc">
+    <a href="#overview">概览</a>
+    <a href="#timeline">工作历程</a>
+    <a href="#deliverables">关键产出</a>
+    <a href="#evidence">循证结论</a>
+    <a href="#code">代码改动</a>
+    <a href="#gap">差距分析</a>
+    <a href="#status">当前状态</a>
+    <a href="#retro">复盘</a>
+    <a href="#roadmap">下一步</a>
+  </nav>
+
+  <!-- 概览 -->
+  <section id="overview">
+    <h2><span class="n">0</span>概览</h2>
+    <p class="lead">一句话：本次会话把一个「找不回来的旧项目」重新定位、安全提交，并基于<strong>真实循证研究</strong>把它的核心交互对齐到科学共识，目前核心 AAC 已达循证标准、build 恢复绿色，卡在「数据库密码失效」这一外部 blocker 上。</p>
+    <div class="card">
+      <table>
+        <tr><th>维度</th><th>结果</th></tr>
+        <tr><td>项目定位</td><td>✅ 找回，确认是 codex 开发的自闭症 AAC 软件</td></tr>
+        <tr><td>GitHub</td><td>✅ 已安全提交（排除密钥），代码在 <code>codex/Audrey2.0</code> 分支</td></tr>
+        <tr><td>循证研究</td><td>✅ 108 个 agent 多源检索 + 对抗验证，产出带四档可信度的报告</td></tr>
+        <tr><td>设计资产</td><td>✅ 流程图、循证 PRD、可点击原型</td></tr>
+        <tr><td>循证对齐改造</td><td>✅ Phase A（A1/A2）完成；A3 代码就绪待联调</td></tr>
+        <tr><td>项目健康度</td><td>✅ build 从「失败」恢复为「绿」（tsc 0 错）</td></tr>
+        <tr><td>当前 blocker</td><td><span class="badge block">数据库密码认证失败，需提供有效 Neon 连接串</span></td></tr>
+      </table>
+    </div>
+  </section>
+
+  <!-- 工作历程 -->
+  <section id="timeline">
+    <h2><span class="n">1</span>工作历程（时间线）</h2>
+    <div class="card">
+      <div class="tl">
+        <div class="step"><div class="when">起点</div><h4>找回丢失的项目</h4><p>在 AIcoding 下全盘搜索，定位到 <code>secondme/projects/Audrey2.0</code>（含 PRD、自闭症功能分析 docx、CLAUDE.md），确认是 codex 在 <code>codex/Audrey2.0</code> 分支开发的 AAC 软件。</p></div>
+        <div class="step"><div class="when">提交</div><h4>安全提交到 GitHub</h4><p>发现 <code>backend/.env</code> 含数据库密码+API key 且仓库为公开 → 加入 .gitignore 排除；根 <code>.env</code>（Supabase anon key）按用户选择保留。688 文件安全提交。</p></div>
+        <div class="step"><div class="when">答疑</div><h4>解释「公司电脑看不到」</h4><p>真相：代码在 <code>codex/Audrey2.0</code> 分支，而默认分支 <code>main</code> 还是旧的英语学习 app；且最新开发未推。</p></div>
+        <div class="step"><div class="when">研究</div><h4>循证深度研究</h4><p>用 deep-research（108 agent）回答 8 大设计问题，核查 25 条结论确认 24 条，区分四档可信度。</p></div>
+        <div class="step"><div class="when">设计</div><h4>流程图 + 循证 PRD + 可点击原型</h4><p>画运行逻辑/用户行为两张流程图；把证据反向落成 PRD 循证修订版；做可点击原型（真实 TTS + 循证说明层）跑通最小闭环。</p></div>
+        <div class="step"><div class="when">规划</div><h4>DEV-PLAN + 现状盘点</h4><p>确认在现有项目上改造。盘点发现核心 AAC 已生产级，定位到「动态词区实时重排」违反循证。</p></div>
+        <div class="step"><div class="when">执行</div><h4>Phase A 循证对齐 + 修 build</h4><p>A1 核心词全固定、A2 场景解耦；顺带修掉让项目编译失败的 Supabase 幽灵引用（R4）。build 恢复绿。已提交。</p></div>
+        <div class="step"><div class="when">核对</div><h4>差距分析（gap）</h4><p>对照 PRD/原型逐项核对，纠正了盘点 agent 的 3 处误判，得出准确差距清单。</p></div>
+        <div class="step"><div class="when">进行中</div><h4>A3 代码就绪 → 撞上数据库 blocker</h4><p>flashcard 同源闭环代码全部写好（tsc 0 错），但 Neon 密码失效，无法跑迁移/联调。</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 关键产出 -->
+  <section id="deliverables">
+    <h2><span class="n">2</span>关键产出（交付物）</h2>
+    <div class="card">
+      <table>
+        <tr><th>文件</th><th>作用</th><th>状态</th></tr>
+        <tr><td><code>docs/AAC_RESEARCH_EVIDENCE_2026-06.md</code></td><td>循证研究报告（四档可信度 + 可点击引用）</td><td><span class="badge ok">完成</span></td></tr>
+        <tr><td><code>docs/FLOW_DIAGRAMS.html</code></td><td>运行逻辑 + 用户行为流程图</td><td><span class="badge ok">完成</span></td></tr>
+        <tr><td><code>PRD_循证修订版.md</code></td><td>把证据落地的新 PRD（含不可妥协清单）</td><td><span class="badge ok">完成</span></td></tr>
+        <tr><td><code>docs/prototype.html</code></td><td>可点击原型（最小闭环 + 真实 TTS）</td><td><span class="badge ok">完成</span></td></tr>
+        <tr><td><code>DEV-PLAN.md</code></td><td>循证对齐改造计划（Phase A-D）</td><td><span class="badge ok">完成</span></td></tr>
+        <tr><td><code>DEV-REPORT.md</code></td><td>Phase A 阶段报告</td><td><span class="badge ok">完成</span></td></tr>
+        <tr><td><code>backend/.env.example</code></td><td>环境变量模板（无密钥）</td><td><span class="badge ok">完成</span></td></tr>
+        <tr><td><code>backend/migrations/006_flashcard_vocab_link.sql</code></td><td>A3 迁移（flashcards 加 vocab_id）</td><td><span class="badge wip">待执行</span></td></tr>
+        <tr><td>本文件 <code>docs/SESSION-WORKLOG.html</code></td><td>工作文档与复盘</td><td><span class="badge ok">完成</span></td></tr>
+      </table>
+    </div>
+  </section>
+
+  <!-- 循证结论 -->
+  <section id="evidence">
+    <h2><span class="n">3</span>循证研究核心结论</h2>
+    <p class="lead">证据分四档：<span class="ev ev-strong">🟢 强证据</span> <span class="ev ev-limited">🟡 有限</span> <span class="ev ev-consensus">🔵 共识</span> <span class="ev ev-biz">⚪ 商业实践</span>。完整正文见 <code>AAC_RESEARCH_EVIDENCE_2026-06.md</code>。</p>
+    <div class="card">
+      <h3>最强、可操作的几条</h3>
+      <ul class="clean">
+        <li><span class="ev ev-strong">🟢</span> <strong>AAC 不会阻碍口语发展</strong>，多数研究显示口语反而有适度提升（Millar 2006 / Yuan 2024）。</li>
+        <li><span class="ev ev-strong">🟢</span> <strong>固定符号位置利于运动规划</strong>（Thistle 2018 / LAMP）—— 这是本项目最重要的设计约束。</li>
+        <li><span class="ev ev-strong">🟢</span> <strong>VSD（视觉场景）是 3-8 岁自闭症幼儿的循证实践</strong>（Patenaude 2025）。</li>
+        <li><span class="ev ev-strong">🟢</span> <strong>AAC 嵌入自然情境教学效果更好</strong> → flashcard 不能孤立刷卡（Pope 2024 / Chazin 2021）。</li>
+        <li><span class="ev ev-consensus">🔵</span> 无年龄/先决技能门槛（ASHA）；起步 Universal Core 36 词、<strong>健壮词汇始终可见</strong>。</li>
+        <li><span class="ev ev-biz">⚠️</span> 「核心词占 80%」原始出处是 <strong>Vanderheiden &amp; Kelso 1987</strong>（非 ASHA，原 BRIEF 归错）。</li>
+        <li><span class="ev ev-biz">⚪</span> Fitzgerald 配色是行业惯例、<strong>无疗效证据</strong>；一致性比配色方案本身重要。</li>
+      </ul>
+      <h3>8 条不可妥协清单（当前达标情况）</h3>
+      <table>
+        <tr><th>#</th><th>约束</th><th>状态</th></tr>
+        <tr><td>1</td><td>核心词运行态位置永不变</td><td><span class="badge ok">✅ 达标（A1）</span></td></tr>
+        <tr><td>2</td><td>AI 只高亮、不返坐标</td><td><span class="badge ok">✅ 达标</span></td></tr>
+        <tr><td>3</td><td>场景切换只换 fringe，core 不动</td><td><span class="badge ok">✅ 达标（A2）</span></td></tr>
+        <tr><td>4</td><td>flashcard 与 AAC 同源</td><td><span class="badge wip">⚠️ 代码就绪待联调（A3）</span></td></tr>
+        <tr><td>5</td><td>无能力门槛 / 健壮词汇始终可见</td><td><span class="badge ok">✅ 达标</span></td></tr>
+        <tr><td>6</td><td>网格大小不按认知降级</td><td><span class="badge ok">✅ 达标</span></td></tr>
+        <tr><td>7</td><td>逐词造句为主，预存短语为辅</td><td><span class="badge ok">✅ 达标</span></td></tr>
+        <tr><td>8</td><td>证据四档标注</td><td><span class="badge wip">⚠️ 文档已对，CORE_WORDS_BRIEF 待修</span></td></tr>
+      </table>
+    </div>
+  </section>
+
+  <!-- 代码改动 -->
+  <section id="code">
+    <h2><span class="n">4</span>代码改动总结</h2>
+    <div class="card">
+      <h3>Phase A —— 已完成并提交（<code>8fb7216</code>，build 绿）</h3>
+      <table>
+        <tr><th>项</th><th>改了什么</th><th>文件</th></tr>
+        <tr><td>A1</td><td>取消「动态词区按语法实时重排」→ 核心词位置确定性、永不随点击变化</td><td><code>src/screens/HomeScreen.tsx</code>（gridState 去掉 sentence 依赖）</td></tr>
+        <tr><td>A2</td><td>核心词加载与场景解耦 → 切 at home/at school 时 core 不重载</td><td><code>HomeScreen.tsx</code>（依赖改 activeChildId）</td></tr>
+        <tr><td>R4</td><td>修掉 5 处不存在的 supabase 引用 + 清 12 个未使用变量 → 项目恢复可编译</td><td><code>admin-api.ts</code> 等 5 文件</td></tr>
+      </table>
+      <h3>A3 —— 代码就绪，待数据库联调（tsc 前后端 0 错）</h3>
+      <table>
+        <tr><th>部分</th><th>文件</th></tr>
+        <tr><td>迁移：flashcards 加 vocab_id</td><td><code>backend/migrations/006_flashcard_vocab_link.sql</code></td></tr>
+        <tr><td>custom 词进网格</td><td><code>home-data.ts</code>（type IN core/custom）</td></tr>
+        <tr><td>addToBoard 服务（去重+幂等）</td><td><code>flashcard-service.ts</code></td></tr>
+        <tr><td>加词板端点</td><td><code>index.ts</code> <code>POST /api/flashcards/add-to-board</code></td></tr>
+        <tr><td>「➕加到我的词板」按钮</td><td><code>FlashcardsScreen.tsx</code></td></tr>
+      </table>
+      <p class="lead" style="margin-top:10px">提交记录：循证三件套 <code>e7cba1b</code> · 原型 <code>1122ee4</code> · env.example <code>04b8081</code> · Phase A <code>8fb7216</code></p>
+    </div>
+  </section>
+
+  <!-- 差距分析 -->
+  <section id="gap">
+    <h2><span class="n">5</span>差距分析（需求 vs 现状）</h2>
+    <p class="lead">核心 AAC 与循证约束已生产级（7/8 达标）；真正的缺口集中在安全、几个闭环、独立家长端。</p>
+    <div class="card">
+      <h3><span class="badge block">🔴 安全（Phase C）—— 上线 blocker，目前几乎为零</span></h3>
+      <ul class="clean">
+        <li>无 JWT 登录态（users 表已建但未接）</li>
+        <li><code>ADMIN_TOKEN</code> 未设则全裸奔（<code>if(!token) next()</code>）</li>
+        <li>无权限隔离：<code>caregiver_child</code> 表设计了但不用，<code>child_id</code> 前端可任意传 → 能看别人孩子数据（违反 COPPA）</li>
+      </ul>
+      <h3><span class="badge wip">🟠 闭环（Phase B）—— 框架在、细节断</span></h3>
+      <ul class="clean">
+        <li>flashcard「加词板」（A3，代码就绪待联调）</li>
+        <li>任务 Focus：<code>focus-data.ts</code> 仅 62 行，步骤推进/完成回写未通</li>
+        <li>math / 绘本：AI 生成与审核流不完整</li>
+      </ul>
+      <h3><span class="badge wip">🔵 完整度（Phase D / 优化）</span></h3>
+      <ul class="clean">
+        <li>无独立家长端（现全混在 admin web，无移动适配/权限）</li>
+        <li>治疗师端指标粗糙，缺 ABC 行为报表</li>
+        <li>原型的「core + 情境词双列」fringe 区未实现</li>
+        <li>离线（无 Service Worker）、媒体加密未做</li>
+      </ul>
+      <div class="callout">📌 盘点中纠正了 3 处 agent 误判：① flashcards <em>没有</em> vocab_id（需新增）② users 表 <em>已</em>建于 001 ③ BulkImportWizard 的 supabase <em>已</em>清除。</div>
+    </div>
+  </section>
+
+  <!-- 当前状态 -->
+  <section id="status">
+    <h2><span class="n">6</span>当前状态 &amp; Blocker</h2>
+    <div class="card">
+      <div class="callout block">
+        ⛔ <strong>唯一卡点：数据库密码认证失败</strong><br>
+        <code>password authentication failed for user 'neondb_owner'</code>（host: ep-sparkling-forest-ahucz7zx，us-east-1）。<br>
+        它同时挡住：A3 迁移 / A3 联调 / A1·A2 的浏览器行为验证 / Phase B 联调。
+      </div>
+      <h3>解锁需要（只有用户能做）</h3>
+      <ol style="padding-left:20px;font-size:14px;">
+        <li>打开 <a class="flink" href="https://console.neon.tech">console.neon.tech</a> → 项目 <code>ep-sparkling-forest-ahucz7zx</code></li>
+        <li>复制最新 Connection string，或 Reset password 重新生成</li>
+        <li>更新到 <code>backend/.env</code> 的 <code>DATABASE_URL=</code></li>
+      </ol>
+      <p class="lead" style="margin-top:8px">拿到后即可：跑迁移 006 → 起前后端 → 浏览器实测 A1/A2/A3 → 继续 Phase B。</p>
+    </div>
+  </section>
+
+  <!-- 复盘 -->
+  <section id="retro">
+    <h2><span class="n">7</span>复盘（Retrospective）</h2>
+    <div class="retro">
+      <div class="col good">
+        <h4>✅ 做得好的</h4>
+        <ul>
+          <li><strong>循证驱动</strong>：先做真实研究再改代码，避免拍脑袋设计</li>
+          <li><strong>安全把关</strong>：提交前拦下数据库密码/API key，没让密钥进公开仓库</li>
+          <li><strong>意外收获</strong>：修 Phase A 时发现并修复了让项目编译失败的历史遗留，build 恢复绿</li>
+          <li><strong>复用优先</strong>：发现核心 AAC 已生产级，改造而非重写，省大量工作</li>
+          <li><strong>核对而非轻信</strong>：纠正了自动盘点的 3 处误判</li>
+        </ul>
+      </div>
+      <div class="col pit">
+        <h4>⚠️ 踩的坑 / 发现的问题</h4>
+        <ul>
+          <li><strong>项目藏在非默认分支</strong>，导致一度「找不回」「看不到」</li>
+          <li><strong>密钥曾被提交到公开历史</strong>（根 .env 的 Supabase key）——历史遗留风险</li>
+          <li><strong>动态词区实时重排</strong>违反运动规划循证——这是个隐蔽但关键的设计缺陷</li>
+          <li><strong>数据库密码失效</strong>，阻断一切本地联调（外部 blocker）</li>
+          <li><strong>鉴权几乎为零</strong>，离上线安全底线差距大</li>
+        </ul>
+      </div>
+      <div class="col learn">
+        <h4>💡 经验沉淀</h4>
+        <ul>
+          <li>研究结论一律标<strong>四档可信度</strong>，不把商业实践当强证据</li>
+          <li>引用要溯源（80% → Vanderheiden &amp; Kelso 1987，纠正了二手归因）</li>
+          <li>改造前先<strong>全量盘点 + gap 分析</strong>，把「需求 vs 现状」量化</li>
+          <li>每个 Phase <strong>build/类型先绿</strong>再进下一步；联调依赖外部资源时，先把可验证的代码做扎实</li>
+          <li>公开仓库提交前<strong>固定做密钥自检</strong></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 下一步 -->
+  <section id="roadmap">
+    <h2><span class="n">8</span>下一步路线图</h2>
+    <div class="card">
+      <table>
+        <tr><th>顺序</th><th>事项</th><th>依赖 / 说明</th></tr>
+        <tr><td>1</td><td><span class="badge block">提供有效 Neon 连接串</span></td><td>用户操作，唯一前置</td></tr>
+        <tr><td>2</td><td>A3 联调 + Phase B 闭环（任务 Focus）</td><td>跑迁移 006、浏览器实测 A1/A2/A3，再做 Focus</td></tr>
+        <tr><td>3</td><td>Phase C 安全（JWT / 默认拒绝 / 权限隔离）</td><td>上线前必做，波及所有 API</td></tr>
+        <tr><td>4</td><td>fringe 双列区 + 家长端 Mobile + 治疗师端看板</td><td>按需排期</td></tr>
+        <tr><td>—</td><td>收尾：CORE_WORDS_BRIEF 的 80% 归因修正、媒体加密、离线</td><td>合规/优化</td></tr>
+      </table>
+    </div>
+  </section>
+</div>
+
+<footer>
+  Audrey 2.0 · 工作文档与复盘 · 2026-06-07 ｜ 本文件可随项目进展更新，作为团队交接与决策依据
+</footer>
+</body>
+</html>

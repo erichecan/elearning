@@ -389,6 +389,20 @@ app.get('/api/public/flashcards', async (req, res) => {
     }
 });
 
+// A3: 学完即用 —— 把一张闪卡加入儿童的 AAC 词板（与 AAC 同源）
+app.post('/api/flashcards/add-to-board', async (req, res) => {
+    try {
+        const { flashcardId, childId } = req.body || {};
+        if (!flashcardId || !childId) {
+            return res.status(400).json({ error: 'flashcardId 和 childId 必填' });
+        }
+        const result = await flashcardService.addToBoard(Number(flashcardId), String(childId));
+        res.json(result);
+    } catch (error: any) {
+        res.status(500).json({ error: error.message || 'Failed to add flashcard to board' });
+    }
+});
+
 app.put('/api/flashcards/:id', async (req, res) => {
     if (process.env.ADMIN_TOKEN) {
         const header = req.header('x-admin-token');
